@@ -1,0 +1,32 @@
+﻿[Sound]
+Go = sound\go.wav
+
+[Picture]
+Background = picture\Background.png
+ChessBoard = picture\ChessBoard.png
+AvBlack = picture\AvBlack.png
+AvWhite = picture\AvWhite.png
+BlackChess = picture\BlackChess.png
+WhiteChess = picture\WhiteChess.png
+BBlackChess = picture\BBlackChess.png
+BWhiteChess = picture\BWhiteChess.png
+FocusedAvBlack = picture\FocusedAvBlack.png
+FocusedAvWhite = picture\FocusedAvWhite.png
+FocusedSelectedAvBlack = picture\FocusedAvBlack.png
+FocusedSelectedAvWhite = picture\FocusedAvWhite.png
+NextAvBlack = picture\NextAvBlack.png
+NextAvWhite = picture\NextAvWhite.png
+NextSelectedAvBlack = picture\SelectedAvBlack.png
+NextSelectedAvWhite = picture\SelectedAvWhite.png
+SelectedAvBlack = picture\SelectedAvBlack.png
+SelectedAvWhite = picture\SelectedAvWhite.png
+
+BoardSetupBlack = picture\BoardSetupBlack.png
+BoardSetupWhite = picture\BoardSetupWhite.png
+BoardSetupAv = picture\BoardSetupAv.png
+
+[Coordinates]
+BoardULX = 25
+BoardULY = 25
+BoardLRX = 1225
+BoardLRY = 1225
