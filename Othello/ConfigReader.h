@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,16 +29,16 @@
 /*
 ********************************************************************************
 								ConfigReader.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà ConfigReader µÄÉùÃ÷¡£
-			ConfigReader Àà·â×°ÁË¶ÔÅäÖÃÎÄ¼şµÄ¶ÁÈ¡²Ù×÷£¬Ìá¹©Ò×ÓÚÊ¹ÓÃµÄ½Ó¿Ú¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» ConfigReader çš„å£°æ˜ã€‚
+			ConfigReader ç±»å°è£…äº†å¯¹é…ç½®æ–‡ä»¶çš„è¯»å–æ“ä½œï¼Œæä¾›æ˜“äºä½¿ç”¨çš„æ¥å£ã€‚
 
 ********************************************************************************
 */
 
 namespace Othello {
 
-//ÅäÖÃÎÄ¼şµÄÒ»¸ö·ÖÀà
+//é…ç½®æ–‡ä»¶çš„ä¸€ä¸ªåˆ†ç±»
 public ref class Catagory {
 public:
 	Catagory(System::String^ name) {
@@ -85,7 +85,7 @@ private:
 	System::Collections::Generic::SortedDictionary<System::String^, System::String^>^ attributes;
 };
 
-//ÅäÖÃÎÄ¼ş¶ÁÈ¡¹¤¾ß
+//é…ç½®æ–‡ä»¶è¯»å–å·¥å…·
 public ref class ConfigReader {
 public:
 	ConfigReader() {

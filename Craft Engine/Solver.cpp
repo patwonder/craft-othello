@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -28,9 +28,9 @@
 /*
 ********************************************************************************
 								Solver.cpp
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà Solver µÄ²¿·Ö¶¨Òå¡£
-			Solver ÊÇ Craft µÄºËÐÄ AI ÒýÇæ¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» Solver çš„éƒ¨åˆ†å®šä¹‰ã€‚
+			Solver æ˜¯ Craft çš„æ ¸å¿ƒ AI å¼•æ“Žã€‚
 
 ********************************************************************************
 */
@@ -94,15 +94,15 @@ int Solver::twoTo3Base[256];
 #endif
 
 //Move ordering
-//1£©A1, H1, A8, H8
-//2£©C1, F1, A3, H3, A6, H6, C8, F8
-//3£©C3, F3, C6, F6
-//4£©D1, E1, A4, H4, A5, H5, D8, E8
-//5£©D3, E3, C4, F4, C5, F5, D6, E6
-//6£©D2, E2, B4, G4, B5, G5, D7, E7
-//7£©C2, F2, B3, G3, B6, G6, C7, F7
-//8£©B1, G1, A2, H2, A7, H7, B8, G8
-//9£©B2, G2, B7, G7
+//1ï¼‰A1, H1, A8, H8
+//2ï¼‰C1, F1, A3, H3, A6, H6, C8, F8
+//3ï¼‰C3, F3, C6, F6
+//4ï¼‰D1, E1, A4, H4, A5, H5, D8, E8
+//5ï¼‰D3, E3, C4, F4, C5, F5, D6, E6
+//6ï¼‰D2, E2, B4, G4, B5, G5, D7, E7
+//7ï¼‰C2, F2, B3, G3, B6, G6, C7, F7
+//8ï¼‰B1, G1, A2, H2, A7, H7, B8, G8
+//9ï¼‰B2, G2, B7, G7
 int Solver::moveOrder[MAXSTEP] = {0, 56, 7, 63,
 								  16, 40, 2, 58, 5, 61, 23, 47,
 								  18, 42, 21, 45,
@@ -3185,8 +3185,8 @@ bool Solver::loadPatterns(std::string patternFile) {
 	//		gcnew System::IO::FileStream(patternFile, System::IO::FileMode::Open, System::IO::FileAccess::Read);
 	//} catch (System::Exception^) {
 	//	System::Diagnostics::Debug::WriteLine("Cannot access file " + patternFile);
-	//	System::Windows::Forms::MessageBox::Show("ÎÞ·¨´ò¿ª " + patternFile + " ÎÄ¼þ¡£\nÇëÈ·ÈÏ´ËÎÄ¼þ´æÔÚÓÚÓÎÏ·Ä¿Â¼ÖÐ£¬È»ºóÔÙÊÔÒ»´Î¡£",
-	//		"ÕÒ²»µ½Êý¾ÝÎÄ¼þ", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
+	//	System::Windows::Forms::MessageBox::Show("æ— æ³•æ‰“å¼€ " + patternFile + " æ–‡ä»¶ã€‚\nè¯·ç¡®è®¤æ­¤æ–‡ä»¶å­˜åœ¨äºŽæ¸¸æˆç›®å½•ä¸­ï¼Œç„¶åŽå†è¯•ä¸€æ¬¡ã€‚",
+	//		"æ‰¾ä¸åˆ°æ•°æ®æ–‡ä»¶", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 	//	exit(-1);
 	//	return;
 	//}
@@ -3202,8 +3202,8 @@ bool Solver::loadPatterns(std::string patternFile) {
 	//} catch (System::Exception^) {
 	//	System::Diagnostics::Debug::WriteLine("Cannot access file " + patternFile);
 	//	br->Close();
-	//	System::Windows::Forms::MessageBox::Show("¶ÁÈ¡ " + patternFile + " ÎÄ¼þ³ö´í¡£\nÇëÈ·ÈÏ´ËÎÄ¼þµÄÍêÕûÐÔ£¬È»ºóÔÙÊÔÒ»´Î¡£",
-	//		"¶ÁÈ¡Êý¾ÝÎÄ¼þ³ö´í", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
+	//	System::Windows::Forms::MessageBox::Show("è¯»å– " + patternFile + " æ–‡ä»¶å‡ºé”™ã€‚\nè¯·ç¡®è®¤æ­¤æ–‡ä»¶çš„å®Œæ•´æ€§ï¼Œç„¶åŽå†è¯•ä¸€æ¬¡ã€‚",
+	//		"è¯»å–æ•°æ®æ–‡ä»¶å‡ºé”™", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 	//	exit(-1);
 	//	return;
 	//}
@@ -4538,8 +4538,8 @@ bool Solver::loadBook(std::string bookFile) {
 	//	}
 	//} catch (System::Exception^) {
 	//	br->Close();
-	//	System::Windows::Forms::MessageBox::Show("¶ÁÈ¡ " + bookFile + " ÎÄ¼þ³ö´í¡£\nÇëÈ·ÈÏ´ËÎÄ¼þµÄÍêÕûÐÔ£¬È»ºóÔÙÊÔÒ»´Î¡£",
-	//		"¶ÁÈ¡ÆåÆ×ÎÄ¼þ³ö´í", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
+	//	System::Windows::Forms::MessageBox::Show("è¯»å– " + bookFile + " æ–‡ä»¶å‡ºé”™ã€‚\nè¯·ç¡®è®¤æ­¤æ–‡ä»¶çš„å®Œæ•´æ€§ï¼Œç„¶åŽå†è¯•ä¸€æ¬¡ã€‚",
+	//		"è¯»å–æ£‹è°±æ–‡ä»¶å‡ºé”™", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 	//	exit(-1);
 	//	return;
 	//}
@@ -4590,8 +4590,8 @@ bool Solver::saveBook(std::string bookFile) {
 	//	fs = 
 	//		gcnew System::IO::FileStream(bookFile, System::IO::FileMode::Create, System::IO::FileAccess::Write);
 	//} catch (System::Exception^) {
-	//	System::Windows::Forms::MessageBox::Show("Ð´Èë " + bookFile + " ÎÄ¼þ³ö´í¡£\nÇëÈ·ÈÏÄú¶ÔÆäÓÐÐ´ÈëÈ¨ÏÞ¡£",
-	//		"Ð´ÈëÆåÆ×ÎÄ¼þ³ö´í", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
+	//	System::Windows::Forms::MessageBox::Show("å†™å…¥ " + bookFile + " æ–‡ä»¶å‡ºé”™ã€‚\nè¯·ç¡®è®¤æ‚¨å¯¹å…¶æœ‰å†™å…¥æƒé™ã€‚",
+	//		"å†™å…¥æ£‹è°±æ–‡ä»¶å‡ºé”™", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
 	//	return;
 	//}
 	//System::IO::BinaryWriter^ bw = gcnew System::IO::BinaryWriter(fs);
@@ -4616,8 +4616,8 @@ bool Solver::saveBook(std::string bookFile) {
 	//		}
 	//	}
 	//} catch (System::Exception^) {
-	//	System::Windows::Forms::MessageBox::Show("Ð´Èë " + bookFile + " ÎÄ¼þ³ö´í¡£\nÇëÈ·ÈÏÄú¶ÔÆäÓÐÐ´ÈëÈ¨ÏÞ¡£",
-	//		"Ð´ÈëÆåÆ×ÎÄ¼þ³ö´í", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
+	//	System::Windows::Forms::MessageBox::Show("å†™å…¥ " + bookFile + " æ–‡ä»¶å‡ºé”™ã€‚\nè¯·ç¡®è®¤æ‚¨å¯¹å…¶æœ‰å†™å…¥æƒé™ã€‚",
+	//		"å†™å…¥æ£‹è°±æ–‡ä»¶å‡ºé”™", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
 	//	bw->Close();
 	//	return;
 	//}

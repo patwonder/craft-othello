@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmEndGameInfo.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmEndGameInfo µÄÉùÃ÷¡£
-			frmEndGameInfo ÀàÊµÏÖ¡°²Ğ¾ÖĞÅÏ¢¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmEndGameInfo çš„å£°æ˜ã€‚
+			frmEndGameInfo ç±»å®ç°â€œæ®‹å±€ä¿¡æ¯â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -56,13 +56,13 @@ namespace Othello {
 	};
 
 	/// <summary>
-	/// frmEndGameInfo ÕªÒª
+	/// frmEndGameInfo æ‘˜è¦
 	///
-	/// ¾¯¸æ: Èç¹û¸ü¸Ä´ËÀàµÄÃû³Æ£¬ÔòĞèÒª¸ü¸Ä
-	///          Óë´ËÀàËùÒÀÀµµÄËùÓĞ .resx ÎÄ¼ş¹ØÁªµÄÍĞ¹Ü×ÊÔ´±àÒëÆ÷¹¤¾ßµÄ
-	///          ¡°×ÊÔ´ÎÄ¼şÃû¡±ÊôĞÔ¡£·ñÔò£¬
-	///          Éè¼ÆÆ÷½«²»ÄÜÓë´Ë´°ÌåµÄ¹ØÁª
-	///          ±¾µØ»¯×ÊÔ´ÕıÈ·½»»¥¡£
+	/// è­¦å‘Š: å¦‚æœæ›´æ”¹æ­¤ç±»çš„åç§°ï¼Œåˆ™éœ€è¦æ›´æ”¹
+	///          ä¸æ­¤ç±»æ‰€ä¾èµ–çš„æ‰€æœ‰ .resx æ–‡ä»¶å…³è”çš„æ‰˜ç®¡èµ„æºç¼–è¯‘å™¨å·¥å…·çš„
+	///          â€œèµ„æºæ–‡ä»¶åâ€å±æ€§ã€‚å¦åˆ™ï¼Œ
+	///          è®¾è®¡å™¨å°†ä¸èƒ½ä¸æ­¤çª—ä½“çš„å…³è”
+	///          æœ¬åœ°åŒ–èµ„æºæ­£ç¡®äº¤äº’ã€‚
 	/// </summary>
 	public ref class frmEndGameInfo : public System::Windows::Forms::Form
 	{
@@ -70,7 +70,7 @@ namespace Othello {
 		frmEndGameInfo(EndGameInfoController^ controller) {
 			InitializeComponent();
 			//
-			//TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôìº¯Êı´úÂë
+			//TODO: åœ¨æ­¤å¤„æ·»åŠ æ„é€ å‡½æ•°ä»£ç 
 			//
 			this->controller = controller;
 			controller->endGameInfoShown();
@@ -84,7 +84,7 @@ namespace Othello {
 
 	protected:
 		/// <summary>
-		/// ÇåÀíËùÓĞÕıÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		~frmEndGameInfo()
 		{
@@ -101,15 +101,15 @@ namespace Othello {
 	protected: 
 	private:
 		/// <summary>
-		/// ±ØĞèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 		System::ComponentModel::Container ^components;
 		EndGameInfoController^ controller;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»Òª
-		/// Ê¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä´Ë·½·¨µÄÄÚÈİ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦
+		/// ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -126,12 +126,12 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(65, 12);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"Æå¾ÖÃèÊö£º";
+			this->label1->Text = L"æ£‹å±€æè¿°ï¼š";
 			// 
 			// txtDescription
 			// 
 			this->txtDescription->Cursor = System::Windows::Forms::Cursors::IBeam;
-			this->txtDescription->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F));
+			this->txtDescription->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F));
 			this->txtDescription->Location = System::Drawing::Point(12, 24);
 			this->txtDescription->Multiline = true;
 			this->txtDescription->Name = L"txtDescription";
@@ -147,7 +147,7 @@ namespace Othello {
 			this->btnStart->Name = L"btnStart";
 			this->btnStart->Size = System::Drawing::Size(96, 32);
 			this->btnStart->TabIndex = 1;
-			this->btnStart->Text = L"¿ªÊ¼²Ğ¾Ö";
+			this->btnStart->Text = L"å¼€å§‹æ®‹å±€";
 			this->btnStart->UseVisualStyleBackColor = true;
 			this->btnStart->Click += gcnew System::EventHandler(this, &frmEndGameInfo::btnStart_Click);
 			// 
@@ -159,7 +159,7 @@ namespace Othello {
 			this->btnChangeOne->Name = L"btnChangeOne";
 			this->btnChangeOne->Size = System::Drawing::Size(96, 32);
 			this->btnChangeOne->TabIndex = 2;
-			this->btnChangeOne->Text = L"»»Ò»¸ö(&A)";
+			this->btnChangeOne->Text = L"æ¢ä¸€ä¸ª(&A)";
 			this->btnChangeOne->UseVisualStyleBackColor = true;
 			this->btnChangeOne->Click += gcnew System::EventHandler(this, &frmEndGameInfo::btnChangeOne_Click);
 			// 
@@ -181,7 +181,7 @@ namespace Othello {
 			this->Name = L"frmEndGameInfo";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"²Ğ¾ÖĞÅÏ¢";
+			this->Text = L"æ®‹å±€ä¿¡æ¯";
 			this->Load += gcnew System::EventHandler(this, &frmEndGameInfo::frmEndGameInfo_Load);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &frmEndGameInfo::frmEndGameInfo_FormClosed);
 			this->ResumeLayout(false);
@@ -191,34 +191,34 @@ namespace Othello {
 #pragma endregion
 	private:
 		static String^ getResultDescription(WThorGame^ game, int bestResult, int empties, Chess player) {
-			String^ result = "ÕâÊÇÓÉ " + game->black.Name + "(ºÚ) Óë "
-				+ game->white.Name + "(°×) ÔÚ" + game->year + "ÄêµÄ "
-				+ game->tour.Name + " ±ÈÈüÉÏÏÂµÄÒ»ÅÌÆå¡£";
-			result += "\r\n×îÖÕ ";
+			String^ result = "è¿™æ˜¯ç”± " + game->black.Name + "(é»‘) ä¸ "
+				+ game->white.Name + "(ç™½) åœ¨" + game->year + "å¹´çš„ "
+				+ game->tour.Name + " æ¯”èµ›ä¸Šä¸‹çš„ä¸€ç›˜æ£‹ã€‚";
+			result += "\r\næœ€ç»ˆ ";
 			if (game->result > 0) {
-				result += game->black.Name + " Õ½Ê¤ÁË " + game->white.Name;
-				result += "£¬±È·ÖÎª " + (game->result / 2 + 32).ToString()
+				result += game->black.Name + " æˆ˜èƒœäº† " + game->white.Name;
+				result += "ï¼Œæ¯”åˆ†ä¸º " + (game->result / 2 + 32).ToString()
 					+ ":" + (32 - game->result / 2).ToString();
 			} else if (game->result < 0) {
-				result += game->white.Name + " Õ½Ê¤ÁË " + game->black.Name;
-				result += "£¬±È·ÖÎª " + (32 - game->result / 2).ToString()
+				result += game->white.Name + " æˆ˜èƒœäº† " + game->black.Name;
+				result += "ï¼Œæ¯”åˆ†ä¸º " + (32 - game->result / 2).ToString()
 					+ ":" + (game->result / 2 + 32).ToString();
 			} else {
-				result += game->black.Name + " Óë " + game->white.Name + " ÎÕÊÖÑÔºÍ";
+				result += game->black.Name + " ä¸ " + game->white.Name + " æ¡æ‰‹è¨€å’Œ";
 			}
-			result += "¡£\r\nÄúÏÖÔÚµÄ½ÇÉ«ÊÇ "
-				+ ((player == Chess::BLACK) ? (game->black.Name + "(ºÚ)") : (game->white.Name + "(°×)"));
-			result += "¡£\r\nÆå¾Ö»¹Ê£ÏÂ×îºó" + empties + "²½£¬" + "×î¼Ñ½á¹ûÊÇ ";
+			result += "ã€‚\r\næ‚¨ç°åœ¨çš„è§’è‰²æ˜¯ "
+				+ ((player == Chess::BLACK) ? (game->black.Name + "(é»‘)") : (game->white.Name + "(ç™½)"));
+			result += "ã€‚\r\næ£‹å±€è¿˜å‰©ä¸‹æœ€å" + empties + "æ­¥ï¼Œ" + "æœ€ä½³ç»“æœæ˜¯ ";
 			if (bestResult > 0) {
 				result += (bestResult / 2 + 32).ToString()
-					+ ":" + (32 - bestResult / 2).ToString() + " Ê¤";
+					+ ":" + (32 - bestResult / 2).ToString() + " èƒœ";
 			} else if (bestResult < 0) {
 				result += (bestResult / 2 + 32).ToString()
-					+ ":" + (32 - bestResult / 2).ToString() + " ¸º";
+					+ ":" + (32 - bestResult / 2).ToString() + " è´Ÿ";
 			} else {
-				result += "Æ½¾Ö";
+				result += "å¹³å±€";
 			}
-			result += "¡£\r\n×¼±¸ºÃÓ­½ÓÌôÕ½£¡";
+			result += "ã€‚\r\nå‡†å¤‡å¥½è¿æ¥æŒ‘æˆ˜ï¼";
 			return result;
 		}
 public:

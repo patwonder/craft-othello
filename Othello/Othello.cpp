@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -28,8 +28,8 @@
 /*
 ********************************************************************************
 								Othello.cpp
-		×÷Õß£ºPatrick
-		¸ÅÊö£º¶¨ÒåÈë¿Úµã main º¯Êı¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šå®šä¹‰å…¥å£ç‚¹ main å‡½æ•°ã€‚
 
 ********************************************************************************
 */
@@ -75,9 +75,9 @@ namespace Othello {
 
 	void doUninstall(String^ productCode) {
 		Windows::Forms::DialogResult res = MessageBox::Show(
-			"È·ÊµÒªĞ¶ÔØ " + __APP_NAME__ + " Version " + __APP_VERSION__ + " Âğ£¿"
+			"ç¡®å®è¦å¸è½½ " + __APP_NAME__ + " Version " + __APP_VERSION__ + " å—ï¼Ÿ"
 			/*+ "\nProductCode: " + productCode*/,
-			"Ğ¶ÔØ " + __APP_NAME__, MessageBoxButtons::YesNo, MessageBoxIcon::Warning,
+			"å¸è½½ " + __APP_NAME__, MessageBoxButtons::YesNo, MessageBoxIcon::Warning,
 			MessageBoxDefaultButton::Button2);
 		if (res == Windows::Forms::DialogResult::No) return;
 		execute(UNINSTALLER + " /x " + productCode + " /passive");
@@ -123,7 +123,7 @@ int main(array<System::String ^> ^args) {
 		CSingleInstance^ si = gcnew CSingleInstance(/*appPath*/UPGRADE_CODE);
 		try { /* mutex release */
 			if (si->isRunning()) {
-				MessageBox::Show(__APP_NAME__ + " ÒÑ¾­ÔÚÔËĞĞÁË£¡", "ÌáÊ¾", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+				MessageBox::Show(__APP_NAME__ + " å·²ç»åœ¨è¿è¡Œäº†ï¼", "æç¤º", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
 				return EXIT_FAILURE;
 			}
 			SHOW(Application::CompanyName);
@@ -142,8 +142,8 @@ int main(array<System::String ^> ^args) {
 			System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)pp);
 
 			if (!init) {
-				MessageBox::Show(__APP_NAME__ + " Î´ÄÜÕı³£³õÊ¼»¯¡£ÇëÈ·±£³ÌĞòÎÄ¼şÊÇÍêÕûµÄ¡£\n³¢ÊÔÖØĞÂ°²×°Ó¦ÓÃ³ÌĞòÒÔ½â¾ö´ËÎÊÌâ¡£",
-					__APP_NAME__ + " ³õÊ¼»¯Ê§°Ü", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				MessageBox::Show(__APP_NAME__ + " æœªèƒ½æ­£å¸¸åˆå§‹åŒ–ã€‚è¯·ç¡®ä¿ç¨‹åºæ–‡ä»¶æ˜¯å®Œæ•´çš„ã€‚\nå°è¯•é‡æ–°å®‰è£…åº”ç”¨ç¨‹åºä»¥è§£å†³æ­¤é—®é¢˜ã€‚",
+					__APP_NAME__ + " åˆå§‹åŒ–å¤±è´¥", MessageBoxButtons::OK, MessageBoxIcon::Error);
 				return EXIT_FAILURE;
 			}
 			*/

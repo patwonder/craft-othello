@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,11 +29,11 @@
 /*
 ********************************************************************************
 								frmWish.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmWish µÄÉùÃ÷¡£
-			frmWish ÀàÊµÏÖ Ê¥µ®ºØ¿¨ ´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmWish çš„å£°æ˜Žã€‚
+			frmWish ç±»å®žçŽ° åœ£è¯žè´ºå¡ çª—ä½“ã€‚
 		
-		×¢£º´ËÀàÎªÊ¥µ®ÌØ±ð°æ×¨ÓÃ£¬ÕýÊ½°æÖÐ²»°üº¬´ËÄÚÈÝ¡£
+		æ³¨ï¼šæ­¤ç±»ä¸ºåœ£è¯žç‰¹åˆ«ç‰ˆä¸“ç”¨ï¼Œæ­£å¼ç‰ˆä¸­ä¸åŒ…å«æ­¤å†…å®¹ã€‚
 
 ********************************************************************************
 */
@@ -60,13 +60,13 @@ namespace Othello {
 	};
 
 	/// <summary>
-	/// frmWish ÕªÒª
+	/// frmWish æ‘˜è¦
 	///
-	/// ¾¯¸æ: Èç¹û¸ü¸Ä´ËÀàµÄÃû³Æ£¬ÔòÐèÒª¸ü¸Ä
-	///          Óë´ËÀàËùÒÀÀµµÄËùÓÐ .resx ÎÄ¼þ¹ØÁªµÄÍÐ¹Ü×ÊÔ´±àÒëÆ÷¹¤¾ßµÄ
-	///          ¡°×ÊÔ´ÎÄ¼þÃû¡±ÊôÐÔ¡£·ñÔò£¬
-	///          Éè¼ÆÆ÷½«²»ÄÜÓë´Ë´°ÌåµÄ¹ØÁª
-	///          ±¾µØ»¯×ÊÔ´ÕýÈ·½»»¥¡£
+	/// è­¦å‘Š: å¦‚æžœæ›´æ”¹æ­¤ç±»çš„åç§°ï¼Œåˆ™éœ€è¦æ›´æ”¹
+	///          ä¸Žæ­¤ç±»æ‰€ä¾èµ–çš„æ‰€æœ‰ .resx æ–‡ä»¶å…³è”çš„æ‰˜ç®¡èµ„æºç¼–è¯‘å™¨å·¥å…·çš„
+	///          â€œèµ„æºæ–‡ä»¶åâ€å±žæ€§ã€‚å¦åˆ™ï¼Œ
+	///          è®¾è®¡å™¨å°†ä¸èƒ½ä¸Žæ­¤çª—ä½“çš„å…³è”
+	///          æœ¬åœ°åŒ–èµ„æºæ­£ç¡®äº¤äº’ã€‚
 	/// </summary>
 	public ref class frmWish : public System::Windows::Forms::Form
 	{
@@ -75,7 +75,7 @@ namespace Othello {
 		{
 			InitializeComponent();
 			//
-			//TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôìº¯Êý´úÂë
+			//TODO: åœ¨æ­¤å¤„æ·»åŠ æž„é€ å‡½æ•°ä»£ç 
 			//
 			this->controller = controller;
 			controller->wishShown();
@@ -83,7 +83,7 @@ namespace Othello {
 
 	protected:
 		/// <summary>
-		/// ÇåÀíËùÓÐÕýÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		~frmWish()
 		{
@@ -95,15 +95,15 @@ namespace Othello {
 
 	private:
 		/// <summary>
-		/// ±ØÐèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 		System::ComponentModel::Container ^components;
 		WishController^ controller;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùÐèµÄ·½·¨ - ²»Òª
-		/// Ê¹ÓÃ´úÂë±à¼­Æ÷ÐÞ¸Ä´Ë·½·¨µÄÄÚÈÝ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦
+		/// ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{

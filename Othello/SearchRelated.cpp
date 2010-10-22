@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -28,8 +28,8 @@
 /*
 ********************************************************************************
 								SearchRelated.cpp
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬ getAIPlayerName ºÍ getAISearchOptions º¯ÊıµÄ¶¨Òå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å« getAIPlayerName å’Œ getAISearchOptions å‡½æ•°çš„å®šä¹‰ã€‚
 
 ********************************************************************************
 */
@@ -42,25 +42,25 @@ using namespace Othello;
 System::String^ Players::getAIPlayerName(PlayerType type) {
 	switch (type) {
 	case PlayerType::RANDOM:
-		return "Ëæ»ú";
+		return "éšæœº";
 	case PlayerType::BIG_EAT:
-		return "´óÊ³";
+		return "å¤§é£Ÿ";
 	case PlayerType::EARTH:
-		return "µØÇò";
+		return "åœ°çƒ";
 	case PlayerType::CLOUDS:
-		return "ÔÆ¶ä";
+		return "äº‘æœµ";
 	case PlayerType::ORBIT:
-		return "¹ìµÀ";
+		return "è½¨é“";
 	case PlayerType::MOON:
-		return "ÔÂÁÁ";
+		return "æœˆäº®";
 	case PlayerType::STAR:
-		return "ĞÇĞÇ";
+		return "æ˜Ÿæ˜Ÿ";
 	case PlayerType::GALAXY:
-		return "ĞÇÏµ";
+		return "æ˜Ÿç³»";
 	case PlayerType::UNIVERSE:
-		return "ÓîÖæ";
+		return "å®‡å®™";
 	default:
-		return "Î´Öª¶ÔÊÖ";
+		return "æœªçŸ¥å¯¹æ‰‹";
 	}
 }
 

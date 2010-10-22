@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								AbstractPlayer.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£ºÕâÊÇËùÓÐÍæ¼ÒÀàÒªÊµÏÖµÄ¹«¹²½è¿Ú¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šè¿™æ˜¯æ‰€æœ‰çŽ©å®¶ç±»è¦å®žçŽ°çš„å…¬å…±å€Ÿå£ã€‚
 
 ********************************************************************************
 */
@@ -42,62 +42,62 @@ namespace Othello {
 public interface class AbstractPlayer {
 public:
 	/*
-	¸ÅÊö£ºÊ¹ÓÃÖ¸¶¨µÄÆå¾ÖÉÏÏÂÎÄºÍ×ßÆå·½£¬³õÊ¼»¯Íæ¼Ò¶ÔÏó
+	æ¦‚è¿°ï¼šä½¿ç”¨æŒ‡å®šçš„æ£‹å±€ä¸Šä¸‹æ–‡å’Œèµ°æ£‹æ–¹ï¼Œåˆå§‹åŒ–çŽ©å®¶å¯¹è±¡
 
-	²ÎÊý£º
-	gc£ºÖ¸¶¨µÄÆå¾ÖÉÏÏÂÎÄ
-	color£ºÖ¸¶¨µÄ×ßÆå·½
+	å‚æ•°ï¼š
+	gcï¼šæŒ‡å®šçš„æ£‹å±€ä¸Šä¸‹æ–‡
+	colorï¼šæŒ‡å®šçš„èµ°æ£‹æ–¹
 	*/
 	virtual void init(GameContext^ gc, Chess color) = 0;
 
 	/*
-	¸ÅÊö£ºÂÖµ½Íæ¼Ò×ßÆå£¬¸ù¾ÝÖ¸¶¨µÄÆå¾ÖÉÏÏÂÎÄºÍ¶ÔÊÖÉÏÒ»²½Æå£¬¾ö¶¨Íæ¼Ò×ßµÄÆå¡£
+	æ¦‚è¿°ï¼šè½®åˆ°çŽ©å®¶èµ°æ£‹ï¼Œæ ¹æ®æŒ‡å®šçš„æ£‹å±€ä¸Šä¸‹æ–‡å’Œå¯¹æ‰‹ä¸Šä¸€æ­¥æ£‹ï¼Œå†³å®šçŽ©å®¶èµ°çš„æ£‹ã€‚
 
-	²ÎÊý£º
-	gc£ºÖ¸¶¨µÄÆå¾ÖÉÏÏÂÎÄ
-	lastMove£º¶ÔÊÖµÄÉÏÒ»²½Æå£¬
-		Èô¶ÔÊÖÇ·ÐÐ£¬lastMove.getColor()·µ»ØChess::AVAILABLE
+	å‚æ•°ï¼š
+	gcï¼šæŒ‡å®šçš„æ£‹å±€ä¸Šä¸‹æ–‡
+	lastMoveï¼šå¯¹æ‰‹çš„ä¸Šä¸€æ­¥æ£‹ï¼Œ
+		è‹¥å¯¹æ‰‹æ¬ è¡Œï¼ŒlastMove.getColor()è¿”å›žChess::AVAILABLE
 
-	·µ»ØÖµ£ºÈôÍæ¼ÒÇ·ÐÐ£¬¿É·µ»ØÈÎÒâÖµ£¬
-		·ñÔò·µ»ØÖµ±ØÐëÎª[0, gc->getAvailable() - 1]Çø¼äÄÚµÄÕûÊý£¬
-		¶ÔÓ¦µÄÆå²½ÓÉgc->getAvailableMove()º¯Êý¸ø³ö¡£
+	è¿”å›žå€¼ï¼šè‹¥çŽ©å®¶æ¬ è¡Œï¼Œå¯è¿”å›žä»»æ„å€¼ï¼Œ
+		å¦åˆ™è¿”å›žå€¼å¿…é¡»ä¸º[0, gc->getAvailable() - 1]åŒºé—´å†…çš„æ•´æ•°ï¼Œ
+		å¯¹åº”çš„æ£‹æ­¥ç”±gc->getAvailableMove()å‡½æ•°ç»™å‡ºã€‚
 	*/
 	virtual int myTurn(GameContext^ gc, Move lastMove) = 0;
 
 	/*
-	¸ÅÊö£ºÔÚÆå¾Ö½áÊø»òÖÐÍ¾ÖÕÖ¹Ê±±»µ÷ÓÃ¡£Íæ¼Ò¶ÔÏó±ØÐë½«ÓÎÏ·×´Ì¬±ê¼ÇÎªÖÕÖ¹¡£
+	æ¦‚è¿°ï¼šåœ¨æ£‹å±€ç»“æŸæˆ–ä¸­é€”ç»ˆæ­¢æ—¶è¢«è°ƒç”¨ã€‚çŽ©å®¶å¯¹è±¡å¿…é¡»å°†æ¸¸æˆçŠ¶æ€æ ‡è®°ä¸ºç»ˆæ­¢ã€‚
 	*/
 	virtual void reset() = 0;
 
 	/*
-	¸ÅÊö£º»ñÈ¡Íæ¼ÒÃû³Æ
+	æ¦‚è¿°ï¼šèŽ·å–çŽ©å®¶åç§°
 
-	·µ»ØÖµ£ºµ±Ç°Íæ¼Ò¶ÔÏó±íÊ¾µÄÍæ¼ÒÃû³Æ
+	è¿”å›žå€¼ï¼šå½“å‰çŽ©å®¶å¯¹è±¡è¡¨ç¤ºçš„çŽ©å®¶åç§°
 	*/
 	virtual System::String^ getName() = 0;
 
 	/*
-	¸ÅÊö£º»ñÈ¡Íæ¼ÒµÄÑÓ³ÙÏìÓ¦Ê±¼ä
+	æ¦‚è¿°ï¼šèŽ·å–çŽ©å®¶çš„å»¶è¿Ÿå“åº”æ—¶é—´
 
-	·µ»ØÖµ£ºµ±Ç°Íæ¼ÒµÄÑÓ³ÙÏìÓ¦Ê±¼ä
+	è¿”å›žå€¼ï¼šå½“å‰çŽ©å®¶çš„å»¶è¿Ÿå“åº”æ—¶é—´
 	*/
 	virtual int getStepDelay();
 
 	/*
-	¸ÅÊö£ºÉèÖÃÍæ¼ÒµÄÑÓ³ÙÏìÓ¦Ê±¼ä
+	æ¦‚è¿°ï¼šè®¾ç½®çŽ©å®¶çš„å»¶è¿Ÿå“åº”æ—¶é—´
 
-	²ÎÊý£º
-	delay£ºÏ£ÍûÉèÖÃµÄÑÓ³ÙÏìÓ¦Ê±¼ä
+	å‚æ•°ï¼š
+	delayï¼šå¸Œæœ›è®¾ç½®çš„å»¶è¿Ÿå“åº”æ—¶é—´
 
-	×¢Òâ£ºÍæ¼Ò¶ÔÏó²»Ò»¶¨ÒªÔÚgetStepDelayÖÐ·µ»Ø¸ÃÊ±¼ä¡£
-		¾ßÌåÀý×Ó¿ÉÒÔ¿´GUIPlayer¡£ÈËÀàÍæ¼ÒÏÂÆå×ÜÊÇ¼´Ê±ÏìÓ¦µÄ¡£
+	æ³¨æ„ï¼šçŽ©å®¶å¯¹è±¡ä¸ä¸€å®šè¦åœ¨getStepDelayä¸­è¿”å›žè¯¥æ—¶é—´ã€‚
+		å…·ä½“ä¾‹å­å¯ä»¥çœ‹GUIPlayerã€‚äººç±»çŽ©å®¶ä¸‹æ£‹æ€»æ˜¯å³æ—¶å“åº”çš„ã€‚
 	*/
 	virtual void setStepDelay(int delay);
 };
 
 }//namespace Othello
 
-/* AbstractPlayer ¿ìËÙ¼Ì³Ð£¨Ö±½Ó¸´ÖÆ£©:
+/* AbstractPlayer å¿«é€Ÿç»§æ‰¿ï¼ˆç›´æŽ¥å¤åˆ¶ï¼‰:
 
 public ref class <ClassName> : public AbstractPlayer {
 private:

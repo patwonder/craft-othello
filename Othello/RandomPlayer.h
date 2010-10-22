@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								RandomPlayer.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà RandomPlayer µÄÉùÃ÷¡£
-			RandomPlayer ÀàÊµÏÖ¸ù¾İ¹æÔòËæ»ú×ßÆåµÄºÚ°×ÆåµçÄÔÍæ¼Ò¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» RandomPlayer çš„å£°æ˜ã€‚
+			RandomPlayer ç±»å®ç°æ ¹æ®è§„åˆ™éšæœºèµ°æ£‹çš„é»‘ç™½æ£‹ç”µè„‘ç©å®¶ã€‚
 
 ********************************************************************************
 */
@@ -50,7 +50,7 @@ private:
 	Chess color;
 public:
 	RandomPlayer(int delay) : stepDelay(delay) {
-		name = "Ëæ»ú";
+		name = "éšæœº";
 	}
 	virtual void init(GameContext^ gc, Chess color) {
 		/*

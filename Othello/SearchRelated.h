@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								SearchRelated.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬ºÍËÑË÷Ïà¹ØÀàµÄÉùÃ÷
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«å’Œæœç´¢ç›¸å…³ç±»çš„å£°æ˜
 
 ********************************************************************************
 */
@@ -40,7 +40,7 @@
 
 namespace Othello {
 
-//¸ÅÊö£ºËÑË÷¼àÊÓÆ÷Àà
+//æ¦‚è¿°ï¼šæœç´¢ç›‘è§†å™¨ç±»
 public interface class SearchDisplayer {
 public:
 	virtual void setSearchState(bool searching) = 0;
@@ -55,7 +55,7 @@ public:
 	virtual void searchEnded() = 0;
 };
 
-//¸ÅÊö£ºËÑË÷Ñ¡ÏîÀà
+//æ¦‚è¿°ï¼šæœç´¢é€‰é¡¹ç±»
 public value class SearchOptions {
 public:
 	int midGameDepth;
@@ -73,22 +73,22 @@ public:
 
 namespace Players {
 	/*
-	¸ÅÊö£º»ñÈ¡Ö¸¶¨Àà±ğAIÍæ¼ÒµÄÃû×Ö
+	æ¦‚è¿°ï¼šè·å–æŒ‡å®šç±»åˆ«AIç©å®¶çš„åå­—
 
-	²ÎÊı£º
-	type£ºÖ¸¶¨µÄAIÍæ¼ÒÀà±ğ
+	å‚æ•°ï¼š
+	typeï¼šæŒ‡å®šçš„AIç©å®¶ç±»åˆ«
 
-	·µ»ØÖµ£ºtypeÀàAIÍæ¼ÒµÄÃû×Ö
+	è¿”å›å€¼ï¼štypeç±»AIç©å®¶çš„åå­—
 	*/
 	System::String^ getAIPlayerName(PlayerType type);
 
 	/*
-	¸ÅÊö£º»ñÈ¡Ö¸¶¨Àà±ğAIÍæ¼ÒµÄËÑË÷Ñ¡Ïî
+	æ¦‚è¿°ï¼šè·å–æŒ‡å®šç±»åˆ«AIç©å®¶çš„æœç´¢é€‰é¡¹
 
-	²ÎÊı£º
-	type£ºÖ¸¶¨µÄAIÍæ¼ÒÀà±ğ
+	å‚æ•°ï¼š
+	typeï¼šæŒ‡å®šçš„AIç©å®¶ç±»åˆ«
 
-	·µ»ØÖµ£ºtypeÀàAIÍæ¼ÒµÄËÑË÷Ñ¡Ïî
+	è¿”å›å€¼ï¼štypeç±»AIç©å®¶çš„æœç´¢é€‰é¡¹
 	*/
 	SearchOptions getAISearchOptions(PlayerType type);
 }

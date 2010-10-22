@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								BigEater.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà BigEater µÄÉùÃ÷¡£
-			BigEater ÀàÊµÏÖ¸ù¾İ´óÊ³²ßÂÔ×ßÆåµÄºÚ°×ÆåAIÍæ¼Ò¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» BigEater çš„å£°æ˜ã€‚
+			BigEater ç±»å®ç°æ ¹æ®å¤§é£Ÿç­–ç•¥èµ°æ£‹çš„é»‘ç™½æ£‹AIç©å®¶ã€‚
 
 ********************************************************************************
 */
@@ -54,10 +54,10 @@ private:
 	void solverStarter();
 public:
 	/*
-	¸ÅÊö£ºÊ¹ÓÃÖ¸¶¨µÄÑÓ³ÙÏìÓ¦Ê±¼ä£¬³õÊ¼»¯ BigEater ¶ÔÏó
+	æ¦‚è¿°ï¼šä½¿ç”¨æŒ‡å®šçš„å»¶è¿Ÿå“åº”æ—¶é—´ï¼Œåˆå§‹åŒ– BigEater å¯¹è±¡
 
-	²ÎÊı£º
-	delay£ºÖ¸¶¨µÄÑÓ³ÙÏìÓ¦Ê±¼ä¡£
+	å‚æ•°ï¼š
+	delayï¼šæŒ‡å®šçš„å»¶è¿Ÿå“åº”æ—¶é—´ã€‚
 	*/
 	BigEater(int delay);
 	virtual void init(GameContext^ gc, Chess color);
@@ -71,7 +71,7 @@ public:
 			}
 	}
 	virtual System::String^ getName() {
-		return "´óÊ³";
+		return "å¤§é£Ÿ";
 	}
 	virtual int getStepDelay() {
 		return stepDelay;

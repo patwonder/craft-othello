@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -28,9 +28,9 @@
 /*
 ********************************************************************************
 								Craft.cpp
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà Craft µÄ¶¨Òå¡£
-			Craft ÀàÊµÏÖÊ¹ÓÃ CraftEngine ×ßÆåµÄºÚ°×ÆåAIÍæ¼Ò¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» Craft çš„å®šä¹‰ã€‚
+			Craft ç±»å®žçŽ°ä½¿ç”¨ CraftEngine èµ°æ£‹çš„é»‘ç™½æ£‹AIçŽ©å®¶ã€‚
 
 ********************************************************************************
 */
@@ -146,7 +146,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		empties--;
 	}
 	if (gc->getAvailableCount() == 0) {
-		displayer->setResult(userInfo->ShowEvaluation ? "Ç·ÐÐ" : "¿ÕÏÐ");
+		displayer->setResult(userInfo->ShowEvaluation ? "æ¬ è¡Œ" : "ç©ºé—²");
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
@@ -157,7 +157,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		System::Drawing::Point thisMove = gc->getAvailableMove(0);
 		solver->makeMove(thisMove.X * HEIGHT + thisMove.Y, myColor);
 		setSelectedMove(thisMove.X * HEIGHT + thisMove.Y);
-		displayer->setResult(userInfo->ShowEvaluation ? "±ØÏÂÆå" : "¿ÕÏÐ");
+		displayer->setResult(userInfo->ShowEvaluation ? "å¿…ä¸‹æ£‹" : "ç©ºé—²");
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
@@ -221,7 +221,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		}
 	// It won't get here
 	resetComponents();
-	System::Windows::Forms::MessageBox::Show("Solver Î´ÄÜ¸ø³öºÏ·¨Æå²½¡£", "³ö´íÀ²~~",
+	System::Windows::Forms::MessageBox::Show("Solver æœªèƒ½ç»™å‡ºåˆæ³•æ£‹æ­¥ã€‚", "å‡ºé”™å•¦~~",
 		System::Windows::Forms::MessageBoxButtons::OK,
 		System::Windows::Forms::MessageBoxIcon::Error);
 	return -1;
@@ -250,10 +250,10 @@ System::String^ Craft::getPartialResultDescription(int partialResult, int partia
 	System::String^ result;
 	if (partialDepth > 0) {
 		if (partialResult > Solver::INFINITE - Solver::MAXSTEP) { // early win
-			result = (partialResult == Solver::INFINITE ? "" : "¡Ý")
+			result = (partialResult == Solver::INFINITE ? "" : "â‰¥")
 				+ "+" + (partialResult - Solver::INFINITE + Solver::MAXSTEP).ToString();
 		} else if (partialResult < -Solver::INFINITE + Solver::MAXSTEP) { // early loss
-			result = (partialResult == -Solver::INFINITE ? "" : "¡Ü")
+			result = (partialResult == -Solver::INFINITE ? "" : "â‰¤")
 				+ (partialResult + Solver::INFINITE - Solver::MAXSTEP).ToString();
 		} else {
 			result = ((partialResult > 0) ? "+" : ((partialResult == 0) ? "" : "-"))
@@ -262,32 +262,32 @@ System::String^ Craft::getPartialResultDescription(int partialResult, int partia
 		result += " @ " + partialDepth.ToString();
 	} else if (partialDepth == Solver::PARTIALDEPTH_WLD) {
 		if (partialResult > 0)
-			result = "Ê¤";
+			result = "èƒœ";
 		else if (partialResult == 0)
-			result = "Æ½";
-		else result = "¸º";
-		result += percentage == 100 ? " @ Ê¤¸º" : (" @ " + percentage + "%");
+			result = "å¹³";
+		else result = "è´Ÿ";
+		result += percentage == 100 ? " @ èƒœè´Ÿ" : (" @ " + percentage + "%");
 	} else if (partialDepth == Solver::PARTIALDEPTH_EXACT) {
 		result = ((partialResult > 0) ? "+" : "") 
 			+ partialResult.ToString();
-		result += percentage == 100 ? " @ ÖÕ¾Ö" : (" @ " + percentage + "%");
+		result += percentage == 100 ? " @ ç»ˆå±€" : (" @ " + percentage + "%");
 	} else {
-		result = "Ë¼¿¼ÖÐ";
+		result = "æ€è€ƒä¸­";
 	}
 	return result;
 }
 
 System::String^ Craft::getResultDescription() {
-	if (!userInfo->ShowEvaluation) return "¿ÕÏÐ";
+	if (!userInfo->ShowEvaluation) return "ç©ºé—²";
 	System::String^ result;
 	int r = res->getResult();
 	if (empties >= options.partialExactStep50) {
 		int bm = res->getBestMove();
 		if (r > Solver::INFINITE - Solver::MAXSTEP) { // early win
-			result = ((bm < 0) ? "ÆåÆ×: " : (r == Solver::INFINITE ? "" : "¡Ý")) 
+			result = ((bm < 0) ? "æ£‹è°±: " : (r == Solver::INFINITE ? "" : "â‰¥")) 
 				+ "+" + (r - Solver::INFINITE + Solver::MAXSTEP).ToString();
 		} else if (r < -Solver::INFINITE + Solver::MAXSTEP) { // early loss
-			result = ((bm < 0) ? "ÆåÆ×: " : (r == -Solver::INFINITE ? "" : "¡Ü"))
+			result = ((bm < 0) ? "æ£‹è°±: " : (r == -Solver::INFINITE ? "" : "â‰¤"))
 				+ (r + Solver::INFINITE - Solver::MAXSTEP).ToString();
 		} else {
 			if (bm >= 0) {
@@ -295,8 +295,8 @@ System::String^ Craft::getResultDescription() {
 					+ (System::Math::Abs((double)r) / Solver::RULER).ToString("0.00");
 			} else {
 				if (System::Math::Abs(r) < 4 * Solver::RULER)
-					result = "ÆåÆ×";
-				else result = "ÆåÆ×: " + ((r > 0) ? "+" : ((r == 0) ? "" : "-"))
+					result = "æ£‹è°±";
+				else result = "æ£‹è°±: " + ((r > 0) ? "+" : ((r == 0) ? "" : "-"))
 					+ (System::Math::Abs((double)r) / Solver::RULER).ToString("0.00");
 			}
 		}

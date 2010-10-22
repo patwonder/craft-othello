@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmAnalyzer.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmAnalyzer µÄÉùÃ÷¡£
-			frmAnalyzer ÀàÊµÏÖ¡°Æå¾Ö·ÖÎö¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmAnalyzer çš„å£°æ˜ã€‚
+			frmAnalyzer ç±»å®ç°â€œæ£‹å±€åˆ†æâ€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -63,13 +63,13 @@ namespace Othello {
 	};
 
 	/// <summary>
-	/// frmAnalyzer ÕªÒª
+	/// frmAnalyzer æ‘˜è¦
 	///
-	/// ¾¯¸æ: Èç¹û¸ü¸Ä´ËÀàµÄÃû³Æ£¬ÔòĞèÒª¸ü¸Ä
-	///          Óë´ËÀàËùÒÀÀµµÄËùÓĞ .resx ÎÄ¼ş¹ØÁªµÄÍĞ¹Ü×ÊÔ´±àÒëÆ÷¹¤¾ßµÄ
-	///          ¡°×ÊÔ´ÎÄ¼şÃû¡±ÊôĞÔ¡£·ñÔò£¬
-	///          Éè¼ÆÆ÷½«²»ÄÜÓë´Ë´°ÌåµÄ¹ØÁª
-	///          ±¾µØ»¯×ÊÔ´ÕıÈ·½»»¥¡£
+	/// è­¦å‘Š: å¦‚æœæ›´æ”¹æ­¤ç±»çš„åç§°ï¼Œåˆ™éœ€è¦æ›´æ”¹
+	///          ä¸æ­¤ç±»æ‰€ä¾èµ–çš„æ‰€æœ‰ .resx æ–‡ä»¶å…³è”çš„æ‰˜ç®¡èµ„æºç¼–è¯‘å™¨å·¥å…·çš„
+	///          â€œèµ„æºæ–‡ä»¶åâ€å±æ€§ã€‚å¦åˆ™ï¼Œ
+	///          è®¾è®¡å™¨å°†ä¸èƒ½ä¸æ­¤çª—ä½“çš„å…³è”
+	///          æœ¬åœ°åŒ–èµ„æºæ­£ç¡®äº¤äº’ã€‚
 	/// </summary>
 	public ref class frmAnalyzer : public System::Windows::Forms::Form
 	{
@@ -78,7 +78,7 @@ namespace Othello {
 			PlayerType defaultPlayerType);
 	protected:
 		/// <summary>
-		/// ÇåÀíËùÓĞÕıÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		~frmAnalyzer()
 		{
@@ -131,14 +131,14 @@ namespace Othello {
 
 	private:
 		/// <summary>
-		/// ±ØĞèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»Òª
-		/// Ê¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä´Ë·½·¨µÄÄÚÈİ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦
+		/// ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -175,7 +175,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(41, 12);
 			this->label1->TabIndex = 1;
-			this->label1->Text = L"·ÖÎöÕß";
+			this->label1->Text = L"åˆ†æè€…";
 			// 
 			// pbAnalyze
 			// 
@@ -197,7 +197,7 @@ namespace Othello {
 			// lstResult
 			// 
 			this->lstResult->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
-			this->lstResult->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F));
+			this->lstResult->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F));
 			this->lstResult->FormattingEnabled = true;
 			this->lstResult->HorizontalScrollbar = true;
 			this->lstResult->ItemHeight = 14;
@@ -215,7 +215,7 @@ namespace Othello {
 			this->btnSave->Name = L"btnSave";
 			this->btnSave->Size = System::Drawing::Size(84, 28);
 			this->btnSave->TabIndex = 4;
-			this->btnSave->Text = L"±£´æ½á¹û(&S)";
+			this->btnSave->Text = L"ä¿å­˜ç»“æœ(&S)";
 			this->btnSave->UseVisualStyleBackColor = true;
 			this->btnSave->Click += gcnew System::EventHandler(this, &frmAnalyzer::btnSave_Click);
 			// 
@@ -227,7 +227,7 @@ namespace Othello {
 			this->btnClose->Name = L"btnClose";
 			this->btnClose->Size = System::Drawing::Size(84, 28);
 			this->btnClose->TabIndex = 5;
-			this->btnClose->Text = L"¹Ø±Õ(&C)";
+			this->btnClose->Text = L"å…³é—­(&C)";
 			this->btnClose->UseVisualStyleBackColor = true;
 			this->btnClose->Click += gcnew System::EventHandler(this, &frmAnalyzer::btnClose_Click);
 			// 
@@ -238,7 +238,7 @@ namespace Othello {
 			this->btnAnalyze->Name = L"btnAnalyze";
 			this->btnAnalyze->Size = System::Drawing::Size(84, 28);
 			this->btnAnalyze->TabIndex = 3;
-			this->btnAnalyze->Text = L"¿ªÊ¼·ÖÎö(&A)";
+			this->btnAnalyze->Text = L"å¼€å§‹åˆ†æ(&A)";
 			this->btnAnalyze->UseVisualStyleBackColor = true;
 			this->btnAnalyze->Click += gcnew System::EventHandler(this, &frmAnalyzer::btnAnalyze_Click);
 			// 
@@ -264,7 +264,7 @@ namespace Othello {
 			this->btnContinue->Name = L"btnContinue";
 			this->btnContinue->Size = System::Drawing::Size(84, 28);
 			this->btnContinue->TabIndex = 2;
-			this->btnContinue->Text = L"¼ÌĞøÓÎÏ·(&C)";
+			this->btnContinue->Text = L"ç»§ç»­æ¸¸æˆ(&C)";
 			this->btnContinue->UseVisualStyleBackColor = true;
 			this->btnContinue->Click += gcnew System::EventHandler(this, &frmAnalyzer::btnContinue_Click);
 			// 
@@ -287,7 +287,7 @@ namespace Othello {
 			this->Name = L"frmAnalyzer";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"Æå¾Ö·ÖÎö";
+			this->Text = L"æ£‹å±€åˆ†æ";
 			this->Load += gcnew System::EventHandler(this, &frmAnalyzer::frmAnalyzer_Load);
 			this->SizeChanged += gcnew System::EventHandler(this, &frmAnalyzer::frmAnalyzer_SizeChanged);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &frmAnalyzer::frmAnalyzer_FormClosed);

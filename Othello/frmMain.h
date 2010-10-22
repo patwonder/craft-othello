@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmMain.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmMain µÄÉùÃ÷¡£
-			frmMain ÀàÊµÏÖ Craft ³ÌĞòÖ÷´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmMain çš„å£°æ˜ã€‚
+			frmMain ç±»å®ç° Craft ç¨‹åºä¸»çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -131,7 +131,7 @@ namespace Othello {
 				guiForm->notifyUser();
 
 				if (gc->getAvailableCount() == 0) {
-					MessageBox::Show(guiForm, "Õâ»ØºÏÄúÇ·ĞĞ¡£", "ÌáÊ¾", MessageBoxButtons::OK,
+					MessageBox::Show(guiForm, "è¿™å›åˆæ‚¨æ¬ è¡Œã€‚", "æç¤º", MessageBoxButtons::OK,
 						MessageBoxIcon::Information);
 					return 0;
 				}
@@ -252,30 +252,30 @@ namespace Othello {
 		static String^ userPath = Application::LocalUserAppDataPath + "\\";
 		static String^ configPath = userPath + "config.craft";
 		static String^ shortKeys = 
-			"²Ù×÷: ¼üÅÌ¿ì½İ¼ü\n" 
-			"´ò¿ª ĞÂÓÎÏ· ²Ëµ¥: Ctrl+N\n"
-			"´ò¿ª ĞÂ²Ğ¾Ö ²Ëµ¥: Ctrl+M\n"
-			"¿ªÊ¼ÓÎÏ·: Enter »ò Space\n"
-			"ÒÆ¶¯¹â±ê: ¡ü¡ı¡ú¡û\n"
-			"Âä×Ó: Enter »ò Space\n"
-			"Ç°Õ°Ò»²½: E\n"
-			"»ÚÆå: Backspace, Ctrl+Z »ò Ctrl+¡û\n"
-			"¼ÌĞø: Ctrl+¡ú\n"
-			"ÖØĞÂ¿ªÊ¼: Ctrl+R\n"
-			"´ò¿ª Ñ¡ÔñºÚ·½ ²Ëµ¥: Ctrl+B\n"
-			"´ò¿ª Ñ¡Ôñ°×·½ ²Ëµ¥: Ctrl+W\n"
-			"Ô¤ÉèÆå¾Ö: Ctrl+P\n"
-			"Ñ§Ï°: Ctrl+L\n"
-			"Í³¼ÆĞÅÏ¢: Ctrl+I\n"
-			"ÌáÊ¾: T\n"
-			"ÖÕ¾ÖÇó½â: F\n"
-			"Í£Ö¹ËÑË÷: P\n"
-			"·ÖÎöÆå¾Ö: Ctrl+A\n"
-			"ÏÔÊ¾²Ğ¾ÖĞÅÏ¢: Ctrl+K\n"
-			"´ò¿ªÓÎÏ·: Ctrl+O\n"
-			"±£´æÓÎÏ·: Ctrl+S\n"
-			"ÏÔÊ¾°ïÖú: F1\n"
-			"ÍË³öÓÎÏ·: Ctrl+X";
+			"æ“ä½œ: é”®ç›˜å¿«æ·é”®\n" 
+			"æ‰“å¼€ æ–°æ¸¸æˆ èœå•: Ctrl+N\n"
+			"æ‰“å¼€ æ–°æ®‹å±€ èœå•: Ctrl+M\n"
+			"å¼€å§‹æ¸¸æˆ: Enter æˆ– Space\n"
+			"ç§»åŠ¨å…‰æ ‡: â†‘â†“â†’â†\n"
+			"è½å­: Enter æˆ– Space\n"
+			"å‰ç»ä¸€æ­¥: E\n"
+			"æ‚”æ£‹: Backspace, Ctrl+Z æˆ– Ctrl+â†\n"
+			"ç»§ç»­: Ctrl+â†’\n"
+			"é‡æ–°å¼€å§‹: Ctrl+R\n"
+			"æ‰“å¼€ é€‰æ‹©é»‘æ–¹ èœå•: Ctrl+B\n"
+			"æ‰“å¼€ é€‰æ‹©ç™½æ–¹ èœå•: Ctrl+W\n"
+			"é¢„è®¾æ£‹å±€: Ctrl+P\n"
+			"å­¦ä¹ : Ctrl+L\n"
+			"ç»Ÿè®¡ä¿¡æ¯: Ctrl+I\n"
+			"æç¤º: T\n"
+			"ç»ˆå±€æ±‚è§£: F\n"
+			"åœæ­¢æœç´¢: P\n"
+			"åˆ†ææ£‹å±€: Ctrl+A\n"
+			"æ˜¾ç¤ºæ®‹å±€ä¿¡æ¯: Ctrl+K\n"
+			"æ‰“å¼€æ¸¸æˆ: Ctrl+O\n"
+			"ä¿å­˜æ¸¸æˆ: Ctrl+S\n"
+			"æ˜¾ç¤ºå¸®åŠ©: F1\n"
+			"é€€å‡ºæ¸¸æˆ: Ctrl+X";
 		array<ChessPicBox^, 2>^ board;
 		//Image::GetThumbnailImageAbort^ commonImageAbort;
 		GameContext^ gcBlack;
@@ -705,7 +705,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->statusBar->RenderMode = System::Windows::Forms::ToolStripRenderMode::ManagerRenderMode;
 				 this->statusBar->Size = System::Drawing::Size(659, 22);
 				 this->statusBar->TabIndex = 4;
-				 this->statusBar->Text = L"×´Ì¬À¸";
+				 this->statusBar->Text = L"çŠ¶æ€æ ";
 				 // 
 				 // ssPlayers
 				 // 
@@ -720,7 +720,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->ssResult->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssResult->Name = L"ssResult";
 				 this->ssResult->Size = System::Drawing::Size(108, 17);
-				 this->ssResult->Text = L"¿ÕÏĞ";
+				 this->ssResult->Text = L"ç©ºé—²";
 				 this->ssResult->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
 				 // ssSpeed
@@ -763,7 +763,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->toolBar->RightToLeft = System::Windows::Forms::RightToLeft::No;
 				 this->toolBar->Size = System::Drawing::Size(659, 39);
 				 this->toolBar->TabIndex = 6;
-				 this->toolBar->Text = L"¹¤¾ßÌõ";
+				 this->toolBar->Text = L"å·¥å…·æ¡";
 				 // 
 				 // tsbtnNew
 				 // 
@@ -775,34 +775,34 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnNew->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnNew->Name = L"tsbtnNew";
 				 this->tsbtnNew->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnNew->Text = L"ĞÂÓÎÏ·";
+				 this->tsbtnNew->Text = L"æ–°æ¸¸æˆ";
 				 // 
 				 // tsmnuManBlackToMachine
 				 // 
 				 this->tsmnuManBlackToMachine->Name = L"tsmnuManBlackToMachine";
 				 this->tsmnuManBlackToMachine->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuManBlackToMachine->Text = L"ÎÒ×öºÚ·½(&B)";
+				 this->tsmnuManBlackToMachine->Text = L"æˆ‘åšé»‘æ–¹(&B)";
 				 this->tsmnuManBlackToMachine->Click += gcnew System::EventHandler(this, &frmMain::tsmnuManBlackToMachine_Click);
 				 // 
 				 // tsmnuManWhiteToMachine
 				 // 
 				 this->tsmnuManWhiteToMachine->Name = L"tsmnuManWhiteToMachine";
 				 this->tsmnuManWhiteToMachine->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuManWhiteToMachine->Text = L"ÎÒ×ö°×·½(&W)";
+				 this->tsmnuManWhiteToMachine->Text = L"æˆ‘åšç™½æ–¹(&W)";
 				 this->tsmnuManWhiteToMachine->Click += gcnew System::EventHandler(this, &frmMain::tsmnuManWhiteToMachine_Click);
 				 // 
 				 // tsmnuManToMan
 				 // 
 				 this->tsmnuManToMan->Name = L"tsmnuManToMan";
 				 this->tsmnuManToMan->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuManToMan->Text = L"ÈË¶ÔÈË(&M)";
+				 this->tsmnuManToMan->Text = L"äººå¯¹äºº(&M)";
 				 this->tsmnuManToMan->Click += gcnew System::EventHandler(this, &frmMain::tsmnuManToMan_Click);
 				 // 
 				 // tsmnuMachines
 				 // 
 				 this->tsmnuMachines->Name = L"tsmnuMachines";
 				 this->tsmnuMachines->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuMachines->Text = L"»úÆ÷¶ÔÕ½(&A)";
+				 this->tsmnuMachines->Text = L"æœºå™¨å¯¹æˆ˜(&A)";
 				 this->tsmnuMachines->Click += gcnew System::EventHandler(this, &frmMain::tsmnuMachines_Click);
 				 // 
 				 // tsmnuNewEndGame
@@ -816,34 +816,34 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsmnuNewEndGame->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsmnuNewEndGame->Name = L"tsmnuNewEndGame";
 				 this->tsmnuNewEndGame->Size = System::Drawing::Size(45, 36);
-				 this->tsmnuNewEndGame->Text = L"ĞÂ²Ğ¾Ö";
+				 this->tsmnuNewEndGame->Text = L"æ–°æ®‹å±€";
 				 // 
 				 // tsmnuEndGameBeginner
 				 // 
 				 this->tsmnuEndGameBeginner->Name = L"tsmnuEndGameBeginner";
 				 this->tsmnuEndGameBeginner->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuEndGameBeginner->Text = L"³õÑ§Õß(&B)";
+				 this->tsmnuEndGameBeginner->Text = L"åˆå­¦è€…(&B)";
 				 this->tsmnuEndGameBeginner->Click += gcnew System::EventHandler(this, &frmMain::tsmnuEndGameBeginner_Click);
 				 // 
 				 // tsmnuEndGameAmateur
 				 // 
 				 this->tsmnuEndGameAmateur->Name = L"tsmnuEndGameAmateur";
 				 this->tsmnuEndGameAmateur->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuEndGameAmateur->Text = L"ÒµÓàÍæ¼Ò(&A)";
+				 this->tsmnuEndGameAmateur->Text = L"ä¸šä½™ç©å®¶(&A)";
 				 this->tsmnuEndGameAmateur->Click += gcnew System::EventHandler(this, &frmMain::tsmnuEndGameAmateur_Click);
 				 // 
 				 // tsmnuEndGameProfessional
 				 // 
 				 this->tsmnuEndGameProfessional->Name = L"tsmnuEndGameProfessional";
 				 this->tsmnuEndGameProfessional->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuEndGameProfessional->Text = L"Ö°ÒµÍæ¼Ò(&P)";
+				 this->tsmnuEndGameProfessional->Text = L"èŒä¸šç©å®¶(&P)";
 				 this->tsmnuEndGameProfessional->Click += gcnew System::EventHandler(this, &frmMain::tsmnuEndGameProfessional_Click);
 				 // 
 				 // tsmnuEndGameMaster
 				 // 
 				 this->tsmnuEndGameMaster->Name = L"tsmnuEndGameMaster";
 				 this->tsmnuEndGameMaster->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuEndGameMaster->Text = L"ÌØ¼¶´óÊ¦(&M)";
+				 this->tsmnuEndGameMaster->Text = L"ç‰¹çº§å¤§å¸ˆ(&M)";
 				 this->tsmnuEndGameMaster->Click += gcnew System::EventHandler(this, &frmMain::tsmnuEndGameMaster_Click);
 				 // 
 				 // toolStripMenuItem7
@@ -855,7 +855,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuEndGameCustom->Name = L"tsmnuEndGameCustom";
 				 this->tsmnuEndGameCustom->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuEndGameCustom->Text = L"×Ô¶¨Òå(&C)";
+				 this->tsmnuEndGameCustom->Text = L"è‡ªå®šä¹‰(&C)";
 				 this->tsmnuEndGameCustom->Click += gcnew System::EventHandler(this, &frmMain::tsmnuEndGameCustom_Click);
 				 // 
 				 // toolStripMenuItem8
@@ -867,7 +867,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuShowEndGameInfo->Name = L"tsmnuShowEndGameInfo";
 				 this->tsmnuShowEndGameInfo->Size = System::Drawing::Size(144, 22);
-				 this->tsmnuShowEndGameInfo->Text = L"²Ğ¾ÖĞÅÏ¢(&K)";
+				 this->tsmnuShowEndGameInfo->Text = L"æ®‹å±€ä¿¡æ¯(&K)";
 				 this->tsmnuShowEndGameInfo->Click += gcnew System::EventHandler(this, &frmMain::tsmnuShowEndGameInfo_Click);
 				 // 
 				 // tsbtnRestart
@@ -878,7 +878,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnRestart->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnRestart->Name = L"tsbtnRestart";
 				 this->tsbtnRestart->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnRestart->Text = L"ÖØĞÂ¿ªÊ¼";
+				 this->tsbtnRestart->Text = L"é‡æ–°å¼€å§‹";
 				 this->tsbtnRestart->Click += gcnew System::EventHandler(this, &frmMain::tsbtnRestart_Click);
 				 // 
 				 // tsbtnSetupBoard
@@ -889,8 +889,8 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnSetupBoard->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnSetupBoard->Name = L"tsbtnSetupBoard";
 				 this->tsbtnSetupBoard->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnSetupBoard->Text = L"Ô¤ÉèÆå¾Ö";
-				 this->tsbtnSetupBoard->ToolTipText = L"Ô¤ÉèÆå¾Ö";
+				 this->tsbtnSetupBoard->Text = L"é¢„è®¾æ£‹å±€";
+				 this->tsbtnSetupBoard->ToolTipText = L"é¢„è®¾æ£‹å±€";
 				 this->tsbtnSetupBoard->Click += gcnew System::EventHandler(this, &frmMain::tsbtnSetupBoard_Click);
 				 // 
 				 // toolStripSeparator14
@@ -906,7 +906,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnOpenGame->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnOpenGame->Name = L"tsbtnOpenGame";
 				 this->tsbtnOpenGame->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnOpenGame->Text = L"´ò¿ªÓÎÏ·";
+				 this->tsbtnOpenGame->Text = L"æ‰“å¼€æ¸¸æˆ";
 				 this->tsbtnOpenGame->Click += gcnew System::EventHandler(this, &frmMain::tsbtnOpenGame_Click);
 				 // 
 				 // tsbtnSaveGame
@@ -917,7 +917,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnSaveGame->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnSaveGame->Name = L"tsbtnSaveGame";
 				 this->tsbtnSaveGame->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnSaveGame->Text = L"±£´æÓÎÏ·";
+				 this->tsbtnSaveGame->Text = L"ä¿å­˜æ¸¸æˆ";
 				 this->tsbtnSaveGame->Click += gcnew System::EventHandler(this, &frmMain::tsbtnSaveGame_Click);
 				 // 
 				 // toolStripSeparator11
@@ -933,7 +933,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnBack->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnBack->Name = L"tsbtnBack";
 				 this->tsbtnBack->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnBack->Text = L"»ÚÆå";
+				 this->tsbtnBack->Text = L"æ‚”æ£‹";
 				 this->tsbtnBack->Click += gcnew System::EventHandler(this, &frmMain::tsbtnBack_Click);
 				 // 
 				 // tsbtnContinue
@@ -944,7 +944,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnContinue->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnContinue->Name = L"tsbtnContinue";
 				 this->tsbtnContinue->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnContinue->Text = L"¼ÌĞø";
+				 this->tsbtnContinue->Text = L"ç»§ç»­";
 				 this->tsbtnContinue->Click += gcnew System::EventHandler(this, &frmMain::tsbtnContinue_Click);
 				 // 
 				 // tsbtnTip
@@ -955,7 +955,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnTip->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnTip->Name = L"tsbtnTip";
 				 this->tsbtnTip->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnTip->Text = L"ÌáÊ¾";
+				 this->tsbtnTip->Text = L"æç¤º";
 				 this->tsbtnTip->Click += gcnew System::EventHandler(this, &frmMain::tsbtnTip_Click);
 				 // 
 				 // tsbtnForceEndSolve
@@ -966,7 +966,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnForceEndSolve->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnForceEndSolve->Name = L"tsbtnForceEndSolve";
 				 this->tsbtnForceEndSolve->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnForceEndSolve->Text = L"ÖÕ¾ÖÇó½â";
+				 this->tsbtnForceEndSolve->Text = L"ç»ˆå±€æ±‚è§£";
 				 this->tsbtnForceEndSolve->Click += gcnew System::EventHandler(this, &frmMain::tsbtnForceEndSolve_Click);
 				 // 
 				 // tsbtnStopSearch
@@ -977,7 +977,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnStopSearch->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnStopSearch->Name = L"tsbtnStopSearch";
 				 this->tsbtnStopSearch->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnStopSearch->Text = L"Í£Ö¹ËÑË÷";
+				 this->tsbtnStopSearch->Text = L"åœæ­¢æœç´¢";
 				 this->tsbtnStopSearch->Click += gcnew System::EventHandler(this, &frmMain::tsbtnStopSearch_Click);
 				 // 
 				 // toolStripSeparator7
@@ -996,13 +996,13 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnBlack->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnBlack->Name = L"tsbtnBlack";
 				 this->tsbtnBlack->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnBlack->Text = L"Ñ¡ÔñºÚ·½";
+				 this->tsbtnBlack->Text = L"é€‰æ‹©é»‘æ–¹";
 				 // 
 				 // tsmnuBlackMan
 				 // 
 				 this->tsmnuBlackMan->Name = L"tsmnuBlackMan";
 				 this->tsmnuBlackMan->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackMan->Text = L"ÈËÀàÍæ¼Ò(&Human)";
+				 this->tsmnuBlackMan->Text = L"äººç±»ç©å®¶(&Human)";
 				 this->tsmnuBlackMan->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackMan_Click);
 				 // 
 				 // toolStripMenuItem5
@@ -1014,21 +1014,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuBlackRandom->Name = L"tsmnuBlackRandom";
 				 this->tsmnuBlackRandom->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackRandom->Text = L"Ëæ»ú(&Random)";
+				 this->tsmnuBlackRandom->Text = L"éšæœº(&Random)";
 				 this->tsmnuBlackRandom->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackRandom_Click);
 				 // 
 				 // tsmnuBlackBigEat
 				 // 
 				 this->tsmnuBlackBigEat->Name = L"tsmnuBlackBigEat";
 				 this->tsmnuBlackBigEat->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackBigEat->Text = L"´óÊ³(&Big Eat)";
+				 this->tsmnuBlackBigEat->Text = L"å¤§é£Ÿ(&Big Eat)";
 				 this->tsmnuBlackBigEat->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackBigEat_Click);
 				 // 
 				 // tsmnuBlackEarth
 				 // 
 				 this->tsmnuBlackEarth->Name = L"tsmnuBlackEarth";
 				 this->tsmnuBlackEarth->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackEarth->Text = L"µØÇò(&Earth)";
+				 this->tsmnuBlackEarth->Text = L"åœ°çƒ(&Earth)";
 				 this->tsmnuBlackEarth->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackEarth_Click);
 				 // 
 				 // toolStripSeparator3
@@ -1040,21 +1040,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuBlackClouds->Name = L"tsmnuBlackClouds";
 				 this->tsmnuBlackClouds->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackClouds->Text = L"ÔÆ¶ä(&Clouds)";
+				 this->tsmnuBlackClouds->Text = L"äº‘æœµ(&Clouds)";
 				 this->tsmnuBlackClouds->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackClouds_Click);
 				 // 
 				 // tsmnuBlackOrbit
 				 // 
 				 this->tsmnuBlackOrbit->Name = L"tsmnuBlackOrbit";
 				 this->tsmnuBlackOrbit->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackOrbit->Text = L"¹ìµÀ(&Orbit)";
+				 this->tsmnuBlackOrbit->Text = L"è½¨é“(&Orbit)";
 				 this->tsmnuBlackOrbit->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackOrbit_Click);
 				 // 
 				 // tsmnuBlackMoon
 				 // 
 				 this->tsmnuBlackMoon->Name = L"tsmnuBlackMoon";
 				 this->tsmnuBlackMoon->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackMoon->Text = L"ÔÂÁÁ(&Moon)";
+				 this->tsmnuBlackMoon->Text = L"æœˆäº®(&Moon)";
 				 this->tsmnuBlackMoon->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackMoon_Click);
 				 // 
 				 // toolStripSeparator4
@@ -1066,21 +1066,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuBlackStar->Name = L"tsmnuBlackStar";
 				 this->tsmnuBlackStar->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackStar->Text = L"ĞÇĞÇ(&Star)";
+				 this->tsmnuBlackStar->Text = L"æ˜Ÿæ˜Ÿ(&Star)";
 				 this->tsmnuBlackStar->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackStar_Click);
 				 // 
 				 // tsmnuBlackGalaxy
 				 // 
 				 this->tsmnuBlackGalaxy->Name = L"tsmnuBlackGalaxy";
 				 this->tsmnuBlackGalaxy->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackGalaxy->Text = L"ĞÇÏµ(&Galaxy)";
+				 this->tsmnuBlackGalaxy->Text = L"æ˜Ÿç³»(&Galaxy)";
 				 this->tsmnuBlackGalaxy->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackGalaxy_Click);
 				 // 
 				 // tsmnuBlackUniverse
 				 // 
 				 this->tsmnuBlackUniverse->Name = L"tsmnuBlackUniverse";
 				 this->tsmnuBlackUniverse->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuBlackUniverse->Text = L"ÓîÖæ(&Universe)";
+				 this->tsmnuBlackUniverse->Text = L"å®‡å®™(&Universe)";
 				 this->tsmnuBlackUniverse->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackUniverse_Click);
 				 // 
 				 // tsbtnWhite
@@ -1094,13 +1094,13 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnWhite->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnWhite->Name = L"tsbtnWhite";
 				 this->tsbtnWhite->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnWhite->Text = L"Ñ¡Ôñ°×·½";
+				 this->tsbtnWhite->Text = L"é€‰æ‹©ç™½æ–¹";
 				 // 
 				 // tsmnuWhiteMan
 				 // 
 				 this->tsmnuWhiteMan->Name = L"tsmnuWhiteMan";
 				 this->tsmnuWhiteMan->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteMan->Text = L"ÈËÀàÍæ¼Ò(&Human)";
+				 this->tsmnuWhiteMan->Text = L"äººç±»ç©å®¶(&Human)";
 				 this->tsmnuWhiteMan->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteMan_Click);
 				 // 
 				 // toolStripMenuItem6
@@ -1112,21 +1112,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuWhiteRandom->Name = L"tsmnuWhiteRandom";
 				 this->tsmnuWhiteRandom->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteRandom->Text = L"Ëæ»ú(&Random)";
+				 this->tsmnuWhiteRandom->Text = L"éšæœº(&Random)";
 				 this->tsmnuWhiteRandom->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteRandom_Click);
 				 // 
 				 // tsmnuWhiteBigEat
 				 // 
 				 this->tsmnuWhiteBigEat->Name = L"tsmnuWhiteBigEat";
 				 this->tsmnuWhiteBigEat->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteBigEat->Text = L"´óÊ³(&Big Eat)";
+				 this->tsmnuWhiteBigEat->Text = L"å¤§é£Ÿ(&Big Eat)";
 				 this->tsmnuWhiteBigEat->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteBigEat_Click);
 				 // 
 				 // tsmnuWhiteEarth
 				 // 
 				 this->tsmnuWhiteEarth->Name = L"tsmnuWhiteEarth";
 				 this->tsmnuWhiteEarth->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteEarth->Text = L"µØÇò(&Earth)";
+				 this->tsmnuWhiteEarth->Text = L"åœ°çƒ(&Earth)";
 				 this->tsmnuWhiteEarth->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteEarth_Click);
 				 // 
 				 // toolStripSeparator5
@@ -1138,21 +1138,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuWhiteClouds->Name = L"tsmnuWhiteClouds";
 				 this->tsmnuWhiteClouds->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteClouds->Text = L"ÔÆ¶ä(&Clouds)";
+				 this->tsmnuWhiteClouds->Text = L"äº‘æœµ(&Clouds)";
 				 this->tsmnuWhiteClouds->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteClouds_Click);
 				 // 
 				 // tsmnuWhiteOrbit
 				 // 
 				 this->tsmnuWhiteOrbit->Name = L"tsmnuWhiteOrbit";
 				 this->tsmnuWhiteOrbit->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteOrbit->Text = L"¹ìµÀ(&Orbit)";
+				 this->tsmnuWhiteOrbit->Text = L"è½¨é“(&Orbit)";
 				 this->tsmnuWhiteOrbit->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteOrbit_Click);
 				 // 
 				 // tsmnuWhiteMoon
 				 // 
 				 this->tsmnuWhiteMoon->Name = L"tsmnuWhiteMoon";
 				 this->tsmnuWhiteMoon->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteMoon->Text = L"ÔÂÁÁ(&Moon)";
+				 this->tsmnuWhiteMoon->Text = L"æœˆäº®(&Moon)";
 				 this->tsmnuWhiteMoon->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteMoon_Click);
 				 // 
 				 // toolStripSeparator6
@@ -1164,21 +1164,21 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->tsmnuWhiteStar->Name = L"tsmnuWhiteStar";
 				 this->tsmnuWhiteStar->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteStar->Text = L"ĞÇĞÇ(&Star)";
+				 this->tsmnuWhiteStar->Text = L"æ˜Ÿæ˜Ÿ(&Star)";
 				 this->tsmnuWhiteStar->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteStar_Click);
 				 // 
 				 // tsmnuWhiteGalaxy
 				 // 
 				 this->tsmnuWhiteGalaxy->Name = L"tsmnuWhiteGalaxy";
 				 this->tsmnuWhiteGalaxy->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteGalaxy->Text = L"ĞÇÏµ(&Galaxy)";
+				 this->tsmnuWhiteGalaxy->Text = L"æ˜Ÿç³»(&Galaxy)";
 				 this->tsmnuWhiteGalaxy->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteGalaxy_Click);
 				 // 
 				 // tsmnuWhiteUniverse
 				 // 
 				 this->tsmnuWhiteUniverse->Name = L"tsmnuWhiteUniverse";
 				 this->tsmnuWhiteUniverse->Size = System::Drawing::Size(173, 22);
-				 this->tsmnuWhiteUniverse->Text = L"ÓîÖæ(&Universe)";
+				 this->tsmnuWhiteUniverse->Text = L"å®‡å®™(&Universe)";
 				 this->tsmnuWhiteUniverse->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteUniverse_Click);
 				 // 
 				 // toolStripSeparator9
@@ -1194,7 +1194,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnShowStatistics->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnShowStatistics->Name = L"tsbtnShowStatistics";
 				 this->tsbtnShowStatistics->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnShowStatistics->Text = L"Í³¼ÆĞÅÏ¢";
+				 this->tsbtnShowStatistics->Text = L"ç»Ÿè®¡ä¿¡æ¯";
 				 this->tsbtnShowStatistics->Click += gcnew System::EventHandler(this, &frmMain::tsbtnShowStatistics_Click);
 				 // 
 				 // tsbtnAnalyze
@@ -1205,7 +1205,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnAnalyze->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnAnalyze->Name = L"tsbtnAnalyze";
 				 this->tsbtnAnalyze->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnAnalyze->Text = L"·ÖÎö";
+				 this->tsbtnAnalyze->Text = L"åˆ†æ";
 				 this->tsbtnAnalyze->Click += gcnew System::EventHandler(this, &frmMain::tsbtnAnalyze_Click);
 				 // 
 				 // toolStripSeparator2
@@ -1221,7 +1221,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnLearn->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnLearn->Name = L"tsbtnLearn";
 				 this->tsbtnLearn->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnLearn->Text = L"Ñ§Ï°";
+				 this->tsbtnLearn->Text = L"å­¦ä¹ ";
 				 this->tsbtnLearn->Visible = false;
 				 this->tsbtnLearn->Click += gcnew System::EventHandler(this, &frmMain::tsbtnLearn_Click);
 				 // 
@@ -1233,7 +1233,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tsbtnExit->ImageTransparentColor = System::Drawing::Color::Magenta;
 				 this->tsbtnExit->Name = L"tsbtnExit";
 				 this->tsbtnExit->Size = System::Drawing::Size(36, 36);
-				 this->tsbtnExit->Text = L"ÍË³ö";
+				 this->tsbtnExit->Text = L"é€€å‡º";
 				 this->tsbtnExit->Click += gcnew System::EventHandler(this, &frmMain::tsbtnExit_Click);
 				 // 
 				 // menuBar
@@ -1254,7 +1254,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuGame->Name = L"mnuGame";
 				 this->mnuGame->ShortcutKeyDisplayString = L"";
 				 this->mnuGame->Size = System::Drawing::Size(61, 21);
-				 this->mnuGame->Text = L"ÓÎÏ·(&G)";
+				 this->mnuGame->Text = L"æ¸¸æˆ(&G)";
 				 // 
 				 // mnuNew
 				 // 
@@ -1263,34 +1263,34 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuNew->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuNew.Image")));
 				 this->mnuNew->Name = L"mnuNew";
 				 this->mnuNew->Size = System::Drawing::Size(142, 22);
-				 this->mnuNew->Text = L"ĞÂÓÎÏ·(&N)";
+				 this->mnuNew->Text = L"æ–°æ¸¸æˆ(&N)";
 				 // 
 				 // mnuManBlackToMachine
 				 // 
 				 this->mnuManBlackToMachine->Name = L"mnuManBlackToMachine";
 				 this->mnuManBlackToMachine->Size = System::Drawing::Size(144, 22);
-				 this->mnuManBlackToMachine->Text = L"ÎÒ×öºÚ·½(&B)";
+				 this->mnuManBlackToMachine->Text = L"æˆ‘åšé»‘æ–¹(&B)";
 				 this->mnuManBlackToMachine->Click += gcnew System::EventHandler(this, &frmMain::tsmnuManBlackToMachine_Click);
 				 // 
 				 // mnuManWhiteToMachine
 				 // 
 				 this->mnuManWhiteToMachine->Name = L"mnuManWhiteToMachine";
 				 this->mnuManWhiteToMachine->Size = System::Drawing::Size(144, 22);
-				 this->mnuManWhiteToMachine->Text = L"ÎÒ×ö°×·½(&W)";
+				 this->mnuManWhiteToMachine->Text = L"æˆ‘åšç™½æ–¹(&W)";
 				 this->mnuManWhiteToMachine->Click += gcnew System::EventHandler(this, &frmMain::tsmnuManWhiteToMachine_Click);
 				 // 
 				 // mnuManToMan
 				 // 
 				 this->mnuManToMan->Name = L"mnuManToMan";
 				 this->mnuManToMan->Size = System::Drawing::Size(144, 22);
-				 this->mnuManToMan->Text = L"ÈË¶ÔÈË(&M)";
+				 this->mnuManToMan->Text = L"äººå¯¹äºº(&M)";
 				 this->mnuManToMan->Click += gcnew System::EventHandler(this, &frmMain::mnuManToMan_Click);
 				 // 
 				 // mnuMachines
 				 // 
 				 this->mnuMachines->Name = L"mnuMachines";
 				 this->mnuMachines->Size = System::Drawing::Size(144, 22);
-				 this->mnuMachines->Text = L"»úÆ÷¶ÔÕ½(&A)";
+				 this->mnuMachines->Text = L"æœºå™¨å¯¹æˆ˜(&A)";
 				 this->mnuMachines->Click += gcnew System::EventHandler(this, &frmMain::mnuMachines_Click);
 				 // 
 				 // mnuNewEndGame
@@ -1301,34 +1301,34 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuNewEndGame->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuNewEndGame.Image")));
 				 this->mnuNewEndGame->Name = L"mnuNewEndGame";
 				 this->mnuNewEndGame->Size = System::Drawing::Size(142, 22);
-				 this->mnuNewEndGame->Text = L"ĞÂ²Ğ¾Ö(&M)";
+				 this->mnuNewEndGame->Text = L"æ–°æ®‹å±€(&M)";
 				 // 
 				 // mnuEndGameBeginner
 				 // 
 				 this->mnuEndGameBeginner->Name = L"mnuEndGameBeginner";
 				 this->mnuEndGameBeginner->Size = System::Drawing::Size(144, 22);
-				 this->mnuEndGameBeginner->Text = L"³õÑ§Õß(&B)";
+				 this->mnuEndGameBeginner->Text = L"åˆå­¦è€…(&B)";
 				 this->mnuEndGameBeginner->Click += gcnew System::EventHandler(this, &frmMain::mnuEndGameBeginner_Click);
 				 // 
 				 // mnuEndGameAmateur
 				 // 
 				 this->mnuEndGameAmateur->Name = L"mnuEndGameAmateur";
 				 this->mnuEndGameAmateur->Size = System::Drawing::Size(144, 22);
-				 this->mnuEndGameAmateur->Text = L"ÒµÓàÍæ¼Ò(&A)";
+				 this->mnuEndGameAmateur->Text = L"ä¸šä½™ç©å®¶(&A)";
 				 this->mnuEndGameAmateur->Click += gcnew System::EventHandler(this, &frmMain::mnuEndGameAmateur_Click);
 				 // 
 				 // mnuEndGameProfessional
 				 // 
 				 this->mnuEndGameProfessional->Name = L"mnuEndGameProfessional";
 				 this->mnuEndGameProfessional->Size = System::Drawing::Size(144, 22);
-				 this->mnuEndGameProfessional->Text = L"Ö°ÒµÍæ¼Ò(&P)";
+				 this->mnuEndGameProfessional->Text = L"èŒä¸šç©å®¶(&P)";
 				 this->mnuEndGameProfessional->Click += gcnew System::EventHandler(this, &frmMain::mnuEndGameProfessional_Click);
 				 // 
 				 // mnuEndGameMaster
 				 // 
 				 this->mnuEndGameMaster->Name = L"mnuEndGameMaster";
 				 this->mnuEndGameMaster->Size = System::Drawing::Size(144, 22);
-				 this->mnuEndGameMaster->Text = L"ÌØ¼¶´óÊ¦(&M)";
+				 this->mnuEndGameMaster->Text = L"ç‰¹çº§å¤§å¸ˆ(&M)";
 				 this->mnuEndGameMaster->Click += gcnew System::EventHandler(this, &frmMain::mnuEndGameMaster_Click);
 				 // 
 				 // toolStripSeparator13
@@ -1340,7 +1340,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->mnuEndGameCustom->Name = L"mnuEndGameCustom";
 				 this->mnuEndGameCustom->Size = System::Drawing::Size(144, 22);
-				 this->mnuEndGameCustom->Text = L"×Ô¶¨Òå(&C)";
+				 this->mnuEndGameCustom->Text = L"è‡ªå®šä¹‰(&C)";
 				 this->mnuEndGameCustom->Click += gcnew System::EventHandler(this, &frmMain::mnuEndGameCustom_Click);
 				 // 
 				 // toolStripSeparator1
@@ -1352,7 +1352,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->mnuShowEndGameInfo->Name = L"mnuShowEndGameInfo";
 				 this->mnuShowEndGameInfo->Size = System::Drawing::Size(144, 22);
-				 this->mnuShowEndGameInfo->Text = L"²Ğ¾ÖĞÅÏ¢(&K)";
+				 this->mnuShowEndGameInfo->Text = L"æ®‹å±€ä¿¡æ¯(&K)";
 				 this->mnuShowEndGameInfo->Click += gcnew System::EventHandler(this, &frmMain::mnuShowEndGameInfo_Click);
 				 // 
 				 // mnuRestart
@@ -1360,7 +1360,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuRestart->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuRestart.Image")));
 				 this->mnuRestart->Name = L"mnuRestart";
 				 this->mnuRestart->Size = System::Drawing::Size(142, 22);
-				 this->mnuRestart->Text = L"ÖØĞÂ¿ªÊ¼(&R)";
+				 this->mnuRestart->Text = L"é‡æ–°å¼€å§‹(&R)";
 				 this->mnuRestart->Click += gcnew System::EventHandler(this, &frmMain::mnuRestart_Click);
 				 // 
 				 // toolStripSeparator10
@@ -1373,7 +1373,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuOpenGame->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuOpenGame.Image")));
 				 this->mnuOpenGame->Name = L"mnuOpenGame";
 				 this->mnuOpenGame->Size = System::Drawing::Size(142, 22);
-				 this->mnuOpenGame->Text = L"´ò¿ªÓÎÏ·(&O)";
+				 this->mnuOpenGame->Text = L"æ‰“å¼€æ¸¸æˆ(&O)";
 				 this->mnuOpenGame->Click += gcnew System::EventHandler(this, &frmMain::mnuOpenGame_Click);
 				 // 
 				 // mnuSaveGame
@@ -1381,7 +1381,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuSaveGame->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuSaveGame.Image")));
 				 this->mnuSaveGame->Name = L"mnuSaveGame";
 				 this->mnuSaveGame->Size = System::Drawing::Size(142, 22);
-				 this->mnuSaveGame->Text = L"±£´æÓÎÏ·(&S)";
+				 this->mnuSaveGame->Text = L"ä¿å­˜æ¸¸æˆ(&S)";
 				 this->mnuSaveGame->Click += gcnew System::EventHandler(this, &frmMain::mnuSaveGame_Click);
 				 // 
 				 // toolStripSeparator12
@@ -1394,7 +1394,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuShowStatistics->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuShowStatistics.Image")));
 				 this->mnuShowStatistics->Name = L"mnuShowStatistics";
 				 this->mnuShowStatistics->Size = System::Drawing::Size(142, 22);
-				 this->mnuShowStatistics->Text = L"Í³¼ÆĞÅÏ¢(&I)";
+				 this->mnuShowStatistics->Text = L"ç»Ÿè®¡ä¿¡æ¯(&I)";
 				 this->mnuShowStatistics->Click += gcnew System::EventHandler(this, &frmMain::mnuShowStatistics_Click);
 				 // 
 				 // toolStripMenuItem2
@@ -1407,7 +1407,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuExit->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuExit.Image")));
 				 this->mnuExit->Name = L"mnuExit";
 				 this->mnuExit->Size = System::Drawing::Size(142, 22);
-				 this->mnuExit->Text = L"ÍË³ö(&X)";
+				 this->mnuExit->Text = L"é€€å‡º(&X)";
 				 this->mnuExit->Click += gcnew System::EventHandler(this, &frmMain::mnuExit_Click);
 				 // 
 				 // mnuControl
@@ -1417,14 +1417,14 @@ private: System::Windows::Forms::Label^  label7;
 					 this->mnuAnalyze, this->mnuLearn});
 				 this->mnuControl->Name = L"mnuControl";
 				 this->mnuControl->Size = System::Drawing::Size(60, 21);
-				 this->mnuControl->Text = L"¿ØÖÆ(&C)";
+				 this->mnuControl->Text = L"æ§åˆ¶(&C)";
 				 // 
 				 // mnuSetupBoard
 				 // 
 				 this->mnuSetupBoard->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuSetupBoard.Image")));
 				 this->mnuSetupBoard->Name = L"mnuSetupBoard";
 				 this->mnuSetupBoard->Size = System::Drawing::Size(139, 22);
-				 this->mnuSetupBoard->Text = L"Ô¤ÉèÆå¾Ö(&S)";
+				 this->mnuSetupBoard->Text = L"é¢„è®¾æ£‹å±€(&S)";
 				 this->mnuSetupBoard->Click += gcnew System::EventHandler(this, &frmMain::mnuSetupBoard_Click);
 				 // 
 				 // toolStripSeparator8
@@ -1437,7 +1437,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuBack->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuBack.Image")));
 				 this->mnuBack->Name = L"mnuBack";
 				 this->mnuBack->Size = System::Drawing::Size(139, 22);
-				 this->mnuBack->Text = L"»ÚÆå(&B)";
+				 this->mnuBack->Text = L"æ‚”æ£‹(&B)";
 				 this->mnuBack->Click += gcnew System::EventHandler(this, &frmMain::mnuBack_Click);
 				 // 
 				 // mnuForward
@@ -1445,7 +1445,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuForward->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuForward.Image")));
 				 this->mnuForward->Name = L"mnuForward";
 				 this->mnuForward->Size = System::Drawing::Size(139, 22);
-				 this->mnuForward->Text = L"¼ÌĞø(&F)";
+				 this->mnuForward->Text = L"ç»§ç»­(&F)";
 				 this->mnuForward->Click += gcnew System::EventHandler(this, &frmMain::mnuForward_Click);
 				 // 
 				 // mnuTip
@@ -1453,7 +1453,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuTip->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuTip.Image")));
 				 this->mnuTip->Name = L"mnuTip";
 				 this->mnuTip->Size = System::Drawing::Size(139, 22);
-				 this->mnuTip->Text = L"ÌáÊ¾(&T)";
+				 this->mnuTip->Text = L"æç¤º(&T)";
 				 this->mnuTip->Click += gcnew System::EventHandler(this, &frmMain::mnuTip_Click);
 				 // 
 				 // mnuForceEndSolve
@@ -1461,7 +1461,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuForceEndSolve->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuForceEndSolve.Image")));
 				 this->mnuForceEndSolve->Name = L"mnuForceEndSolve";
 				 this->mnuForceEndSolve->Size = System::Drawing::Size(139, 22);
-				 this->mnuForceEndSolve->Text = L"ÖÕ¾ÖÇó½â(&E)";
+				 this->mnuForceEndSolve->Text = L"ç»ˆå±€æ±‚è§£(&E)";
 				 this->mnuForceEndSolve->Click += gcnew System::EventHandler(this, &frmMain::mnuForceEndSolve_Click);
 				 // 
 				 // mnuStopSearch
@@ -1469,7 +1469,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuStopSearch->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuStopSearch.Image")));
 				 this->mnuStopSearch->Name = L"mnuStopSearch";
 				 this->mnuStopSearch->Size = System::Drawing::Size(139, 22);
-				 this->mnuStopSearch->Text = L"Í£Ö¹ËÑË÷(&P)";
+				 this->mnuStopSearch->Text = L"åœæ­¢æœç´¢(&P)";
 				 this->mnuStopSearch->Click += gcnew System::EventHandler(this, &frmMain::mnuStopSearch_Click);
 				 // 
 				 // toolStripMenuItem1
@@ -1482,7 +1482,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuAnalyze->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuAnalyze.Image")));
 				 this->mnuAnalyze->Name = L"mnuAnalyze";
 				 this->mnuAnalyze->Size = System::Drawing::Size(139, 22);
-				 this->mnuAnalyze->Text = L"·ÖÎö(&A)";
+				 this->mnuAnalyze->Text = L"åˆ†æ(&A)";
 				 this->mnuAnalyze->Click += gcnew System::EventHandler(this, &frmMain::mnuAnalyze_Click);
 				 // 
 				 // mnuLearn
@@ -1490,7 +1490,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuLearn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuLearn.Image")));
 				 this->mnuLearn->Name = L"mnuLearn";
 				 this->mnuLearn->Size = System::Drawing::Size(139, 22);
-				 this->mnuLearn->Text = L"Ñ§Ï°(&L)";
+				 this->mnuLearn->Text = L"å­¦ä¹ (&L)";
 				 this->mnuLearn->Click += gcnew System::EventHandler(this, &frmMain::mnuLearn_Click);
 				 // 
 				 // mnuSetting
@@ -1500,7 +1500,7 @@ private: System::Windows::Forms::Label^  label7;
 					 this->mnuPlaySound, this->mnuUseBook, this->mnuLearnImmediately, this->mnuFreeMode});
 				 this->mnuSetting->Name = L"mnuSetting";
 				 this->mnuSetting->Size = System::Drawing::Size(59, 21);
-				 this->mnuSetting->Text = L"ÉèÖÃ(&S)";
+				 this->mnuSetting->Text = L"è®¾ç½®(&S)";
 				 // 
 				 // mnuTheme
 				 // 
@@ -1508,13 +1508,13 @@ private: System::Windows::Forms::Label^  label7;
 					 this->toolStripMenuItem10});
 				 this->mnuTheme->Name = L"mnuTheme";
 				 this->mnuTheme->Size = System::Drawing::Size(152, 22);
-				 this->mnuTheme->Text = L"Ö÷Ìâ(&T)";
+				 this->mnuTheme->Text = L"ä¸»é¢˜(&T)";
 				 // 
 				 // mnuDefaultTheme
 				 // 
 				 this->mnuDefaultTheme->Name = L"mnuDefaultTheme";
 				 this->mnuDefaultTheme->Size = System::Drawing::Size(141, 22);
-				 this->mnuDefaultTheme->Text = L"¾­µäÖ÷Ìâ(&D)";
+				 this->mnuDefaultTheme->Text = L"ç»å…¸ä¸»é¢˜(&D)";
 				 this->mnuDefaultTheme->Click += gcnew System::EventHandler(this, &frmMain::mnuDefaultTheme_Click);
 				 // 
 				 // toolStripMenuItem10
@@ -1531,7 +1531,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->mnuClearCache->Name = L"mnuClearCache";
 				 this->mnuClearCache->Size = System::Drawing::Size(152, 22);
-				 this->mnuClearCache->Text = L"Çå¿ÕÖÃ»»±í(&C)";
+				 this->mnuClearCache->Text = L"æ¸…ç©ºç½®æ¢è¡¨(&C)";
 				 this->mnuClearCache->Click += gcnew System::EventHandler(this, &frmMain::mnuClearCache_Click);
 				 // 
 				 // mnuTableSize
@@ -1540,7 +1540,7 @@ private: System::Windows::Forms::Label^  label7;
 					 this->mnu8MB, this->mnu16MB, this->mnu32MB, this->mnu64MB, this->mnu128MB, this->mnu256MB, this->mnu512MB, this->mnu1GB, this->mnu2GB});
 				 this->mnuTableSize->Name = L"mnuTableSize";
 				 this->mnuTableSize->Size = System::Drawing::Size(152, 22);
-				 this->mnuTableSize->Text = L"ÖÃ»»±í´óĞ¡(&Z)";
+				 this->mnuTableSize->Text = L"ç½®æ¢è¡¨å¤§å°(&Z)";
 				 // 
 				 // mnu4MB
 				 // 
@@ -1616,7 +1616,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->mnuAutoClean->Name = L"mnuAutoClean";
 				 this->mnuAutoClean->Size = System::Drawing::Size(152, 22);
-				 this->mnuAutoClean->Text = L"×Ô¶¯Çå¿Õ(&A)";
+				 this->mnuAutoClean->Text = L"è‡ªåŠ¨æ¸…ç©º(&A)";
 				 this->mnuAutoClean->Click += gcnew System::EventHandler(this, &frmMain::mnuAutoClean_Click);
 				 // 
 				 // toolStripMenuItem9
@@ -1630,62 +1630,62 @@ private: System::Windows::Forms::Label^  label7;
 					 this->mnuDelay05s, this->mnuDelay1s, this->mnuDelay2s});
 				 this->mnuDelay->Name = L"mnuDelay";
 				 this->mnuDelay->Size = System::Drawing::Size(152, 22);
-				 this->mnuDelay->Text = L"ÑÓ³ÙÏìÓ¦(&D)";
+				 this->mnuDelay->Text = L"å»¶è¿Ÿå“åº”(&D)";
 				 // 
 				 // mnuDelayClose
 				 // 
 				 this->mnuDelayClose->Name = L"mnuDelayClose";
 				 this->mnuDelayClose->Size = System::Drawing::Size(120, 22);
-				 this->mnuDelayClose->Text = L"¹Ø±Õ(&C)";
+				 this->mnuDelayClose->Text = L"å…³é—­(&C)";
 				 this->mnuDelayClose->Click += gcnew System::EventHandler(this, &frmMain::mnuDelayClose_Click);
 				 // 
 				 // mnuDelay05s
 				 // 
 				 this->mnuDelay05s->Name = L"mnuDelay05s";
 				 this->mnuDelay05s->Size = System::Drawing::Size(120, 22);
-				 this->mnuDelay05s->Text = L"0.5Ãë(&5)";
+				 this->mnuDelay05s->Text = L"0.5ç§’(&5)";
 				 this->mnuDelay05s->Click += gcnew System::EventHandler(this, &frmMain::mnuDelay05s_Click);
 				 // 
 				 // mnuDelay1s
 				 // 
 				 this->mnuDelay1s->Name = L"mnuDelay1s";
 				 this->mnuDelay1s->Size = System::Drawing::Size(120, 22);
-				 this->mnuDelay1s->Text = L"1Ãë(&1)";
+				 this->mnuDelay1s->Text = L"1ç§’(&1)";
 				 this->mnuDelay1s->Click += gcnew System::EventHandler(this, &frmMain::mnuDelay1s_Click);
 				 // 
 				 // mnuDelay2s
 				 // 
 				 this->mnuDelay2s->Name = L"mnuDelay2s";
 				 this->mnuDelay2s->Size = System::Drawing::Size(120, 22);
-				 this->mnuDelay2s->Text = L"2Ãë(&2)";
+				 this->mnuDelay2s->Text = L"2ç§’(&2)";
 				 this->mnuDelay2s->Click += gcnew System::EventHandler(this, &frmMain::mnuDelay2s_Click);
 				 // 
 				 // mnuPlaySound
 				 // 
 				 this->mnuPlaySound->Name = L"mnuPlaySound";
 				 this->mnuPlaySound->Size = System::Drawing::Size(152, 22);
-				 this->mnuPlaySound->Text = L"ÒôĞ§(&S)";
+				 this->mnuPlaySound->Text = L"éŸ³æ•ˆ(&S)";
 				 this->mnuPlaySound->Click += gcnew System::EventHandler(this, &frmMain::mnuPlaySound_Click);
 				 // 
 				 // mnuUseBook
 				 // 
 				 this->mnuUseBook->Name = L"mnuUseBook";
 				 this->mnuUseBook->Size = System::Drawing::Size(152, 22);
-				 this->mnuUseBook->Text = L"Ê¹ÓÃÆåÆ×(&B)";
+				 this->mnuUseBook->Text = L"ä½¿ç”¨æ£‹è°±(&B)";
 				 this->mnuUseBook->Click += gcnew System::EventHandler(this, &frmMain::mnuUseBook_Click);
 				 // 
 				 // mnuLearnImmediately
 				 // 
 				 this->mnuLearnImmediately->Name = L"mnuLearnImmediately";
 				 this->mnuLearnImmediately->Size = System::Drawing::Size(152, 22);
-				 this->mnuLearnImmediately->Text = L"×Ô¶¯Ñ§Ï°(&L)";
+				 this->mnuLearnImmediately->Text = L"è‡ªåŠ¨å­¦ä¹ (&L)";
 				 this->mnuLearnImmediately->Click += gcnew System::EventHandler(this, &frmMain::mnuLearnImmediately_Click);
 				 // 
 				 // mnuFreeMode
 				 // 
 				 this->mnuFreeMode->Name = L"mnuFreeMode";
 				 this->mnuFreeMode->Size = System::Drawing::Size(152, 22);
-				 this->mnuFreeMode->Text = L"×ÔÓÉÄ£Ê½(&F)";
+				 this->mnuFreeMode->Text = L"è‡ªç”±æ¨¡å¼(&F)";
 				 this->mnuFreeMode->Click += gcnew System::EventHandler(this, &frmMain::mnuFreeMode_Click);
 				 // 
 				 // mnuView
@@ -1694,27 +1694,27 @@ private: System::Windows::Forms::Label^  label7;
 					 this->mnuShowSpeed, this->mnuShowProgress});
 				 this->mnuView->Name = L"mnuView";
 				 this->mnuView->Size = System::Drawing::Size(60, 21);
-				 this->mnuView->Text = L"²é¿´(&V)";
+				 this->mnuView->Text = L"æŸ¥çœ‹(&V)";
 				 // 
 				 // mnuShowEvaluation
 				 // 
 				 this->mnuShowEvaluation->Name = L"mnuShowEvaluation";
 				 this->mnuShowEvaluation->Size = System::Drawing::Size(141, 22);
-				 this->mnuShowEvaluation->Text = L"¹ÀÖµ(&E)";
+				 this->mnuShowEvaluation->Text = L"ä¼°å€¼(&E)";
 				 this->mnuShowEvaluation->Click += gcnew System::EventHandler(this, &frmMain::mnuShowEvaluation_Click);
 				 // 
 				 // mnuShowSpeed
 				 // 
 				 this->mnuShowSpeed->Name = L"mnuShowSpeed";
 				 this->mnuShowSpeed->Size = System::Drawing::Size(141, 22);
-				 this->mnuShowSpeed->Text = L"ËÑË÷ËÙ¶È(&D)";
+				 this->mnuShowSpeed->Text = L"æœç´¢é€Ÿåº¦(&D)";
 				 this->mnuShowSpeed->Click += gcnew System::EventHandler(this, &frmMain::mnuShowSpeed_Click);
 				 // 
 				 // mnuShowProgress
 				 // 
 				 this->mnuShowProgress->Name = L"mnuShowProgress";
 				 this->mnuShowProgress->Size = System::Drawing::Size(141, 22);
-				 this->mnuShowProgress->Text = L"ËÑË÷½ø¶È(&P)";
+				 this->mnuShowProgress->Text = L"æœç´¢è¿›åº¦(&P)";
 				 this->mnuShowProgress->Click += gcnew System::EventHandler(this, &frmMain::mnuShowProgress_Click);
 				 // 
 				 // mnuHelp
@@ -1723,13 +1723,13 @@ private: System::Windows::Forms::Label^  label7;
 					 this->toolStripMenuItem4, this->mnuShortkeys, this->mnuAbout});
 				 this->mnuHelp->Name = L"mnuHelp";
 				 this->mnuHelp->Size = System::Drawing::Size(61, 21);
-				 this->mnuHelp->Text = L"°ïÖú(&H)";
+				 this->mnuHelp->Text = L"å¸®åŠ©(&H)";
 				 // 
 				 // mnuHelpContents
 				 // 
 				 this->mnuHelpContents->Name = L"mnuHelpContents";
 				 this->mnuHelpContents->Size = System::Drawing::Size(148, 22);
-				 this->mnuHelpContents->Text = L"°ïÖúÖ÷Ìâ(&C)";
+				 this->mnuHelpContents->Text = L"å¸®åŠ©ä¸»é¢˜(&C)";
 				 this->mnuHelpContents->Click += gcnew System::EventHandler(this, &frmMain::mnuHelpContents_Click);
 				 // 
 				 // toolStripMenuItem4
@@ -1741,14 +1741,14 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->mnuShortkeys->Name = L"mnuShortkeys";
 				 this->mnuShortkeys->Size = System::Drawing::Size(148, 22);
-				 this->mnuShortkeys->Text = L"¿ì½İ¼ü(&K)";
+				 this->mnuShortkeys->Text = L"å¿«æ·é”®(&K)";
 				 this->mnuShortkeys->Click += gcnew System::EventHandler(this, &frmMain::mnuShortkeys_Click);
 				 // 
 				 // mnuAbout
 				 // 
 				 this->mnuAbout->Name = L"mnuAbout";
 				 this->mnuAbout->Size = System::Drawing::Size(148, 22);
-				 this->mnuAbout->Text = L"¹ØÓÚ Craft(&A)";
+				 this->mnuAbout->Text = L"å…³äº Craft(&A)";
 				 this->mnuAbout->Click += gcnew System::EventHandler(this, &frmMain::mnuAbout_Click);
 				 // 
 				 // tmrLayout
@@ -1797,13 +1797,13 @@ private: System::Windows::Forms::Label^  label7;
 				 // btnStart
 				 // 
 				 this->btnStart->FlatStyle = System::Windows::Forms::FlatStyle::System;
-				 this->btnStart->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->btnStart->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->btnStart->Location = System::Drawing::Point(12, 153);
 				 this->btnStart->Name = L"btnStart";
 				 this->btnStart->Size = System::Drawing::Size(134, 35);
 				 this->btnStart->TabIndex = 18;
-				 this->btnStart->Text = L"¿ªÊ¼£¡";
+				 this->btnStart->Text = L"å¼€å§‹ï¼";
 				 this->btnStart->UseVisualStyleBackColor = true;
 				 this->btnStart->Visible = false;
 				 this->btnStart->Click += gcnew System::EventHandler(this, &frmMain::btnStart_Click);
@@ -1832,7 +1832,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // lblEmpty
 				 // 
 				 this->lblEmpty->BackColor = System::Drawing::Color::Transparent;
-				 this->lblEmpty->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lblEmpty->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->lblEmpty->Location = System::Drawing::Point(105, 132);
 				 this->lblEmpty->Name = L"lblEmpty";
@@ -1844,7 +1844,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // lblWCount
 				 // 
 				 this->lblWCount->BackColor = System::Drawing::Color::Transparent;
-				 this->lblWCount->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lblWCount->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->lblWCount->Location = System::Drawing::Point(95, 107);
 				 this->lblWCount->Name = L"lblWCount";
@@ -1856,18 +1856,18 @@ private: System::Windows::Forms::Label^  label7;
 				 // label6
 				 // 
 				 this->label6->AutoSize = true;
-				 this->label6->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label6->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label6->Location = System::Drawing::Point(120, 107);
 				 this->label6->Name = L"label6";
 				 this->label6->Size = System::Drawing::Size(21, 14);
 				 this->label6->TabIndex = 16;
-				 this->label6->Text = L"²½";
+				 this->label6->Text = L"æ­¥";
 				 // 
 				 // lblBCount
 				 // 
 				 this->lblBCount->BackColor = System::Drawing::Color::Transparent;
-				 this->lblBCount->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lblBCount->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->lblBCount->Location = System::Drawing::Point(95, 47);
 				 this->lblBCount->Name = L"lblBCount";
@@ -1879,18 +1879,18 @@ private: System::Windows::Forms::Label^  label7;
 				 // label5
 				 // 
 				 this->label5->AutoSize = true;
-				 this->label5->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label5->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label5->Location = System::Drawing::Point(120, 47);
 				 this->label5->Name = L"label5";
 				 this->label5->Size = System::Drawing::Size(21, 14);
 				 this->label5->TabIndex = 16;
-				 this->label5->Text = L"²½";
+				 this->label5->Text = L"æ­¥";
 				 // 
 				 // lblCStep
 				 // 
 				 this->lblCStep->BackColor = System::Drawing::Color::Transparent;
-				 this->lblCStep->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lblCStep->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(0)));
 				 this->lblCStep->Location = System::Drawing::Point(104, 160);
 				 this->lblCStep->Name = L"lblCStep";
@@ -1914,13 +1914,13 @@ private: System::Windows::Forms::Label^  label7;
 				 // label4
 				 // 
 				 this->label4->AutoSize = true;
-				 this->label4->Font = (gcnew System::Drawing::Font(L"ºÚÌå", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label4->Font = (gcnew System::Drawing::Font(L"é»‘ä½“", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label4->Location = System::Drawing::Point(119, 78);
 				 this->label4->Name = L"label4";
 				 this->label4->Size = System::Drawing::Size(29, 19);
 				 this->label4->TabIndex = 15;
-				 this->label4->Text = L"×Ó";
+				 this->label4->Text = L"å­";
 				 // 
 				 // lblBNum
 				 // 
@@ -1937,13 +1937,13 @@ private: System::Windows::Forms::Label^  label7;
 				 // label3
 				 // 
 				 this->label3->AutoSize = true;
-				 this->label3->Font = (gcnew System::Drawing::Font(L"ºÚÌå", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label3->Font = (gcnew System::Drawing::Font(L"é»‘ä½“", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label3->Location = System::Drawing::Point(119, 17);
 				 this->label3->Name = L"label3";
 				 this->label3->Size = System::Drawing::Size(29, 19);
 				 this->label3->TabIndex = 15;
-				 this->label3->Text = L"×Ó";
+				 this->label3->Text = L"å­";
 				 // 
 				 // picBlack
 				 // 
@@ -1958,52 +1958,52 @@ private: System::Windows::Forms::Label^  label7;
 				 // lblCurrentStep
 				 // 
 				 this->lblCurrentStep->AutoSize = true;
-				 this->lblCurrentStep->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lblCurrentStep->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->lblCurrentStep->Location = System::Drawing::Point(14, 160);
 				 this->lblCurrentStep->Name = L"lblCurrentStep";
 				 this->lblCurrentStep->Size = System::Drawing::Size(77, 14);
 				 this->lblCurrentStep->TabIndex = 13;
-				 this->lblCurrentStep->Text = L"µ±Ç°²½Êı£º";
+				 this->lblCurrentStep->Text = L"å½“å‰æ­¥æ•°ï¼š";
 				 // 
 				 // label7
 				 // 
 				 this->label7->AutoSize = true;
-				 this->label7->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label7->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label7->Location = System::Drawing::Point(14, 132);
 				 this->label7->Name = L"label7";
 				 this->label7->Size = System::Drawing::Size(63, 14);
 				 this->label7->TabIndex = 13;
-				 this->label7->Text = L"¿Õ¸ñÊı£º";
+				 this->label7->Text = L"ç©ºæ ¼æ•°ï¼š";
 				 // 
 				 // label2
 				 // 
 				 this->label2->AutoSize = true;
-				 this->label2->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label2->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label2->Location = System::Drawing::Point(38, 107);
 				 this->label2->Name = L"label2";
 				 this->label2->Size = System::Drawing::Size(63, 14);
 				 this->label2->TabIndex = 13;
-				 this->label2->Text = L"ĞĞ¶¯Á¦£º";
+				 this->label2->Text = L"è¡ŒåŠ¨åŠ›ï¼š";
 				 // 
 				 // label1
 				 // 
 				 this->label1->AutoSize = true;
-				 this->label1->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->label1->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->label1->Location = System::Drawing::Point(38, 47);
 				 this->label1->Name = L"label1";
 				 this->label1->Size = System::Drawing::Size(63, 14);
 				 this->label1->TabIndex = 13;
-				 this->label1->Text = L"ĞĞ¶¯Á¦£º";
+				 this->label1->Text = L"è¡ŒåŠ¨åŠ›ï¼š";
 				 // 
 				 // lstSteps
 				 // 
 				 this->lstSteps->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 				 this->lstSteps->Dock = System::Windows::Forms::DockStyle::Bottom;
-				 this->lstSteps->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				 this->lstSteps->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 					 static_cast<System::Byte>(134)));
 				 this->lstSteps->FormattingEnabled = true;
 				 this->lstSteps->ItemHeight = 14;

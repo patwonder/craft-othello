@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								Common.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º¹«¹²Í·ÎÄ¼ş£¬°üº¬³ÌĞò¹«¹²µÄ³£Á¿¶¨Òå¡¢ºê¶¨ÒåµÈ
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šå…¬å…±å¤´æ–‡ä»¶ï¼ŒåŒ…å«ç¨‹åºå…¬å…±çš„å¸¸é‡å®šä¹‰ã€å®å®šä¹‰ç­‰
 
 ********************************************************************************
 */
@@ -40,13 +40,13 @@
 //#define CHRISTMAS
 
 #ifdef CHRISTMAS
-#define  __APP_SPECIAL_VERSION__ " Ê¥µ®ÌØ±ğ°æ"
+#define  __APP_SPECIAL_VERSION__ " åœ£è¯ç‰¹åˆ«ç‰ˆ"
 #else
 #define __APP_SPECIAL_VERSION__ ""
 #endif
 
 #ifdef MACHINE_X64
-#define __APP_SPECIAL_VERSION_2__ " (64 Î»)"
+#define __APP_SPECIAL_VERSION_2__ " (64 ä½)"
 #else
 #define __APP_SPECIAL_VERSION_2__ ""
 #endif
@@ -59,10 +59,10 @@
 
 namespace Othello {
 
-//Æå×ÓÑÕÉ«
+//æ£‹å­é¢œè‰²
 public enum class Chess {AVAILABLE, BLACK, WHITE};
 
-//Íæ¼ÒÀàĞÍ
+//ç©å®¶ç±»å‹
 public enum class PlayerType {
 	GUI, RANDOM, BIG_EAT, EARTH, CLOUDS, ORBIT, MOON, STAR, GALAXY, UNIVERSE, NETWORK
 };
@@ -72,12 +72,12 @@ const int WIDTH = 8;
 const int HEIGHT = 8;
 const int MAX_PLAYERTYPES = 11;
 
-//ÖĞ¾Ö¹ÀÖµ±ÈÂÊ¡£Èô³ÌĞò¼ÆËãµÃµ½µÄ¹ÀÖµÎª+5000£¬ÔòÊµ¼Ê¹ÀÖµÎª(+5000/RULER)
+//ä¸­å±€ä¼°å€¼æ¯”ç‡ã€‚è‹¥ç¨‹åºè®¡ç®—å¾—åˆ°çš„ä¼°å€¼ä¸º+5000ï¼Œåˆ™å®é™…ä¼°å€¼ä¸º(+5000/RULER)
 const int RULER = 10000;
 
 typedef array<Chess, 2> Board;
 
-//±íÊ¾Ò»²½Æå
+//è¡¨ç¤ºä¸€æ­¥æ£‹
 public value class Move {
 	int x, y;
 	Chess color;

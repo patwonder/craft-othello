@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -28,9 +28,9 @@
 /*
 ********************************************************************************
 								frmAnalyzer.cpp
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmAnalyzer µÄ¶¨Òå¡£
-			frmAnalyzer ÀàÊµÏÖ¡°Æå¾Ö·ÖÎö¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmAnalyzer çš„å®šä¹‰ã€‚
+			frmAnalyzer ç±»å®ç°â€œæ£‹å±€åˆ†æâ€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -148,8 +148,8 @@ void frmAnalyzer::startAnalyze() {
 	currentMaxStep = 0;
 	lstResult->Items->Clear();
 	dAnalyzeResult->clear();
-	lblState->Text = "ÕıÔÚ·ÖÎö...";
-	btnAnalyze->Text = "Í£Ö¹·ÖÎö(&A)";
+	lblState->Text = "æ­£åœ¨åˆ†æ...";
+	btnAnalyze->Text = "åœæ­¢åˆ†æ(&A)";
 	btnSave->Enabled = false;
 	cbAnalyzer->Enabled = false;
 	this->Cursor = ::Cursors::WaitCursor;
@@ -217,8 +217,8 @@ void frmAnalyzer::startAnalyze() {
 			this->Cursor = ::Cursors::Default;
 			cbAnalyzer->Enabled = true;
 			btnClose->Enabled = true;
-			btnAnalyze->Text = "¿ªÊ¼·ÖÎö(&A)";
-			lblState->Text = "·ÖÎöÖĞ¶Ï";
+			btnAnalyze->Text = "å¼€å§‹åˆ†æ(&A)";
+			lblState->Text = "åˆ†æä¸­æ–­";
 			btnContinue->Enabled = (lstResult->Items->Count > 0);
 			pbAnalyze->Style = ProgressBarStyle::Continuous;
 			controller->analyzeEnded();
@@ -237,8 +237,8 @@ void frmAnalyzer::startAnalyze() {
 	this->Cursor = ::Cursors::Default;
 	cbAnalyzer->Enabled = true;
 	btnSave->Enabled = true;
-	btnAnalyze->Text = "¿ªÊ¼·ÖÎö(&A)";
-	lblState->Text = "·ÖÎöÍê±Ï";
+	btnAnalyze->Text = "å¼€å§‹åˆ†æ(&A)";
+	lblState->Text = "åˆ†æå®Œæ¯•";
 	btnContinue->Enabled = (lstResult->Items->Count > 0);
 	controller->analyzeEnded();
 	analyzing = false;
@@ -256,7 +256,7 @@ AnalyzedMove frmAnalyzer::getAnalyzedResult(int step, int empties, Chess color,
 		String^ result = ((step < 10) ? ("0" + step.ToString()) : step.ToString()) + ".";
 		result += " " + sPlayedMove;
 		if (playedMove >= WIDTH * HEIGHT || playedMove < -WIDTH * HEIGHT) {
-			result += "   (Ç·ĞĞ)";
+			result += "   (æ¬ è¡Œ)";
 		} else {
 			if (empties > options.winLossStep) {
 				bool questionable;
@@ -268,40 +268,40 @@ AnalyzedMove frmAnalyzer::getAnalyzedResult(int step, int empties, Chess color,
 					questionable = bestEval - playedEval >= MID_EVAL_DIFFERENCE * Solver::RULER;
 				}
 				if (questionable) result += "? "; else result += "  ";
-				result += " ·ÖÎöÖµ: " + sPlayedEval;
+				result += " åˆ†æå€¼: " + sPlayedEval;
 				if (questionable) {
-					result += " ½¨ÒéÏÂ" + sBestMove + ": " + sBestEval;
+					result += " å»ºè®®ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::NORMAL;
 				}
 			} else if (empties > options.exactGameStep) {
 				if (bestEval > 0 && playedEval == 0) {
-					result += "?  " + ((color == Chess::BLACK) ? "ºÚ·½" : "°×·½") + "ÏÂÁËºÍ×Å"
-						+ " Ó¦¸ÃÏÂ" + sBestMove + ": " + sBestEval;
+					result += "?  " + ((color == Chess::BLACK) ? "é»‘æ–¹" : "ç™½æ–¹") + "ä¸‹äº†å’Œç€"
+						+ " åº”è¯¥ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::NORMAL;
 				} else if (bestEval >= 0 && playedEval < 0) {
-					result += "?? " + ((color == Chess::BLACK) ? "ºÚ·½" : "°×·½") + "ÏÂÁË°Ü×Å"
-						+ " Ó¦¸ÃÏÂ" + sBestMove + ": " + sBestEval;
+					result += "?? " + ((color == Chess::BLACK) ? "é»‘æ–¹" : "ç™½æ–¹") + "ä¸‹äº†è´¥ç€"
+						+ " åº”è¯¥ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::BAD;
 				} else {
-					result += "   " + sPlayedEval + "  Ê¤¸ºÕıÈ·";
+					result += "   " + sPlayedEval + "  èƒœè´Ÿæ­£ç¡®";
 				}
 			} else {
 				if (bestEval > 0 && playedEval == 0) {
-					result += "?  " + ((color == Chess::BLACK) ? "ºÚ·½" : "°×·½") + "ÏÂÁËºÍ×Å"
-						+ " Ó¦¸ÃÏÂ" + sBestMove + ": " + sBestEval;
+					result += "?  " + ((color == Chess::BLACK) ? "é»‘æ–¹" : "ç™½æ–¹") + "ä¸‹äº†å’Œç€"
+						+ " åº”è¯¥ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::NORMAL;
 				} else if (bestEval >= 0 && playedEval < 0) {
-					result += "?? " + ((color == Chess::BLACK) ? "ºÚ·½" : "°×·½") + "ÏÂÁË°Ü×Å("
+					result += "?? " + ((color == Chess::BLACK) ? "é»‘æ–¹" : "ç™½æ–¹") + "ä¸‹äº†è´¥ç€("
 						+ sPlayedEval + ")"
-						+ " Ó¦¸ÃÏÂ" + sBestMove + ": " + sBestEval;
+						+ " åº”è¯¥ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::BAD;
 				} else if (bestEval > playedEval) {
-					result += "?  " + ((color == Chess::BLACK) ? "ºÚ·½" : "°×·½") + "ËğÊ§"
-						+ (bestEval - playedEval) / 2 + "×Ó(" + sPlayedEval + ")"
-						+ " Ó¦¸ÃÏÂ" + sBestMove + ": " + sBestEval;
+					result += "?  " + ((color == Chess::BLACK) ? "é»‘æ–¹" : "ç™½æ–¹") + "æŸå¤±"
+						+ (bestEval - playedEval) / 2 + "å­(" + sPlayedEval + ")"
+						+ " åº”è¯¥ä¸‹" + sBestMove + ": " + sBestEval;
 					questionLevel = QuestionLevel::NORMAL;
 				} else {
-					result += "   " + sPlayedEval + "  ÕıÈ·";
+					result += "   " + sPlayedEval + "  æ­£ç¡®";
 				}
 			}
 		}
@@ -314,13 +314,13 @@ System::String^ frmAnalyzer::getResultDescription(int res, int bestMove, int emp
 	System::String^ result;
 	if (empties > options.winLossStep) {
 		if (res > Solver::INFINITE - Solver::MAXSTEP) { // early win
-			result = ((bestMove < 0) ? "" : (res == Solver::INFINITE ? "" : "¡İ")) 
+			result = ((bestMove < 0) ? "" : (res == Solver::INFINITE ? "" : "â‰¥")) 
 				+ "+" + (res - Solver::INFINITE + Solver::MAXSTEP).ToString();
-			if (bestMove < 0) result += "(ÆåÆ×)"; else result += " @ " + options.midGameDepth;
+			if (bestMove < 0) result += "(æ£‹è°±)"; else result += " @ " + options.midGameDepth;
 		} else if (res < -Solver::INFINITE + Solver::MAXSTEP) { // early loss
-			result = ((bestMove < 0) ? "" : (res == -Solver::INFINITE ? "" : "¡Ü"))
+			result = ((bestMove < 0) ? "" : (res == -Solver::INFINITE ? "" : "â‰¤"))
 				+ (res + Solver::INFINITE - Solver::MAXSTEP).ToString();
-			if (bestMove < 0) result += "(ÆåÆ×)"; else result += " @ " + options.midGameDepth;
+			if (bestMove < 0) result += "(æ£‹è°±)"; else result += " @ " + options.midGameDepth;
 		} else {
 			if (bestMove >= 0) {
 				result = ((res > 0) ? "+" : ((res == 0) ? "" : "-"))
@@ -329,15 +329,15 @@ System::String^ frmAnalyzer::getResultDescription(int res, int bestMove, int emp
 			} else {
 				result = ((res > 0) ? "+" : ((res == 0) ? "" : "-"))
 					+ (System::Math::Abs((double)(res)) / Solver::RULER).ToString("0.00")
-					+ "(ÆåÆ×)";
+					+ "(æ£‹è°±)";
 			}
 		}
 	} else if (empties > options.exactGameStep) {
 		if (res > 0)
-			result = "Ê¤";
+			result = "èƒœ";
 		else if (res == 0)
-			result = "Æ½";
-		else result = "¸º";
+			result = "å¹³";
+		else result = "è´Ÿ";
 	} else {
 		result = ((res > 0) ? "+" : "") 
 			+ res.ToString();
@@ -390,10 +390,10 @@ String^ frmAnalyzer::getEndDescription() {
 			else empties++;
 	if (nBlack > nWhite) nBlack += empties;
 	else if (nWhite > nBlack) nWhite += empties;
-	String^ res = "ÖÕ¾Ö±È·Ö: " + nBlack + ":" + nWhite;
-	if (nBlack > nWhite) res += " ºÚ·½Ê¤";
-	else if (nBlack == nWhite) res += " Æ½¾Ö";
-	else res += " °×·½Ê¤";
+	String^ res = "ç»ˆå±€æ¯”åˆ†: " + nBlack + ":" + nWhite;
+	if (nBlack > nWhite) res += " é»‘æ–¹èƒœ";
+	else if (nBlack == nWhite) res += " å¹³å±€";
+	else res += " ç™½æ–¹èƒœ";
 	return res;
 }
 
@@ -457,17 +457,17 @@ void frmAnalyzer::saveResult(String^ fileName) {
 	try {
 		fs = gcnew IO::FileStream(fileName, IO::FileMode::Create, IO::FileAccess::Write);
 	} catch (Exception^) {
-		System::Windows::Forms::MessageBox::Show(this, "ÎŞ·¨Ğ´Èë " + fileName + " ÎÄ¼ş¡£",
-			"ÎŞ·¨±£´æ·ÖÎö½á¹û", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
+		System::Windows::Forms::MessageBox::Show(this, "æ— æ³•å†™å…¥ " + fileName + " æ–‡ä»¶ã€‚",
+			"æ— æ³•ä¿å­˜åˆ†æç»“æœ", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 		return;
 	}
 	IO::StreamWriter^ writer = gcnew IO::StreamWriter(fs, System::Text::Encoding::UTF8);
 	try {
-		String^ versionInfo = __APP_NAME__ + " Version " + __APP_VERSION__ + " ·ÖÎö½á¹ûÎÄ¼ş";
-		String^ now = System::DateTime::Now.ToString("yyyyÄêMÔÂdÈÕ H:mm:ss",
+		String^ versionInfo = __APP_NAME__ + " Version " + __APP_VERSION__ + " åˆ†æç»“æœæ–‡ä»¶";
+		String^ now = System::DateTime::Now.ToString("yyyyå¹´Mæœˆdæ—¥ H:mm:ss",
 			Globalization::CultureInfo::CreateSpecificCulture("zh-CN"));
-		String^ symbolDescription = "ºÚÆå: " + black + "  °×Æå: " + white + "  ¿Õ¸ñ: " + av
-			+ "\r\nÒÑÏÂÆå²½: " + played + "  ½¨ÒéÆå²½: " + best;
+		String^ symbolDescription = "é»‘æ£‹: " + black + "  ç™½æ£‹: " + white + "  ç©ºæ ¼: " + av
+			+ "\r\nå·²ä¸‹æ£‹æ­¥: " + played + "  å»ºè®®æ£‹æ­¥: " + best;
 
 		writer->WriteLine(versionInfo);
 		writer->WriteLine(now);
@@ -476,11 +476,11 @@ void frmAnalyzer::saveResult(String^ fileName) {
 
 		ChessBoard^ bd = gcnew ChessBoard(gc->getInitialBoard());
 		Chess fp = gc->getFirstPlayer();
-		String^ gameInfo = "ÏÈÊÖ·½: " + (fp == Chess::BLACK ? "ºÚ·½" : "°×·½");
+		String^ gameInfo = "å…ˆæ‰‹æ–¹: " + (fp == Chess::BLACK ? "é»‘æ–¹" : "ç™½æ–¹");
 		String^ initBoard = chessBoardToString(bd);
 
 		writer->WriteLine(gameInfo);
-		writer->WriteLine("³õÊ¼ÆåÅÌ:\r\n" + initBoard);
+		writer->WriteLine("åˆå§‹æ£‹ç›˜:\r\n" + initBoard);
 
 		for (int i = 1; i < dAnalyzeResult->getSteps(); i++) {
 			AnalyzedMove am = dAnalyzeResult->getAnalyzedResult(i);
@@ -500,20 +500,20 @@ void frmAnalyzer::saveResult(String^ fileName) {
 		}
 
 	} catch (Exception^) {
-		System::Windows::Forms::MessageBox::Show(this, "Ğ´Èë " + fileName + " ÎÄ¼ş³ö´í¡£",
-			"±£´æ·ÖÎö½á¹û³ö´í", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
+		System::Windows::Forms::MessageBox::Show(this, "å†™å…¥ " + fileName + " æ–‡ä»¶å‡ºé”™ã€‚",
+			"ä¿å­˜åˆ†æç»“æœå‡ºé”™", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 		writer->Close();
 		return;
 	}
 	writer->Close();
-	System::Windows::Forms::MessageBox::Show(this, "·ÖÎö½á¹ûÒÑ±£´æÔÚ£º\n" + fileName,
-		"·ÖÎö½á¹ûÒÑ±£´æ", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+	System::Windows::Forms::MessageBox::Show(this, "åˆ†æç»“æœå·²ä¿å­˜åœ¨ï¼š\n" + fileName,
+		"åˆ†æç»“æœå·²ä¿å­˜", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 }
 
 void frmAnalyzer::saveResult() {
 	SaveFileDialog^ dialog = gcnew SaveFileDialog();
-	dialog->Title = "±£´æ·ÖÎö½á¹û";
-	dialog->Filter = "ÎÄ±¾ÎÄµµ(*.txt)|*.txt";
+	dialog->Title = "ä¿å­˜åˆ†æç»“æœ";
+	dialog->Filter = "æ–‡æœ¬æ–‡æ¡£(*.txt)|*.txt";
 	dialog->CheckFileExists = false;
 	dialog->FileName = "";
 

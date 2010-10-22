@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -33,12 +33,12 @@ using namespace System;
 
 namespace CraftEngineNet {
 	
-	///±íÊ¾Æå×ÓÑÕÉ«ºÍÓÎÏ··½
+	///è¡¨ç¤ºæ£‹å­é¢œè‰²å’Œæ¸¸æˆæ–¹
 	public enum class Chess {
 		AVAILABLE, BLACK, WHITE
 	};
 
-	///Æå²½£¬¼´ÆåÅÌÉÏµÄÒ»¸öµã
+	///æ£‹æ­¥ï¼Œå³æ£‹ç›˜ä¸Šçš„ä¸€ä¸ªç‚¹
 	public value class Move {
 	private:
 		int x, y;
@@ -65,7 +65,7 @@ namespace CraftEngineNet {
 
 	typedef array<Chess, 2>^ Board;
 
-	///ËÑË÷½á¹û
+	///æœç´¢ç»“æœ
 	public value class SearchResult {
 	private:
 		Move move;
@@ -77,21 +77,21 @@ namespace CraftEngineNet {
 			this->evaluation = evaluation;
 			this->bookMove = bookMove;
 		}
-		///×î¼ÑÆå²½
+		///æœ€ä½³æ£‹æ­¥
 		property Move Move {
 			CraftEngineNet::Move get() {
 				return move;
 			}
 		}
-		///¹ÀÖµ
-		///·ÖÖĞ¾Ö¹ÀÖµºÍÖÕ¾Ö¹ÀÖµÁ½ÖÖ
-		///* ÖÕ¾Ö¹ÀÖµµÄ·¶Î§Îª-64~64
-		///* ÖĞ¾Ö¹ÀÖµÎªÊµ¼Ê¹ÀÖµ*RULER(=10000)µÄ½á¹û
-		/// -ÈôÖĞ¾Ö¹ÀÖµÂäÔÚ-INFINITE~(-INFINITE + 63)·¶Î§ÄÚ£¬
-		///  Ôò´ú±íÔÚÖĞ¾ÖËÑË÷ÖĞ¼ì²âµ½±ØÊä¾ÖÃæ£¬¶ÔÓ¦µÄÖÕ¾Ö¹ÀÖµÎª
+		///ä¼°å€¼
+		///åˆ†ä¸­å±€ä¼°å€¼å’Œç»ˆå±€ä¼°å€¼ä¸¤ç§
+		///* ç»ˆå±€ä¼°å€¼çš„èŒƒå›´ä¸º-64~64
+		///* ä¸­å±€ä¼°å€¼ä¸ºå®é™…ä¼°å€¼*RULER(=10000)çš„ç»“æœ
+		/// -è‹¥ä¸­å±€ä¼°å€¼è½åœ¨-INFINITE~(-INFINITE + 63)èŒƒå›´å†…ï¼Œ
+		///  åˆ™ä»£è¡¨åœ¨ä¸­å±€æœç´¢ä¸­æ£€æµ‹åˆ°å¿…è¾“å±€é¢ï¼Œå¯¹åº”çš„ç»ˆå±€ä¼°å€¼ä¸º
 		///  Evaluation + INFINITE - 64
-		/// -ÈôÖĞ¾Ö¹ÀÖµÂäÔÚ(INFINITE - 63)~INFINITE·¶Î§ÄÚ£¬
-		///  Ôò´ú±íÔÚÖĞ¾ÖËÑË÷ÖĞ¼ì²âµ½±ØÊ¤¾ÖÃæ£¬¶ÔÓ¦µÄÖÕ¾Ö¹ÀÖµÎª
+		/// -è‹¥ä¸­å±€ä¼°å€¼è½åœ¨(INFINITE - 63)~INFINITEèŒƒå›´å†…ï¼Œ
+		///  åˆ™ä»£è¡¨åœ¨ä¸­å±€æœç´¢ä¸­æ£€æµ‹åˆ°å¿…èƒœå±€é¢ï¼Œå¯¹åº”çš„ç»ˆå±€ä¼°å€¼ä¸º
 		///  Evaluation - INFINITE + 64
 		property int Evaluation {
 			int get() {
@@ -99,7 +99,7 @@ namespace CraftEngineNet {
 			}
 		}
 
-		///½á¹ûÊÇ·ñ´ÓÆåÆ×Ö±½ÓµÃµ½
+		///ç»“æœæ˜¯å¦ä»æ£‹è°±ç›´æ¥å¾—åˆ°
 		property bool BookMove {
 			bool get() {
 				return bookMove;
@@ -107,7 +107,7 @@ namespace CraftEngineNet {
 		}
 	};
 
-	///ËÑË÷×´Ì¬
+	///æœç´¢çŠ¶æ€
 	public value class SearchStats {
 	private:
 		unsigned long long evaluationCount;
@@ -118,9 +118,9 @@ namespace CraftEngineNet {
 		int partialResult;
 		int epcPercentage;
 	public:
-		///ÖÕ¾ÖËÑË÷
+		///ç»ˆå±€æœç´¢
 		static const int PARTIALDEPTH_EXACT = CraftEngine::Solver::PARTIALDEPTH_EXACT;
-		///Ê¤¸ºËÑË÷
+		///èƒœè´Ÿæœç´¢
 		static const int PARTIALDEPTH_WLD = CraftEngine::Solver::PARTIALDEPTH_WLD;
 
 		SearchStats(unsigned long long evnum, Move focused,
@@ -134,44 +134,44 @@ namespace CraftEngineNet {
 				epcPercentage = percentage;
 		}
 
-		///¾ÖÃæ¼ÆÊı£¬¼´ÒÑ¾­½øĞĞ¹ÀÖµµÄ¾ÖÃæµÄÊıÄ¿
+		///å±€é¢è®¡æ•°ï¼Œå³å·²ç»è¿›è¡Œä¼°å€¼çš„å±€é¢çš„æ•°ç›®
 		property unsigned long long EvaluationCount {
 			unsigned long long get() {
 				return evaluationCount;
 			}
 		}
-		///µ±Ç°ÕıÔÚËÑË÷µÄÆå²½
+		///å½“å‰æ­£åœ¨æœç´¢çš„æ£‹æ­¥
 		property Move FocusedMove {
 			Move get() {
 				return focusedMove;
 			}
 		}
-		///µ±Ç°ÈÏÎª×î¼ÑµÄÆå²½
+		///å½“å‰è®¤ä¸ºæœ€ä½³çš„æ£‹æ­¥
 		property Move SelectedMove {
 			Move get() {
 				return selectedMove;
 			}
 		}
-		///ËÑË÷Íê³ÉµÄ°Ù·Ö±È(Ö»ÊÇÒ»¸ö¹À¼Æ)
+		///æœç´¢å®Œæˆçš„ç™¾åˆ†æ¯”(åªæ˜¯ä¸€ä¸ªä¼°è®¡)
 		property int Percent {
 			int get() {
 				return percent;
 			}
 		}
-		///ÕıÔÚ½øĞĞµÄËÑË÷Éî¶È
+		///æ­£åœ¨è¿›è¡Œçš„æœç´¢æ·±åº¦
 		property int PartialDepth {
 			int get() {
 				return partialDepth;
 			}
 		}
-		///µ±Ç°Éî¶ÈµÄµ±Ç°×î¼Ñ¹ÀÖµ
+		///å½“å‰æ·±åº¦çš„å½“å‰æœ€ä½³ä¼°å€¼
 		property int PartialResult {
 			int get() {
 				return partialResult;
 			}
 		}
 
-		///ÖÕ¾ÖÑ¡ÔñĞÔËÑË÷µÄ¿ÉĞÅ¶È(1%~100%)
+		///ç»ˆå±€é€‰æ‹©æ€§æœç´¢çš„å¯ä¿¡åº¦(1%~100%)
 		property int EPCPercentage {
 			int get() {
 				return epcPercentage;
@@ -195,14 +195,14 @@ namespace CraftEngineNet {
 
 	};
 
-	///Ò»Ğ©È«¾Ö³£Á¿
+	///ä¸€äº›å…¨å±€å¸¸é‡
 	public ref class Global abstract {
 	public:
-		///ÆåÅÌºáÏò³¤¶È
+		///æ£‹ç›˜æ¨ªå‘é•¿åº¦
 		static const int WIDTH = CraftEngine::WIDTH;
-		///ÆåÅÌ×İÏò³¤¶È
+		///æ£‹ç›˜çºµå‘é•¿åº¦
 		static const int HEIGHT = CraftEngine::HEIGHT;
-		///Infinity³£Á¿
+		///Infinityå¸¸é‡
 		static const int INFINITY = CraftEngine::Solver::INFINITE;
 	};
 } // namespace CraftEngineNet

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmStartUp.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmStartUp µÄÉùÃ÷¡£
-			frmStartUpÀàÊµÏÖÆô¶¯´°¿Ú¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmStartUp çš„å£°æ˜ã€‚
+			frmStartUpç±»å®ç°å¯åŠ¨çª—å£ã€‚
 
 ********************************************************************************
 */
@@ -162,7 +162,7 @@ namespace Othello {
 				 this->label1->Name = L"label1";
 				 this->label1->Size = System::Drawing::Size(129, 29);
 				 this->label1->TabIndex = 2;
-				 this->label1->Text = L"ÕıÔÚÆô¶¯";
+				 this->label1->Text = L"æ­£åœ¨å¯åŠ¨";
 				 // 
 				 // pbStartUp
 				 // 
@@ -219,7 +219,7 @@ namespace Othello {
 				 this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 				 this->Name = L"frmStartUp";
 				 this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-				 this->Text = L"Craft Æô¶¯ÖĞ¡­¡­";
+				 this->Text = L"Craft å¯åŠ¨ä¸­â€¦â€¦";
 				 this->ShowInTaskbar = false;
 				 this->Cursor = Cursors::WaitCursor;
 				 this->Load += gcnew System::EventHandler(this, &frmStartUp::frmStartUp_Load);
@@ -247,7 +247,7 @@ namespace Othello {
 				 isDone = true;
 			 }
 	private: System::Void frmStartUp_Load(System::Object^  sender, System::EventArgs^  e) {
-				 this->Text = __APP_NAME__ + " Æô¶¯ÖĞ";
+				 this->Text = __APP_NAME__ + " å¯åŠ¨ä¸­";
 				 lblName->Text = __APP_NAME__;
 				 lblVersion->Text = "Version " + __APP_VERSION__;
 			 }
@@ -272,23 +272,23 @@ namespace Othello {
 						 case 0:
 						 case 1:
 						 case 2:
-							 lblState->Text = "ÕıÔÚ³õÊ¼»¯¡­¡­";
+							 lblState->Text = "æ­£åœ¨åˆå§‹åŒ–â€¦â€¦";
 							 break;
 						 case 3:
-							 lblState->Text = "ÕıÔÚÔØÈëÄ£°å¡­¡­";
+							 lblState->Text = "æ­£åœ¨è½½å…¥æ¨¡æ¿â€¦â€¦";
 							 break;
 						 case 4:
-							 lblState->Text = "ÕıÔÚÔØÈëÆåÆ×¡­¡­";
+							 lblState->Text = "æ­£åœ¨è½½å…¥æ£‹è°±â€¦â€¦";
 							 break;
 						 case 5:
-							 lblState->Text = "Íê³É";
+							 lblState->Text = "å®Œæˆ";
 					 }
 					 pbStartUp->Value = percent;
 					 Application::DoEvents();
 				 }
 				 if (!successful) {
-					 MessageBox::Show(this, __APP_NAME__ + " Î´ÄÜÕı³£³õÊ¼»¯¡£ÇëÈ·±£³ÌĞòÎÄ¼şÊÇÍêÕûµÄ¡£\n³¢ÊÔÖØĞÂ°²×°Ó¦ÓÃ³ÌĞòÒÔ½â¾ö´ËÎÊÌâ¡£",
-						 __APP_NAME__ + " ³õÊ¼»¯Ê§°Ü", MessageBoxButtons::OK, MessageBoxIcon::Error);
+					 MessageBox::Show(this, __APP_NAME__ + " æœªèƒ½æ­£å¸¸åˆå§‹åŒ–ã€‚è¯·ç¡®ä¿ç¨‹åºæ–‡ä»¶æ˜¯å®Œæ•´çš„ã€‚\nå°è¯•é‡æ–°å®‰è£…åº”ç”¨ç¨‹åºä»¥è§£å†³æ­¤é—®é¢˜ã€‚",
+						 __APP_NAME__ + " åˆå§‹åŒ–å¤±è´¥", MessageBoxButtons::OK, MessageBoxIcon::Error);
 				 } else {
 					 mainForm = gcnew frmMain();
 				 }

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 using namespace System;
 using namespace System::Reflection;
@@ -7,9 +7,9 @@ using namespace System::Runtime::InteropServices;
 using namespace System::Security::Permissions;
 
 //
-// ÓĞ¹Ø³ÌĞò¼¯µÄ³£¹æĞÅÏ¢Í¨¹ıÏÂÁĞÊôĞÔ¼¯
-// ¿ØÖÆ¡£¸ü¸ÄÕâĞ©ÊôĞÔÖµ¿ÉĞŞ¸Ä
-// Óë³ÌĞò¼¯¹ØÁªµÄĞÅÏ¢¡£
+// æœ‰å…³ç¨‹åºé›†çš„å¸¸è§„ä¿¡æ¯é€šè¿‡ä¸‹åˆ—å±æ€§é›†
+// æ§åˆ¶ã€‚æ›´æ”¹è¿™äº›å±æ€§å€¼å¯ä¿®æ”¹
+// ä¸ç¨‹åºé›†å…³è”çš„ä¿¡æ¯ã€‚
 //
 [assembly:AssemblyTitleAttribute("CraftEngineNet")];
 [assembly:AssemblyDescriptionAttribute("")];
@@ -21,15 +21,15 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyCultureAttribute("")];
 
 //
-// ³ÌĞò¼¯µÄ°æ±¾ĞÅÏ¢ÓÉÏÂÃæËÄ¸öÖµ×é³É:
+// ç¨‹åºé›†çš„ç‰ˆæœ¬ä¿¡æ¯ç”±ä¸‹é¢å››ä¸ªå€¼ç»„æˆ:
 //
-//      Ö÷°æ±¾
-//      ´Î°æ±¾
-//      ÄÚ²¿°æ±¾ºÅ
-//      ĞŞ¶©ºÅ
+//      ä¸»ç‰ˆæœ¬
+//      æ¬¡ç‰ˆæœ¬
+//      å†…éƒ¨ç‰ˆæœ¬å·
+//      ä¿®è®¢å·
 //
-// Äú¿ÉÒÔÖ¸¶¨ËùÓĞÖµ£¬Ò²¿ÉÊ¹ÓÃ¡°ĞŞ¶©ºÅ¡±ºÍ¡°ÄÚ²¿°æ±¾ºÅ¡±µÄÄ¬ÈÏÖµ£¬
-// ·½·¨ÊÇ°´ÈçÏÂËùÊ¾Ê¹ÓÃ¡°*¡±:
+// æ‚¨å¯ä»¥æŒ‡å®šæ‰€æœ‰å€¼ï¼Œä¹Ÿå¯ä½¿ç”¨â€œä¿®è®¢å·â€å’Œâ€œå†…éƒ¨ç‰ˆæœ¬å·â€çš„é»˜è®¤å€¼ï¼Œ
+// æ–¹æ³•æ˜¯æŒ‰å¦‚ä¸‹æ‰€ç¤ºä½¿ç”¨â€œ*â€:
 
 [assembly:AssemblyVersionAttribute("1.0.*")];
 

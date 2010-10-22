@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmStatistics.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmStatistics µÄÉùÃ÷¡£
-			frmStatistics ÀàÊµÏÖ¡°Í³¼ÆÐÅÏ¢¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmStatistics çš„å£°æ˜Žã€‚
+			frmStatistics ç±»å®žçŽ°â€œç»Ÿè®¡ä¿¡æ¯â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -163,7 +163,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(65, 12);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"µ±Ç°ÓÃ»§£º";
+			this->label1->Text = L"å½“å‰ç”¨æˆ·ï¼š";
 			// 
 			// txtName
 			// 
@@ -176,7 +176,7 @@ namespace Othello {
 			// 
 			// lstDifficulty
 			// 
-			this->lstDifficulty->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 10.5F));
+			this->lstDifficulty->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 10.5F));
 			this->lstDifficulty->FormattingEnabled = true;
 			this->lstDifficulty->ItemHeight = 14;
 			this->lstDifficulty->Location = System::Drawing::Point(16, 63);
@@ -192,7 +192,7 @@ namespace Othello {
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(77, 12);
 			this->label2->TabIndex = 3;
-			this->label2->Text = L"»ñÊ¤µÄÓÎÏ·£º";
+			this->label2->Text = L"èŽ·èƒœçš„æ¸¸æˆï¼š";
 			// 
 			// lblWin
 			// 
@@ -210,7 +210,7 @@ namespace Othello {
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(89, 12);
 			this->label3->TabIndex = 3;
-			this->label3->Text = L"ÎªÆ½¾ÖµÄÓÎÏ·£º";
+			this->label3->Text = L"ä¸ºå¹³å±€çš„æ¸¸æˆï¼š";
 			// 
 			// lblDraw
 			// 
@@ -228,7 +228,7 @@ namespace Othello {
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(77, 12);
 			this->label4->TabIndex = 3;
-			this->label4->Text = L"Ê§°ÜµÄÓÎÏ·£º";
+			this->label4->Text = L"å¤±è´¥çš„æ¸¸æˆï¼š";
 			// 
 			// lblLoss
 			// 
@@ -246,7 +246,7 @@ namespace Othello {
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(65, 12);
 			this->label6->TabIndex = 3;
-			this->label6->Text = L"»ñÊ¤¸ÅÂÊ£º";
+			this->label6->Text = L"èŽ·èƒœæ¦‚çŽ‡ï¼š";
 			// 
 			// lblWinPercentage
 			// 
@@ -264,7 +264,7 @@ namespace Othello {
 			this->label8->Name = L"label8";
 			this->label8->Size = System::Drawing::Size(65, 12);
 			this->label8->TabIndex = 3;
-			this->label8->Text = L"µ±Ç°×´Ì¬£º";
+			this->label8->Text = L"å½“å‰çŠ¶æ€ï¼š";
 			// 
 			// lblCurrentState
 			// 
@@ -283,7 +283,7 @@ namespace Othello {
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(96, 32);
 			this->btnOK->TabIndex = 2;
-			this->btnOK->Text = L"¹Ø±Õ";
+			this->btnOK->Text = L"å…³é—­";
 			this->btnOK->UseVisualStyleBackColor = true;
 			this->btnOK->Click += gcnew System::EventHandler(this, &frmStatistics::btnOK_Click);
 			// 
@@ -294,7 +294,7 @@ namespace Othello {
 			this->btnClear->Name = L"btnClear";
 			this->btnClear->Size = System::Drawing::Size(96, 32);
 			this->btnClear->TabIndex = 3;
-			this->btnClear->Text = L"È«²¿ÖØÖÃ(&R)";
+			this->btnClear->Text = L"å…¨éƒ¨é‡ç½®(&R)";
 			this->btnClear->UseVisualStyleBackColor = true;
 			this->btnClear->Click += gcnew System::EventHandler(this, &frmStatistics::btnClear_Click);
 			// 
@@ -305,7 +305,7 @@ namespace Othello {
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(65, 12);
 			this->label5->TabIndex = 3;
-			this->label5->Text = L"×î³¤Á¬Ê¤£º";
+			this->label5->Text = L"æœ€é•¿è¿žèƒœï¼š";
 			// 
 			// lblLongestWin
 			// 
@@ -323,7 +323,7 @@ namespace Othello {
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(65, 12);
 			this->label9->TabIndex = 3;
-			this->label9->Text = L"×î³¤Á¬Æ½£º";
+			this->label9->Text = L"æœ€é•¿è¿žå¹³ï¼š";
 			// 
 			// lblLongestDraw
 			// 
@@ -341,7 +341,7 @@ namespace Othello {
 			this->label11->Name = L"label11";
 			this->label11->Size = System::Drawing::Size(65, 12);
 			this->label11->TabIndex = 3;
-			this->label11->Text = L"×î³¤Á¬°Ü£º";
+			this->label11->Text = L"æœ€é•¿è¿žè´¥ï¼š";
 			// 
 			// lblLongestLoss
 			// 
@@ -359,7 +359,7 @@ namespace Othello {
 			this->label13->Name = L"label13";
 			this->label13->Size = System::Drawing::Size(65, 12);
 			this->label13->TabIndex = 3;
-			this->label13->Text = L"×î¼Ñ±È·Ö£º";
+			this->label13->Text = L"æœ€ä½³æ¯”åˆ†ï¼š";
 			// 
 			// lblBestScore
 			// 
@@ -407,7 +407,7 @@ namespace Othello {
 			this->Name = L"frmStatistics";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"Í³¼ÆÐÅÏ¢";
+			this->Text = L"ç»Ÿè®¡ä¿¡æ¯";
 			this->Load += gcnew System::EventHandler(this, &frmStatistics::frmStatistics_Load);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &frmStatistics::frmStatistics_FormClosed);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &frmStatistics::frmStatistics_FormClosing);
@@ -424,23 +424,23 @@ private: System::Void frmStatistics_Load(System::Object^  sender, System::EventA
 			 CenterToParent();
 			 txtName->Text = userInfo->UserName;
 			 playerList = gcnew array<PlayerType>(MAX_PLAYERTYPES);
-			 lstDifficulty->Items->Add("Ëæ»ú");
+			 lstDifficulty->Items->Add("éšæœº");
 			 playerList[0] = PlayerType::RANDOM;
-			 lstDifficulty->Items->Add("´óÊ³");
+			 lstDifficulty->Items->Add("å¤§é£Ÿ");
 			 playerList[1] = PlayerType::BIG_EAT;
-			 lstDifficulty->Items->Add("µØÇò");
+			 lstDifficulty->Items->Add("åœ°çƒ");
 			 playerList[2] = PlayerType::EARTH;
-			 lstDifficulty->Items->Add("ÔÆ¶ä");
+			 lstDifficulty->Items->Add("äº‘æœµ");
 			 playerList[3] = PlayerType::CLOUDS;
-			 lstDifficulty->Items->Add("¹ìµÀ");
+			 lstDifficulty->Items->Add("è½¨é“");
 			 playerList[4] = PlayerType::ORBIT;
-			 lstDifficulty->Items->Add("ÔÂÁÁ");
+			 lstDifficulty->Items->Add("æœˆäº®");
 			 playerList[5] = PlayerType::MOON;
-			 lstDifficulty->Items->Add("ÐÇÐÇ");
+			 lstDifficulty->Items->Add("æ˜Ÿæ˜Ÿ");
 			 playerList[6] = PlayerType::STAR;
-			 lstDifficulty->Items->Add("ÐÇÏµ");
+			 lstDifficulty->Items->Add("æ˜Ÿç³»");
 			 playerList[7] = PlayerType::GALAXY;
-			 lstDifficulty->Items->Add("ÓîÖæ");
+			 lstDifficulty->Items->Add("å®‡å®™");
 			 playerList[8] = PlayerType::UNIVERSE;
 			 lstDifficulty->SelectedIndex = 0;
 		 }
@@ -455,16 +455,16 @@ private:
 			: "N/A";
 		String^ currentState;
 		if (total) {
-			currentState = stat->getSeries() + " Á¬";
+			currentState = stat->getSeries() + " è¿ž";
 			switch (stat->getSeriesState()) {
 				 case GameResult::WIN:
-					 currentState += "Ê¤";
+					 currentState += "èƒœ";
 					 break;
 				 case GameResult::DRAW:
-					 currentState += "Æ½";
+					 currentState += "å¹³";
 					 break;
 				 case GameResult::LOSS:
-					 currentState += "°Ü";
+					 currentState += "è´¥";
 			}
 		} else currentState = "N/A";
 		lblWin->Text = stat->getWin().ToString();
@@ -478,11 +478,11 @@ private:
 		String^ bestScore;
 		if (total) {
 			if (stat->getBestScore() == 0) {
-				bestScore = "Æ½¾Ö";
+				bestScore = "å¹³å±€";
 			} else {
 				bestScore = (32 + stat->getBestScore() / 2).ToString() + ":"
 					+ (32 - stat->getBestScore() / 2).ToString()
-					+ " " + ((stat->getBestScore() > 0) ? "Ê¤" : "¸º");
+					+ " " + ((stat->getBestScore() > 0) ? "èƒœ" : "è´Ÿ");
 			}
 		} else bestScore = "N/A";
 		lblBestScore->Text = bestScore;
@@ -493,8 +493,8 @@ private:
 private:
 	void restoreStatistics() {
 		//controller->acquirePause(true);
-		Windows::Forms::DialogResult res = MessageBox::Show(this, "È·ÊµÒªÖØÖÃÍ³¼ÆÐÅÏ¢Âð£¿",
-			"ÖØÖÃÍ³¼ÆÐÅÏ¢", MessageBoxButtons::YesNo, MessageBoxIcon::Question,
+		Windows::Forms::DialogResult res = MessageBox::Show(this, "ç¡®å®žè¦é‡ç½®ç»Ÿè®¡ä¿¡æ¯å—ï¼Ÿ",
+			"é‡ç½®ç»Ÿè®¡ä¿¡æ¯", MessageBoxButtons::YesNo, MessageBoxIcon::Question,
 			MessageBoxDefaultButton::Button2);
 		//controller->acquirePause(false);
 		if (res == Windows::Forms::DialogResult::No) return;

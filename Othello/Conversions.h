@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								Conversions.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬³£ÓÃ×ª»»º¯ÊıµÄÉùÃ÷¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«å¸¸ç”¨è½¬æ¢å‡½æ•°çš„å£°æ˜ã€‚
 
 ********************************************************************************
 */
@@ -41,19 +41,19 @@
 namespace Othello {
 
 namespace Conversions {
-	//½« int ±íÊ¾µÄÆå²½×ª»»Îª System::Drawing::Point ¶ÔÏó±íÊ¾µÄÆå²½
+	//å°† int è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸º System::Drawing::Point å¯¹è±¡è¡¨ç¤ºçš„æ£‹æ­¥
 	System::Drawing::Point intToPoint(int theInt);
 
-	//½« int ±íÊ¾µÄ×ßÆå·½×ª»»Îª Chess ±íÊ¾µÄ×ßÆå·½
+	//å°† int è¡¨ç¤ºçš„èµ°æ£‹æ–¹è½¬æ¢ä¸º Chess è¡¨ç¤ºçš„èµ°æ£‹æ–¹
 	Chess intToChess(int theInt);
 
-	//½« System::Drawing::Point ¶ÔÏó±íÊ¾µÄÆå²½×ª»»Îª×Ö·û´®±íÊ¾µÄÆå²½
+	//å°† System::Drawing::Point å¯¹è±¡è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸ºå­—ç¬¦ä¸²è¡¨ç¤ºçš„æ£‹æ­¥
 	System::String^ pointToString(System::Drawing::Point thePoint);
 
-	//½« int ±íÊ¾µÄÆå²½×ª»»Îª×Ö·û´®±íÊ¾µÄÆå²½
+	//å°† int è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸ºå­—ç¬¦ä¸²è¡¨ç¤ºçš„æ£‹æ­¥
 	System::String^ intToString(int theInt);
 
-	//½«Board^±íÊ¾µÄÆåÅÌ×ª»»ÎªCraftEngine½ÓÊÜµÄ¸ñÊ½
+	//å°†Board^è¡¨ç¤ºçš„æ£‹ç›˜è½¬æ¢ä¸ºCraftEngineæ¥å—çš„æ ¼å¼
 	void convertBoard(Board^ board, int dest[]);
 
 } // namespace Conversions

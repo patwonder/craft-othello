@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								BookLearning.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà BookLearning µÄÉùÃ÷¡£
-			BookLearning ÀàÊµÏÖ¡°ÆåÆ×Ñ§Ï°¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» BookLearning çš„å£°æ˜Žã€‚
+			BookLearning ç±»å®žçŽ°â€œæ£‹è°±å­¦ä¹ â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -115,13 +115,13 @@ namespace Othello {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"ËÎÌå", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->label1->Font = (gcnew System::Drawing::Font(L"å®‹ä½“", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
 			this->label1->Location = System::Drawing::Point(33, 9);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(152, 16);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"ÕýÔÚÑ§Ï°£¬ÇëÉÔºò£¡";
+			this->label1->Text = L"æ­£åœ¨å­¦ä¹ ï¼Œè¯·ç¨å€™ï¼";
 			// 
 			// tmrLearn
 			// 
@@ -151,7 +151,7 @@ namespace Othello {
 			this->Name = L"BookLearning";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"ÆåÆ×Ñ§Ï°";
+			this->Text = L"æ£‹è°±å­¦ä¹ ";
 			this->Load += gcnew System::EventHandler(this, &BookLearning::BookLearning_Load);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &BookLearning::BookLearning_FormClosed);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &BookLearning::BookLearning_FormClosing);

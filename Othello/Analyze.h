@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								Analyze.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º¶¨ÒåÆå¾Ö·ÖÎö½á¹ûĞèÒªÓÃµ½µÄÀà£º
-			AnalyzedMove ºÍ DetailedAnalyzeResult
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šå®šä¹‰æ£‹å±€åˆ†æç»“æœéœ€è¦ç”¨åˆ°çš„ç±»ï¼š
+			AnalyzedMove å’Œ DetailedAnalyzeResult
 
 ********************************************************************************
 */
@@ -40,14 +40,14 @@
 
 namespace Othello {
 
-//¸ÅÊö£º¶¨ÒåÎÊÌâ¼¶±ğ
+//æ¦‚è¿°ï¼šå®šä¹‰é—®é¢˜çº§åˆ«
 public enum class QuestionLevel {
-	NONE,	//Ã»ÓĞÎÊÌâ
-	NORMAL, //ÓĞÒ»µãÎÊÌâ
-	BAD		//ÓĞºÜ´óÎÊÌâ
+	NONE,	//æ²¡æœ‰é—®é¢˜
+	NORMAL, //æœ‰ä¸€ç‚¹é—®é¢˜
+	BAD		//æœ‰å¾ˆå¤§é—®é¢˜
 };
 
-//¸ÅÊö£ºÀà AnalyzedMove ±íÊ¾Ò»²½ÆåµÄ·ÖÎö½á¹û
+//æ¦‚è¿°ï¼šç±» AnalyzedMove è¡¨ç¤ºä¸€æ­¥æ£‹çš„åˆ†æç»“æœ
 public value class AnalyzedMove {
 private:
 	System::String^ generalDescription;
@@ -58,7 +58,7 @@ private:
 	QuestionLevel questionLevel;
 	Chess color;
 public:
-	//¹¹Ôìº¯Êı£¬³õÊ¼»¯ AnalyzedMove ¶ÔÏó£¬Éè¶¨·ÖÎö½á¹û
+	//æ„é€ å‡½æ•°ï¼Œåˆå§‹åŒ– AnalyzedMove å¯¹è±¡ï¼Œè®¾å®šåˆ†æç»“æœ
 	AnalyzedMove(System::String^ description, Chess player,
 		System::String^ sPlayedEval, System::String^ sBestEval,
 		int iPlayedEval, int iBestEval, System::String^ sPlayed, System::String^ sBest,
@@ -75,57 +75,57 @@ public:
 			questionLevel = ql;
 			color = player;
 	}
-	//»ñÈ¡Õâ²½Æå·ÖÎö½á¹ûµÄ×ÜÌåÃèÊö
+	//è·å–è¿™æ­¥æ£‹åˆ†æç»“æœçš„æ€»ä½“æè¿°
 	System::String^ getGeneralDescription() {
 		return generalDescription;
 	}
-	//»ñÈ¡×Ö·û´®±íÊ¾µÄÒÑÏÂÆå²½¹ÀÖµ
+	//è·å–å­—ç¬¦ä¸²è¡¨ç¤ºçš„å·²ä¸‹æ£‹æ­¥ä¼°å€¼
 	System::String^ getSPlayedMoveEval() {
 		return sPlayedMoveEval;
 	}
-	//»ñÈ¡×Ö·û´®±íÊ¾µÄ×î¼ÑÆå²½µÄ¹ÀÖµ
+	//è·å–å­—ç¬¦ä¸²è¡¨ç¤ºçš„æœ€ä½³æ£‹æ­¥çš„ä¼°å€¼
 	System::String^ getSBestMoveEval() {
 		return sBestMoveEval;
 	}
-	//»ñÈ¡ int ±íÊ¾µÄÒÑÏÂÆå²½µÄ¹ÀÖµ
+	//è·å– int è¡¨ç¤ºçš„å·²ä¸‹æ£‹æ­¥çš„ä¼°å€¼
 	int getIPlayedMoveEval() {
 		return iBestMoveEval;
 	}
-	//»ñÈ¡ int ±íÊ¾µÄ×î¼ÑÆå²½µÄ¹ÀÖµ
+	//è·å– int è¡¨ç¤ºçš„æœ€ä½³æ£‹æ­¥çš„ä¼°å€¼
 	int getIBestMoveEval() {
 		return iBestMoveEval;
 	}
-	//»ñÈ¡×Ö·û´®±íÊ¾µÄÒÑÏÂÆå²½
+	//è·å–å­—ç¬¦ä¸²è¡¨ç¤ºçš„å·²ä¸‹æ£‹æ­¥
 	System::String^ getSPlayedMove() {
 		return sPlayedMove;
 	}
-	//»ñÈ¡×Ö·û´®±íÊ¾µÄ×î¼ÑÆå²½
+	//è·å–å­—ç¬¦ä¸²è¡¨ç¤ºçš„æœ€ä½³æ£‹æ­¥
 	System::String^ getSBestMove() {
 		return sBestMove;
 	}
-	//»ñÈ¡ÓÉ System::Drawing::Point ¶ÔÏó±íÊ¾µÄÒÑÏÂÆå²½
+	//è·å–ç”± System::Drawing::Point å¯¹è±¡è¡¨ç¤ºçš„å·²ä¸‹æ£‹æ­¥
 	System::Drawing::Point getPPlayedMove() {
 		return pPlayedMove;
 	}
-	//»ñÈ¡ÓÉ System::Drawing::Point ¶ÔÏó±íÊ¾µÄ×î¼ÑÆå²½
+	//è·å–ç”± System::Drawing::Point å¯¹è±¡è¡¨ç¤ºçš„æœ€ä½³æ£‹æ­¥
 	System::Drawing::Point getPBestMove() {
 		return pBestMove;
 	}
-	//»ñÈ¡ÎÊÌâ¼¶±ğ
+	//è·å–é—®é¢˜çº§åˆ«
 	QuestionLevel getQuestionLevel() {
 		return questionLevel;
 	}
-	//»ñÈ¡Õâ²½ÆåµÄ×ßÆå·½
+	//è·å–è¿™æ­¥æ£‹çš„èµ°æ£‹æ–¹
 	Chess getPlayer() {
 		return color;
 	}
 };
 
-//¸ÅÊö£ºÀà DetailedAnalyzeResult ±íÊ¾Ò»¾ÖÆåµÄ·ÖÎö½á¹û
+//æ¦‚è¿°ï¼šç±» DetailedAnalyzeResult è¡¨ç¤ºä¸€å±€æ£‹çš„åˆ†æç»“æœ
 public ref class DetailedAnalyzeResult {
 	System::Collections::Generic::List<AnalyzedMove>^ moves;
 public:
-	//³õÊ¼»¯Îª¿Õ DetailedAnalyzeResult ¶ÔÏó
+	//åˆå§‹åŒ–ä¸ºç©º DetailedAnalyzeResult å¯¹è±¡
 	DetailedAnalyzeResult() {
 		moves = gcnew System::Collections::Generic::List<AnalyzedMove>();
 		moves->Add(AnalyzedMove("", Chess::AVAILABLE, "", "", 0, 0, "", "", System::Drawing::Point(-1, -1), 
@@ -133,33 +133,33 @@ public:
 	}
 
 	/*
-	¸ÅÊö£º»ñÈ¡Ä³Ò»²½µÄ·ÖÎö½á¹û
+	æ¦‚è¿°ï¼šè·å–æŸä¸€æ­¥çš„åˆ†æç»“æœ
 
-	²ÎÊı£º
-	step£ºÒª»ñÈ¡µÄÆå²½ĞòºÅ
+	å‚æ•°ï¼š
+	stepï¼šè¦è·å–çš„æ£‹æ­¥åºå·
 
-	·µ»ØÖµ£ºµÚ step ²½µÄ·ÖÎö½á¹û
+	è¿”å›å€¼ï¼šç¬¬ step æ­¥çš„åˆ†æç»“æœ
 	*/
 	AnalyzedMove getAnalyzedResult(int step) {
 		return moves[step];
 	}
 
 	/*
-	¸ÅÊö£ºÍù DetailedAnalyzeResult ¶ÔÏóÖĞ¼ÓÈëÆå²½·ÖÎö½á¹û
+	æ¦‚è¿°ï¼šå¾€ DetailedAnalyzeResult å¯¹è±¡ä¸­åŠ å…¥æ£‹æ­¥åˆ†æç»“æœ
 
-	²ÎÊı£º
-	move£ºÒª¼ÓÈëµÄÆå²½·ÖÎö½á¹û
+	å‚æ•°ï¼š
+	moveï¼šè¦åŠ å…¥çš„æ£‹æ­¥åˆ†æç»“æœ
 	*/
 	void addAnalyzedResult(AnalyzedMove move) {
 		moves->Add(move);
 	}
 
-	//»ñÈ¡×ÜµÄÆå²½Êı
+	//è·å–æ€»çš„æ£‹æ­¥æ•°
 	int getSteps() {
 		return moves->Count;
 	}
 
-	//Çå¿Õ DetailedAnalyzeResult ¶ÔÏó
+	//æ¸…ç©º DetailedAnalyzeResult å¯¹è±¡
 	void clear() {
 		moves->Clear();
 		moves->Add(AnalyzedMove("", Chess::AVAILABLE, "", "", 0, 0, "", "", System::Drawing::Point(-1, -1), 

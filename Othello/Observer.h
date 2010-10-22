@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								Observer.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£ºÕâÊÇËùÓĞ¹Û²ìÕßÀàÒªÊµÏÖµÄ½Ó¿Ú
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šè¿™æ˜¯æ‰€æœ‰è§‚å¯Ÿè€…ç±»è¦å®ç°çš„æ¥å£
 
 ********************************************************************************
 */
@@ -41,124 +41,124 @@ namespace Othello {
 public interface class Observer {
 public:
 	/*
-	¸ÅÊö£ºµ±Ä³Ò»×ßÆå·½×ßÁËÒ»²½ÆåÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šå½“æŸä¸€èµ°æ£‹æ–¹èµ°äº†ä¸€æ­¥æ£‹æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	move£º¸Õ×ßµÄÄÇ²½Æå
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	moveï¼šåˆšèµ°çš„é‚£æ­¥æ£‹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void playerMoved(Move move, 
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÓÎÏ·¿ªÊ¼Ê±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ¸¸æˆå¼€å§‹æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	firstPlayer£ºÏÈÊÖ·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	firstPlayerï¼šå…ˆæ‰‹æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameStarted(Chess firstPlayer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÓÎÏ·ÖĞÍ¾½áÊøÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ¸¸æˆä¸­é€”ç»“æŸæ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	firstPlayer£ºÏÈÊÖ·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	firstPlayerï¼šå…ˆæ‰‹æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameReseted(Chess firstPlayer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÓÎÏ·½áÊøÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ¸¸æˆç»“æŸæ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	winner£º»ñÊ¤·½£¬Æ½¾ÖÎª Chess::AVAILABLE
-	nBlack£ººÚ·½×îÖÕÆå×ÓÊı
-	nWhite£º°×·½×îÖÕÆå×ÓÊı
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	winnerï¼šè·èƒœæ–¹ï¼Œå¹³å±€ä¸º Chess::AVAILABLE
+	nBlackï¼šé»‘æ–¹æœ€ç»ˆæ£‹å­æ•°
+	nWhiteï¼šç™½æ–¹æœ€ç»ˆæ£‹å­æ•°
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameEnded(Chess winner, int nBlack, int nWhite, 
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºµ±ÓÎÏ·ÔİÍ£Ê±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šå½“æ¸¸æˆæš‚åœæ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	currentPlayer£ºµ±Ç°×ßÆå·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	currentPlayerï¼šå½“å‰èµ°æ£‹æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameHasBeenPaused(Chess currentPlayer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£º¸Ä±ä³õÊ¼ÆåÅÌÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ”¹å˜åˆå§‹æ£‹ç›˜æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	firstPlayer£ºÏÈÊÖ·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	firstPlayerï¼šå…ˆæ‰‹æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void boardChanged(Chess firstPlayer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÖĞÍ¾ÇĞ»»ÆåÊÖÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šä¸­é€”åˆ‡æ¢æ£‹æ‰‹æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	firstPlayer£ºÏÈÊÖ·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	firstPlayerï¼šå…ˆæ‰‹æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void playerChanged(Chess currentPlayer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£º¸Ä±äÊ±ÏŞÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ”¹å˜æ—¶é™æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	timeLimit£ºĞÂµÄÊ±ÏŞ
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	timeLimitï¼šæ–°çš„æ—¶é™
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void timeLimitChanged(int timeLimit,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÓÎÏ·ÖĞÍ¾½áÊøÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šæ¸¸æˆä¸­é€”ç»“æŸæ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	overTimer£º³¬Ê±·½
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	overTimerï¼šè¶…æ—¶æ–¹
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void playerOverTimed(Chess overTimer,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÒ»·½»ÚÆåÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šä¸€æ–¹æ‚”æ£‹æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	step£º»ÚÆåµÄ²½Êı
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	stepï¼šæ‚”æ£‹çš„æ­¥æ•°
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameGoneBack(int step,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
 
 	/*
-	¸ÅÊö£ºÒ»·½È¡Ïû»ÚÆåÊ±±»µ÷ÓÃ
+	æ¦‚è¿°ï¼šä¸€æ–¹å–æ¶ˆæ‚”æ£‹æ—¶è¢«è°ƒç”¨
 
-	²ÎÊı£º
-	step£ºÈ¡Ïû»ÚÆåµÄ²½Êı
-	gcBlack£ººÚ·½µÄÆå¾ÖÉÏÏÂÎÄ
-	gcWhite£º°×·½µÄÆå¾ÖÉÏÏÂÎÄ
+	å‚æ•°ï¼š
+	stepï¼šå–æ¶ˆæ‚”æ£‹çš„æ­¥æ•°
+	gcBlackï¼šé»‘æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
+	gcWhiteï¼šç™½æ–¹çš„æ£‹å±€ä¸Šä¸‹æ–‡
 	*/
 	virtual void gameGoneForward(int step,
 		GameContext^ gcBlack, GameContext^ gcWhite) = 0;
@@ -166,7 +166,7 @@ public:
 
 } // namespace Othello
 
-/* Observer ¿ìËÙ¼Ì³Ğ£¨Ö±½Ó¸´ÖÆ£©
+/* Observer å¿«é€Ÿç»§æ‰¿ï¼ˆç›´æ¥å¤åˆ¶ï¼‰
 
 public ref class <ClassName> : public Observer {
 private:

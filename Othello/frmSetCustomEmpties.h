@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmSetCustomEmpties.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmSetCustomEmpties µÄÉùÃ÷¡£
-			frmSetCustomEmpties ÀàÊµÏÖ ×Ô¶¨Òå²Ğ¾Ö¿Õ¸ñÊı ´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmSetCustomEmpties çš„å£°æ˜ã€‚
+			frmSetCustomEmpties ç±»å®ç° è‡ªå®šä¹‰æ®‹å±€ç©ºæ ¼æ•° çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -46,13 +46,13 @@ using namespace System::Drawing;
 namespace Othello {
 
 	/// <summary>
-	/// frmSetCustomEmpties ÕªÒª
+	/// frmSetCustomEmpties æ‘˜è¦
 	///
-	/// ¾¯¸æ: Èç¹û¸ü¸Ä´ËÀàµÄÃû³Æ£¬ÔòĞèÒª¸ü¸Ä
-	///          Óë´ËÀàËùÒÀÀµµÄËùÓĞ .resx ÎÄ¼ş¹ØÁªµÄÍĞ¹Ü×ÊÔ´±àÒëÆ÷¹¤¾ßµÄ
-	///          ¡°×ÊÔ´ÎÄ¼şÃû¡±ÊôĞÔ¡£·ñÔò£¬
-	///          Éè¼ÆÆ÷½«²»ÄÜÓë´Ë´°ÌåµÄ¹ØÁª
-	///          ±¾µØ»¯×ÊÔ´ÕıÈ·½»»¥¡£
+	/// è­¦å‘Š: å¦‚æœæ›´æ”¹æ­¤ç±»çš„åç§°ï¼Œåˆ™éœ€è¦æ›´æ”¹
+	///          ä¸æ­¤ç±»æ‰€ä¾èµ–çš„æ‰€æœ‰ .resx æ–‡ä»¶å…³è”çš„æ‰˜ç®¡èµ„æºç¼–è¯‘å™¨å·¥å…·çš„
+	///          â€œèµ„æºæ–‡ä»¶åâ€å±æ€§ã€‚å¦åˆ™ï¼Œ
+	///          è®¾è®¡å™¨å°†ä¸èƒ½ä¸æ­¤çª—ä½“çš„å…³è”
+	///          æœ¬åœ°åŒ–èµ„æºæ­£ç¡®äº¤äº’ã€‚
 	/// </summary>
 	public ref class frmSetCustomEmpties : public System::Windows::Forms::Form
 	{
@@ -61,7 +61,7 @@ namespace Othello {
 		{
 			InitializeComponent();
 			//
-			//TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôìº¯Êı´úÂë
+			//TODO: åœ¨æ­¤å¤„æ·»åŠ æ„é€ å‡½æ•°ä»£ç 
 			//
 			nudEmpties->Value = defaultEmpties;
 			DialogResult = Windows::Forms::DialogResult::Cancel;
@@ -75,7 +75,7 @@ namespace Othello {
 
 	protected:
 		/// <summary>
-		/// ÇåÀíËùÓĞÕıÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		~frmSetCustomEmpties()
 		{
@@ -92,14 +92,14 @@ namespace Othello {
 
 	private:
 		/// <summary>
-		/// ±ØĞèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»Òª
-		/// Ê¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä´Ë·½·¨µÄÄÚÈİ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦
+		/// ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -117,7 +117,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(77, 12);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"Ê£Óà¿Õ¸ñÊı£º";
+			this->label1->Text = L"å‰©ä½™ç©ºæ ¼æ•°ï¼š";
 			// 
 			// btnOK
 			// 
@@ -127,7 +127,7 @@ namespace Othello {
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(96, 32);
 			this->btnOK->TabIndex = 1;
-			this->btnOK->Text = L"È·¶¨";
+			this->btnOK->Text = L"ç¡®å®š";
 			this->btnOK->UseVisualStyleBackColor = true;
 			this->btnOK->Click += gcnew System::EventHandler(this, &frmSetCustomEmpties::btnOK_Click);
 			// 
@@ -139,7 +139,7 @@ namespace Othello {
 			this->btnCancel->Name = L"btnCancel";
 			this->btnCancel->Size = System::Drawing::Size(96, 32);
 			this->btnCancel->TabIndex = 2;
-			this->btnCancel->Text = L"È¡Ïû";
+			this->btnCancel->Text = L"å–æ¶ˆ";
 			this->btnCancel->UseVisualStyleBackColor = true;
 			this->btnCancel->Click += gcnew System::EventHandler(this, &frmSetCustomEmpties::btnCancel_Click);
 			// 
@@ -172,7 +172,7 @@ namespace Othello {
 			this->Name = L"frmSetCustomEmpties";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"ÇëÊäÈëÊ£Óà¿Õ¸ñÊı";
+			this->Text = L"è¯·è¾“å…¥å‰©ä½™ç©ºæ ¼æ•°";
 			this->Load += gcnew System::EventHandler(this, &frmSetCustomEmpties::frmSetCustomEmpties_Load);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &frmSetCustomEmpties::frmSetCustomEmpties_FormClosed);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->nudEmpties))->EndInit();

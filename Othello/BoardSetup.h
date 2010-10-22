@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								BoardSetup.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà BoardSetup µÄÉùÃ÷¡£
-			BoardSetup ÀàÊµÏÖ¡°Ô¤ÉèÆå¾Ö¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» BoardSetup çš„å£°æ˜Žã€‚
+			BoardSetup ç±»å®žçŽ°â€œé¢„è®¾æ£‹å±€â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -163,7 +163,7 @@ namespace Othello {
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(84, 28);
 			this->btnOK->TabIndex = 9;
-			this->btnOK->Text = L"È·¶¨";
+			this->btnOK->Text = L"ç¡®å®š";
 			this->btnOK->UseVisualStyleBackColor = true;
 			this->btnOK->Click += gcnew System::EventHandler(this, &BoardSetup::btnOK_Click);
 			// 
@@ -175,7 +175,7 @@ namespace Othello {
 			this->btnCancel->Name = L"btnCancel";
 			this->btnCancel->Size = System::Drawing::Size(84, 28);
 			this->btnCancel->TabIndex = 10;
-			this->btnCancel->Text = L"È¡Ïû";
+			this->btnCancel->Text = L"å–æ¶ˆ";
 			this->btnCancel->UseVisualStyleBackColor = true;
 			this->btnCancel->Click += gcnew System::EventHandler(this, &BoardSetup::btnCancel_Click);
 			// 
@@ -190,7 +190,7 @@ namespace Othello {
 			this->gbColor->Size = System::Drawing::Size(84, 96);
 			this->gbColor->TabIndex = 3;
 			this->gbColor->TabStop = false;
-			this->gbColor->Text = L"ÑÕÉ«";
+			this->gbColor->Text = L"é¢œè‰²";
 			// 
 			// rbColorAvailable
 			// 
@@ -201,7 +201,7 @@ namespace Othello {
 			this->rbColorAvailable->Size = System::Drawing::Size(53, 17);
 			this->rbColorAvailable->TabIndex = 5;
 			this->rbColorAvailable->TabStop = true;
-			this->rbColorAvailable->Text = L"¿Õ¸ñ";
+			this->rbColorAvailable->Text = L"ç©ºæ ¼";
 			this->rbColorAvailable->UseVisualStyleBackColor = true;
 			this->rbColorAvailable->CheckedChanged += gcnew System::EventHandler(this, &BoardSetup::rbColorAvailable_CheckedChanged);
 			// 
@@ -214,7 +214,7 @@ namespace Othello {
 			this->rbColorWhite->Size = System::Drawing::Size(53, 17);
 			this->rbColorWhite->TabIndex = 4;
 			this->rbColorWhite->TabStop = true;
-			this->rbColorWhite->Text = L"°××Ó";
+			this->rbColorWhite->Text = L"ç™½å­";
 			this->rbColorWhite->UseVisualStyleBackColor = true;
 			this->rbColorWhite->CheckedChanged += gcnew System::EventHandler(this, &BoardSetup::rbColorWhite_CheckedChanged);
 			// 
@@ -227,7 +227,7 @@ namespace Othello {
 			this->rbColorBlack->Size = System::Drawing::Size(53, 17);
 			this->rbColorBlack->TabIndex = 3;
 			this->rbColorBlack->TabStop = true;
-			this->rbColorBlack->Text = L"ºÚ×Ó";
+			this->rbColorBlack->Text = L"é»‘å­";
 			this->rbColorBlack->UseVisualStyleBackColor = true;
 			this->rbColorBlack->CheckedChanged += gcnew System::EventHandler(this, &BoardSetup::rbColorBlack_CheckedChanged);
 			// 
@@ -241,7 +241,7 @@ namespace Othello {
 			this->gbFirstPlayer->Size = System::Drawing::Size(84, 80);
 			this->gbFirstPlayer->TabIndex = 6;
 			this->gbFirstPlayer->TabStop = false;
-			this->gbFirstPlayer->Text = L"ÏÈÊÖ·½";
+			this->gbFirstPlayer->Text = L"å…ˆæ‰‹æ–¹";
 			// 
 			// rbFirstWhite
 			// 
@@ -252,7 +252,7 @@ namespace Othello {
 			this->rbFirstWhite->Size = System::Drawing::Size(53, 17);
 			this->rbFirstWhite->TabIndex = 7;
 			this->rbFirstWhite->TabStop = true;
-			this->rbFirstWhite->Text = L"°×·½";
+			this->rbFirstWhite->Text = L"ç™½æ–¹";
 			this->rbFirstWhite->UseVisualStyleBackColor = true;
 			this->rbFirstWhite->CheckedChanged += gcnew System::EventHandler(this, &BoardSetup::rbFirstWhite_CheckedChanged);
 			// 
@@ -265,7 +265,7 @@ namespace Othello {
 			this->rbFirstBlack->Size = System::Drawing::Size(53, 17);
 			this->rbFirstBlack->TabIndex = 6;
 			this->rbFirstBlack->TabStop = true;
-			this->rbFirstBlack->Text = L"ºÚ·½";
+			this->rbFirstBlack->Text = L"é»‘æ–¹";
 			this->rbFirstBlack->UseVisualStyleBackColor = true;
 			this->rbFirstBlack->CheckedChanged += gcnew System::EventHandler(this, &BoardSetup::rbFirstBlack_CheckedChanged);
 			// 
@@ -276,7 +276,7 @@ namespace Othello {
 			this->btnReset->Name = L"btnReset";
 			this->btnReset->Size = System::Drawing::Size(84, 28);
 			this->btnReset->TabIndex = 8;
-			this->btnReset->Text = L"ÖØÉè";
+			this->btnReset->Text = L"é‡è®¾";
 			this->btnReset->UseVisualStyleBackColor = true;
 			this->btnReset->Click += gcnew System::EventHandler(this, &BoardSetup::btnReset_Click);
 			// 
@@ -287,7 +287,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(143, 12);
 			this->label1->TabIndex = 10;
-			this->label1->Text = L"¾ÖÃæ´úÂë£º(ºÚX °×O ¿Õ-)";
+			this->label1->Text = L"å±€é¢ä»£ç ï¼š(é»‘X ç™½O ç©º-)";
 			// 
 			// txtPos
 			// 
@@ -304,7 +304,7 @@ namespace Othello {
 			this->btnCopy->Name = L"btnCopy";
 			this->btnCopy->Size = System::Drawing::Size(60, 20);
 			this->btnCopy->TabIndex = 1;
-			this->btnCopy->Text = L"¸´ÖÆ";
+			this->btnCopy->Text = L"å¤åˆ¶";
 			this->btnCopy->UseVisualStyleBackColor = true;
 			this->btnCopy->Click += gcnew System::EventHandler(this, &BoardSetup::btnCopy_Click);
 			// 
@@ -315,7 +315,7 @@ namespace Othello {
 			this->btnPaste->Name = L"btnPaste";
 			this->btnPaste->Size = System::Drawing::Size(60, 20);
 			this->btnPaste->TabIndex = 2;
-			this->btnPaste->Text = L"Õ³Ìù";
+			this->btnPaste->Text = L"ç²˜è´´";
 			this->btnPaste->UseVisualStyleBackColor = true;
 			this->btnPaste->Click += gcnew System::EventHandler(this, &BoardSetup::btnPaste_Click);
 			// 
@@ -326,7 +326,7 @@ namespace Othello {
 			this->lblCopied->Name = L"lblCopied";
 			this->lblCopied->Size = System::Drawing::Size(89, 12);
 			this->lblCopied->TabIndex = 12;
-			this->lblCopied->Text = L"ÒÑ¸´ÖÆµ½¼ôÌù°å";
+			this->lblCopied->Text = L"å·²å¤åˆ¶åˆ°å‰ªè´´æ¿";
 			this->lblCopied->Visible = false;
 			// 
 			// tmrCopied
@@ -359,7 +359,7 @@ namespace Othello {
 			this->Name = L"BoardSetup";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"Ô¤ÉèÆå¾Ö";
+			this->Text = L"é¢„è®¾æ£‹å±€";
 			this->Load += gcnew System::EventHandler(this, &BoardSetup::BoardSetup_Load);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &BoardSetup::BoardSetup_FormClosing);
 			this->gbColor->ResumeLayout(false);

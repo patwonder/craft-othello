@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,11 +29,11 @@
 /*
 ********************************************************************************
 								PatternLearning.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà PatternLearning µÄÉùÃ÷¡£
-			PatternLearning ÀàÊµÏÖ¡°Ä£°åÑ§Ï°¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» PatternLearning çš„å£°æ˜ã€‚
+			PatternLearning ç±»å®ç°â€œæ¨¡æ¿å­¦ä¹ â€çª—ä½“ã€‚
 		
-		×¢£º´ËÀàÎª½øĞĞÄ£°å¼ÆËã×¨ÓÃ£¬ÕıÊ½°æÖĞ²»°üº¬´ËÄÚÈİ¡£
+		æ³¨ï¼šæ­¤ç±»ä¸ºè¿›è¡Œæ¨¡æ¿è®¡ç®—ä¸“ç”¨ï¼Œæ­£å¼ç‰ˆä¸­ä¸åŒ…å«æ­¤å†…å®¹ã€‚
 
 ********************************************************************************
 */
@@ -179,7 +179,7 @@ namespace Othello {
 			this->btnOpenFile->Name = L"btnOpenFile";
 			this->btnOpenFile->Size = System::Drawing::Size(96, 30);
 			this->btnOpenFile->TabIndex = 2;
-			this->btnOpenFile->Text = L"´ò¿ªÎÄ¼ş";
+			this->btnOpenFile->Text = L"æ‰“å¼€æ–‡ä»¶";
 			this->btnOpenFile->UseVisualStyleBackColor = true;
 			this->btnOpenFile->Click += gcnew System::EventHandler(this, &PatternLearning::btnOpenFile_Click);
 			// 
@@ -190,7 +190,7 @@ namespace Othello {
 			this->btnLearn->Name = L"btnLearn";
 			this->btnLearn->Size = System::Drawing::Size(96, 30);
 			this->btnLearn->TabIndex = 2;
-			this->btnLearn->Text = L"¿ªÊ¼Ñ§Ï°";
+			this->btnLearn->Text = L"å¼€å§‹å­¦ä¹ ";
 			this->btnLearn->UseVisualStyleBackColor = true;
 			this->btnLearn->Click += gcnew System::EventHandler(this, &PatternLearning::btnLearn_Click);
 			// 
@@ -209,7 +209,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(89, 12);
 			this->label1->TabIndex = 4;
-			this->label1->Text = L"ÕıÔÚ´¦Àí£º";
+			this->label1->Text = L"æ­£åœ¨å¤„ç†ï¼š";
 			// 
 			// lblFile
 			// 
@@ -241,7 +241,7 @@ namespace Othello {
 			this->Controls->Add(this->txtInfo);
 			this->Controls->Add(this->lstFiles);
 			this->Name = L"PatternLearning";
-			this->Text = L"Ä£°åÑ§Ï°";
+			this->Text = L"æ¨¡æ¿å­¦ä¹ ";
 			this->Load += gcnew System::EventHandler(this, &PatternLearning::PatternLearning_Load);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &PatternLearning::PatternLearning_FormClosing);
 			this->ResumeLayout(false);
@@ -262,7 +262,7 @@ namespace Othello {
 private: System::Void btnOpenFile_Click(System::Object^  sender, System::EventArgs^  e) {
 			 dlgChooseFile->Filter = "Pattern Configuration Database(*.pcd)|*.PCD";
 			 dlgChooseFile->CheckFileExists = true;
-			 dlgChooseFile->Title = "Ñ¡ÔñÊı¾İÎÄ¼ş";
+			 dlgChooseFile->Title = "é€‰æ‹©æ•°æ®æ–‡ä»¶";
 			 dlgChooseFile->FileName = "";
 			 System::Windows::Forms::DialogResult res = dlgChooseFile->ShowDialog(this);
 			 if (res == System::Windows::Forms::DialogResult::Cancel) {
@@ -305,28 +305,28 @@ private: void readHeader(String^ currentFile) {
 				 //header.Reserved = br->ReadByte();
 				 header = br->ReadInt32();
 				 String^ info = "";
-				 info += "¾ÖÃæÊıÁ¿: " + header;
-				 //info += "ÎÄ¼ş½¨Á¢Äê·İ: " + (int)(header.Century * 100 + header.Year) + "\r\n";
-				 //info += "ÎÄ¼ş½¨Á¢ÈÕÆÚ: " + (int)header.Month + " ÔÂ " + (int)header.Day + " ÈÕ\r\n";
-				 //info += "¶Ô¾Ö×ÜÊı: " + header.Anzahl + "\r\n";
-				 //info += "¶Ô¾ÖÄê·İ: " + header.YearOfGames + "\r\n";
-				 //info += "ÆåÅÌ´óĞ¡: " + ((header.SizeOfBoard == 0 || header.SizeOfBoard == 8) ? "8 * 8" : "ÆäËû") + "\r\n";
-				 //info += "ÊÇ·ñSolitaireÓÎÏ·: " + ((header.IsAnEndgameSolitaireFile == 0) ? "·ñ" : "ÊÇ") + "\r\n";
-				 //info += "ÖÕ¾Ö¼ÆËã²½Êı: " + (int)header.NumberOfEmptiesForTheoricalScoreCalculation + "\r\n";
+				 info += "å±€é¢æ•°é‡: " + header;
+				 //info += "æ–‡ä»¶å»ºç«‹å¹´ä»½: " + (int)(header.Century * 100 + header.Year) + "\r\n";
+				 //info += "æ–‡ä»¶å»ºç«‹æ—¥æœŸ: " + (int)header.Month + " æœˆ " + (int)header.Day + " æ—¥\r\n";
+				 //info += "å¯¹å±€æ€»æ•°: " + header.Anzahl + "\r\n";
+				 //info += "å¯¹å±€å¹´ä»½: " + header.YearOfGames + "\r\n";
+				 //info += "æ£‹ç›˜å¤§å°: " + ((header.SizeOfBoard == 0 || header.SizeOfBoard == 8) ? "8 * 8" : "å…¶ä»–") + "\r\n";
+				 //info += "æ˜¯å¦Solitaireæ¸¸æˆ: " + ((header.IsAnEndgameSolitaireFile == 0) ? "å¦" : "æ˜¯") + "\r\n";
+				 //info += "ç»ˆå±€è®¡ç®—æ­¥æ•°: " + (int)header.NumberOfEmptiesForTheoricalScoreCalculation + "\r\n";
 				 txtInfo->Text = info;
 				 //WTHORRecord record;
 				 //record.TourNumber = br->ReadUInt16();
-				 //info = "±ÈÈüÃû³ÆĞòºÅ: " + record.TourNumber + "\r\n";
+				 //info = "æ¯”èµ›åç§°åºå·: " + record.TourNumber + "\r\n";
 				 //record.Black = br->ReadUInt16();
-				 //info += "ºÚ·½ÆåÊÖÃû³Æ: " + record.Black + "\r\n";
+				 //info += "é»‘æ–¹æ£‹æ‰‹åç§°: " + record.Black + "\r\n";
 				 //record.White = br->ReadUInt16();
-				 //info += "°×·½ÆåÊÖÃû³Æ: " + record.White + "\r\n";
+				 //info += "ç™½æ–¹æ£‹æ‰‹åç§°: " + record.White + "\r\n";
 				 //record.RealScore = br->ReadByte();
-				 //info += "Êµ¼Ê±È·Ö: " + (int)record.RealScore + " : " + (int)(64 - record.RealScore) + "\r\n";
+				 //info += "å®é™…æ¯”åˆ†: " + (int)record.RealScore + " : " + (int)(64 - record.RealScore) + "\r\n";
 				 //record.TheoryScore = br->ReadByte();
-				 //info += "ÀíÂÛ×î¼Ñ±È·Ö: " + (int)record.TheoryScore + " : " + (int)(64 - record.TheoryScore) + "\r\n";
+				 //info += "ç†è®ºæœ€ä½³æ¯”åˆ†: " + (int)record.TheoryScore + " : " + (int)(64 - record.TheoryScore) + "\r\n";
 				 //record.MoveList = gcnew array<unsigned char>(60);
-				 //info += "Æå²½ĞòÁĞ: ";
+				 //info += "æ£‹æ­¥åºåˆ—: ";
 				 //for (int i = 0; i < 60; i++) {
 					// record.MoveList[i] = br->ReadByte();
 					// info += (int)record.MoveList[i] + " ";
@@ -369,12 +369,12 @@ private: System::Void btnLearn_Click(System::Object^  sender, System::EventArgs^
 				 solver->writePatterns();
 				 lblGame->Text = solver->getPercent() + "%";
 				 pbLearn->Value = (times + 1) * 100 / timeCount;
-				 txtInfo->Text += "µÚ" + (times + 1) + "´Îµü´ú: " + result.getTotalSum() + "\r\n"
-					 + "Æ½¾ù¹ÀÖµ±ä»¯: " + result.getAverageWeightAlteration() + "\r\n"
-					 + "×î´ó¹ÀÖµ±ä»¯: " + result.getMaximunWeightAlteration() + "\r\n";
+				 txtInfo->Text += "ç¬¬" + (times + 1) + "æ¬¡è¿­ä»£: " + result.getTotalSum() + "\r\n"
+					 + "å¹³å‡ä¼°å€¼å˜åŒ–: " + result.getAverageWeightAlteration() + "\r\n"
+					 + "æœ€å¤§ä¼°å€¼å˜åŒ–: " + result.getMaximunWeightAlteration() + "\r\n";
 			 }
 			 delete solver;
-			 System::Windows::Forms::MessageBox::Show(this, "´¦ÀíÍê±Ï¡£", "Ä£°åÑ§Ï°");
+			 System::Windows::Forms::MessageBox::Show(this, "å¤„ç†å®Œæ¯•ã€‚", "æ¨¡æ¿å­¦ä¹ ");
 			 btnLearn->Enabled = true;
 			 btnOpenFile->Enabled = true;
 			 learning = false;

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,11 +29,11 @@
 /*
 ********************************************************************************
 								PatternPreparer.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà PatternPreparer µÄÉùÃ÷¡£
-			PatternPreparer ÀàÊµÏÖ¡°Ä£°å×¼±¸¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» PatternPreparer çš„å£°æ˜ã€‚
+			PatternPreparer ç±»å®ç°â€œæ¨¡æ¿å‡†å¤‡â€çª—ä½“ã€‚
 		
-		×¢£º´ËÀàÎª½øĞĞÄ£°å¼ÆËã×¨ÓÃ£¬ÕıÊ½°æÖĞ²»°üº¬´ËÄÚÈİ¡£
+		æ³¨ï¼šæ­¤ç±»ä¸ºè¿›è¡Œæ¨¡æ¿è®¡ç®—ä¸“ç”¨ï¼Œæ­£å¼ç‰ˆä¸­ä¸åŒ…å«æ­¤å†…å®¹ã€‚
 
 ********************************************************************************
 */
@@ -182,7 +182,7 @@ namespace Othello {
 			this->btnOpenFile->Name = L"btnOpenFile";
 			this->btnOpenFile->Size = System::Drawing::Size(96, 30);
 			this->btnOpenFile->TabIndex = 2;
-			this->btnOpenFile->Text = L"´ò¿ªÎÄ¼ş";
+			this->btnOpenFile->Text = L"æ‰“å¼€æ–‡ä»¶";
 			this->btnOpenFile->UseVisualStyleBackColor = true;
 			this->btnOpenFile->Click += gcnew System::EventHandler(this, &PatternPreparer::btnOpenFile_Click);
 			// 
@@ -193,7 +193,7 @@ namespace Othello {
 			this->btnLearn->Name = L"btnLearn";
 			this->btnLearn->Size = System::Drawing::Size(96, 30);
 			this->btnLearn->TabIndex = 2;
-			this->btnLearn->Text = L"¿ªÊ¼´¦Àí";
+			this->btnLearn->Text = L"å¼€å§‹å¤„ç†";
 			this->btnLearn->UseVisualStyleBackColor = true;
 			this->btnLearn->Click += gcnew System::EventHandler(this, &PatternPreparer::btnLearn_Click);
 			// 
@@ -244,7 +244,7 @@ namespace Othello {
 			this->Controls->Add(this->lstFiles);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->Name = L"PatternPreparer";
-			this->Text = L"Ä£°å×¼±¸";
+			this->Text = L"æ¨¡æ¿å‡†å¤‡";
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &PatternPreparer::BookLearner_FormClosing);
 			this->Load += gcnew System::EventHandler(this, &PatternPreparer::BookLearner_Load);
 			this->ResumeLayout(false);
@@ -260,9 +260,9 @@ namespace Othello {
 				 preparing = false;
 			 }
 private: System::Void btnOpenFile_Click(System::Object^  sender, System::EventArgs^  e) {
-			 dlgChooseFile->Filter = "WThorÊı¾İÎÄ¼ş(*.wtb)|*.WTB";
+			 dlgChooseFile->Filter = "WThoræ•°æ®æ–‡ä»¶(*.wtb)|*.WTB";
 			 dlgChooseFile->CheckFileExists = true;
-			 dlgChooseFile->Title = "Ñ¡ÔñÊı¾İÎÄ¼ş";
+			 dlgChooseFile->Title = "é€‰æ‹©æ•°æ®æ–‡ä»¶";
 			 dlgChooseFile->FileName = "";
 			 System::Windows::Forms::DialogResult res = dlgChooseFile->ShowDialog(this);
 			 if (res == System::Windows::Forms::DialogResult::Cancel) {
@@ -303,27 +303,27 @@ private: void readHeader(String^ currentFile) {
 				 header.NumberOfEmptiesForTheoricalScoreCalculation = br->ReadByte();
 				 header.Reserved = br->ReadByte();
 				 String^ info = "";
-				 info += "ÎÄ¼ş½¨Á¢Äê·İ: " + (int)(header.Century * 100 + header.Year) + "\r\n";
-				 info += "ÎÄ¼ş½¨Á¢ÈÕÆÚ: " + (int)header.Month + " ÔÂ " + (int)header.Day + " ÈÕ\r\n";
-				 info += "¶Ô¾Ö×ÜÊı: " + header.Anzahl + "\r\n";
-				 info += "¶Ô¾ÖÄê·İ: " + header.YearOfGames + "\r\n";
-				 info += "ÆåÅÌ´óĞ¡: " + ((header.SizeOfBoard == 0 || header.SizeOfBoard == 8) ? "8 * 8" : "ÆäËû") + "\r\n";
-				 info += "ÊÇ·ñSolitaireÓÎÏ·: " + ((header.IsAnEndgameSolitaireFile == 0) ? "·ñ" : "ÊÇ") + "\r\n";
-				 info += "ÖÕ¾Ö¼ÆËã²½Êı: " + (int)header.NumberOfEmptiesForTheoricalScoreCalculation + "\r\n";
+				 info += "æ–‡ä»¶å»ºç«‹å¹´ä»½: " + (int)(header.Century * 100 + header.Year) + "\r\n";
+				 info += "æ–‡ä»¶å»ºç«‹æ—¥æœŸ: " + (int)header.Month + " æœˆ " + (int)header.Day + " æ—¥\r\n";
+				 info += "å¯¹å±€æ€»æ•°: " + header.Anzahl + "\r\n";
+				 info += "å¯¹å±€å¹´ä»½: " + header.YearOfGames + "\r\n";
+				 info += "æ£‹ç›˜å¤§å°: " + ((header.SizeOfBoard == 0 || header.SizeOfBoard == 8) ? "8 * 8" : "å…¶ä»–") + "\r\n";
+				 info += "æ˜¯å¦Solitaireæ¸¸æˆ: " + ((header.IsAnEndgameSolitaireFile == 0) ? "å¦" : "æ˜¯") + "\r\n";
+				 info += "ç»ˆå±€è®¡ç®—æ­¥æ•°: " + (int)header.NumberOfEmptiesForTheoricalScoreCalculation + "\r\n";
 				 txtInfo->Text = info;
 				 //WTHORRecord record;
 				 //record.TourNumber = br->ReadUInt16();
-				 //info = "±ÈÈüÃû³ÆĞòºÅ: " + record.TourNumber + "\r\n";
+				 //info = "æ¯”èµ›åç§°åºå·: " + record.TourNumber + "\r\n";
 				 //record.Black = br->ReadUInt16();
-				 //info += "ºÚ·½ÆåÊÖÃû³Æ: " + record.Black + "\r\n";
+				 //info += "é»‘æ–¹æ£‹æ‰‹åç§°: " + record.Black + "\r\n";
 				 //record.White = br->ReadUInt16();
-				 //info += "°×·½ÆåÊÖÃû³Æ: " + record.White + "\r\n";
+				 //info += "ç™½æ–¹æ£‹æ‰‹åç§°: " + record.White + "\r\n";
 				 //record.RealScore = br->ReadByte();
-				 //info += "Êµ¼Ê±È·Ö: " + (int)record.RealScore + " : " + (int)(64 - record.RealScore) + "\r\n";
+				 //info += "å®é™…æ¯”åˆ†: " + (int)record.RealScore + " : " + (int)(64 - record.RealScore) + "\r\n";
 				 //record.TheoryScore = br->ReadByte();
-				 //info += "ÀíÂÛ×î¼Ñ±È·Ö: " + (int)record.TheoryScore + " : " + (int)(64 - record.TheoryScore) + "\r\n";
+				 //info += "ç†è®ºæœ€ä½³æ¯”åˆ†: " + (int)record.TheoryScore + " : " + (int)(64 - record.TheoryScore) + "\r\n";
 				 //record.MoveList = gcnew array<unsigned char>(60);
-				 //info += "Æå²½ĞòÁĞ: ";
+				 //info += "æ£‹æ­¥åºåˆ—: ";
 				 //for (int i = 0; i < 60; i++) {
 					// record.MoveList[i] = br->ReadByte();
 					// info += (int)record.MoveList[i] + " ";
@@ -346,12 +346,12 @@ private:
 	void learnBook() {
 		if (preparing) {
 			aborted = true;
-			lblState->Text = "ÕıÔÚÍ£Ö¹...";
+			lblState->Text = "æ­£åœ¨åœæ­¢...";
 			lblFile->Visible = false;
 			btnLearn->Enabled = false;
 		} else {
 			dlgSaveFile->Filter = "Pattern Configuration Database(*.pcd)|*.PCD";
-			dlgSaveFile->Title = "Ñ¡Ôñ±£´æÎ»ÖÃ";
+			dlgSaveFile->Title = "é€‰æ‹©ä¿å­˜ä½ç½®";
 			dlgSaveFile->FileName = "";
 			System::Windows::Forms::DialogResult res = dlgSaveFile->ShowDialog(this);
 			if (res == System::Windows::Forms::DialogResult::Cancel) {
@@ -359,9 +359,9 @@ private:
 			}
 			String^ saveFileName = dlgSaveFile->FileName;
 			lstFiles->Enabled = false;
-			lblState->Text = "ÕıÔÚ´¦ÀíÎÄ¼ş: ";
+			lblState->Text = "æ­£åœ¨å¤„ç†æ–‡ä»¶: ";
 			lblFile->Visible = true;
-			btnLearn->Text = "Í£Ö¹´¦Àí";
+			btnLearn->Text = "åœæ­¢å¤„ç†";
 			txtInfo->Enabled = false;
 			btnOpenFile->Enabled = false;
 			preparing = true;
@@ -374,9 +374,9 @@ private:
 			}
 			solver->savePreparedConfiguration(saveFileName);
 			if (!aborted)
-				System::Windows::Forms::MessageBox::Show(this, "´¦ÀíÍê±Ï¡£", "Ä£°å×¼±¸");
-			btnLearn->Text = "¿ªÊ¼´¦Àí";
-			lblState->Text = "´¦ÀíÍê±Ï";
+				System::Windows::Forms::MessageBox::Show(this, "å¤„ç†å®Œæ¯•ã€‚", "æ¨¡æ¿å‡†å¤‡");
+			btnLearn->Text = "å¼€å§‹å¤„ç†";
+			lblState->Text = "å¤„ç†å®Œæ¯•";
 			lblFile->Visible = false;
 			txtInfo->Enabled = true;
 			preparing = false;

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								frmThanks.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà frmThanks µÄÉùÃ÷¡£
-			frmThanks ÀàÊµÏÖ¡°ÖÂĞ»¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» frmThanks çš„å£°æ˜ã€‚
+			frmThanks ç±»å®ç°â€œè‡´è°¢â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -47,13 +47,13 @@ using namespace System::Drawing;
 namespace Othello {
 
 	/// <summary>
-	/// frmThanks ÕªÒª
+	/// frmThanks æ‘˜è¦
 	///
-	/// ¾¯¸æ: Èç¹û¸ü¸Ä´ËÀàµÄÃû³Æ£¬ÔòĞèÒª¸ü¸Ä
-	///          Óë´ËÀàËùÒÀÀµµÄËùÓĞ .resx ÎÄ¼ş¹ØÁªµÄÍĞ¹Ü×ÊÔ´±àÒëÆ÷¹¤¾ßµÄ
-	///          ¡°×ÊÔ´ÎÄ¼şÃû¡±ÊôĞÔ¡£·ñÔò£¬
-	///          Éè¼ÆÆ÷½«²»ÄÜÓë´Ë´°ÌåµÄ¹ØÁª
-	///          ±¾µØ»¯×ÊÔ´ÕıÈ·½»»¥¡£
+	/// è­¦å‘Š: å¦‚æœæ›´æ”¹æ­¤ç±»çš„åç§°ï¼Œåˆ™éœ€è¦æ›´æ”¹
+	///          ä¸æ­¤ç±»æ‰€ä¾èµ–çš„æ‰€æœ‰ .resx æ–‡ä»¶å…³è”çš„æ‰˜ç®¡èµ„æºç¼–è¯‘å™¨å·¥å…·çš„
+	///          â€œèµ„æºæ–‡ä»¶åâ€å±æ€§ã€‚å¦åˆ™ï¼Œ
+	///          è®¾è®¡å™¨å°†ä¸èƒ½ä¸æ­¤çª—ä½“çš„å…³è”
+	///          æœ¬åœ°åŒ–èµ„æºæ­£ç¡®äº¤äº’ã€‚
 	/// </summary>
 	public ref class frmThanks : public System::Windows::Forms::Form
 	{
@@ -62,13 +62,13 @@ namespace Othello {
 		{
 			InitializeComponent();
 			//
-			//TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôìº¯Êı´úÂë
+			//TODO: åœ¨æ­¤å¤„æ·»åŠ æ„é€ å‡½æ•°ä»£ç 
 			//
 		}
 
 	protected:
 		/// <summary>
-		/// ÇåÀíËùÓĞÕıÔÚÊ¹ÓÃµÄ×ÊÔ´¡£
+		/// æ¸…ç†æ‰€æœ‰æ­£åœ¨ä½¿ç”¨çš„èµ„æºã€‚
 		/// </summary>
 		~frmThanks()
 		{
@@ -85,14 +85,14 @@ namespace Othello {
 
 	private:
 		/// <summary>
-		/// ±ØĞèµÄÉè¼ÆÆ÷±äÁ¿¡£
+		/// å¿…éœ€çš„è®¾è®¡å™¨å˜é‡ã€‚
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»Òª
-		/// Ê¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä´Ë·½·¨µÄÄÚÈİ¡£
+		/// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦
+		/// ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
 		/// </summary>
 		void InitializeComponent(void)
 		{
@@ -103,17 +103,17 @@ namespace Othello {
 			// 
 			// label1
 			// 
-			this->label1->Font = (gcnew System::Drawing::Font(L"Î¢ÈíÑÅºÚ", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->label1->Font = (gcnew System::Drawing::Font(L"å¾®è½¯é›…é»‘", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
 			this->label1->Location = System::Drawing::Point(12, 9);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(205, 39);
 			this->label1->TabIndex = 2;
-			this->label1->Text = L"¸ĞĞ»ÏÂÁĞÈËÔ±ÔÚ Craft ¿ª·¢¹ı³ÌÖĞ¸øÓèµÄÖ§³ÖºÍ°ïÖú£º";
+			this->label1->Text = L"æ„Ÿè°¢ä¸‹åˆ—äººå‘˜åœ¨ Craft å¼€å‘è¿‡ç¨‹ä¸­ç»™äºˆçš„æ”¯æŒå’Œå¸®åŠ©ï¼š";
 			// 
 			// lstHelpers
 			// 
-			this->lstHelpers->Font = (gcnew System::Drawing::Font(L"Î¢ÈíÑÅºÚ", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->lstHelpers->Font = (gcnew System::Drawing::Font(L"å¾®è½¯é›…é»‘", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
 			this->lstHelpers->FormattingEnabled = true;
 			this->lstHelpers->ItemHeight = 17;
@@ -129,13 +129,13 @@ namespace Othello {
 			// 
 			this->btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
 			this->btnOK->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->btnOK->Font = (gcnew System::Drawing::Font(L"Î¢ÈíÑÅºÚ", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->btnOK->Font = (gcnew System::Drawing::Font(L"å¾®è½¯é›…é»‘", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
 			this->btnOK->Location = System::Drawing::Point(139, 163);
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(78, 29);
 			this->btnOK->TabIndex = 0;
-			this->btnOK->Text = L"¹Ø±Õ";
+			this->btnOK->Text = L"å…³é—­";
 			this->btnOK->UseVisualStyleBackColor = true;
 			// 
 			// frmThanks
@@ -155,7 +155,7 @@ namespace Othello {
 			this->Name = L"frmThanks";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"ÖÂĞ»";
+			this->Text = L"è‡´è°¢";
 			this->ResumeLayout(false);
 
 		}

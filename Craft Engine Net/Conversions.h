@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,8 +29,8 @@
 /*
 ********************************************************************************
 								Conversions.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬³£ÓÃ×ª»»º¯ÊıµÄÉùÃ÷¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«å¸¸ç”¨è½¬æ¢å‡½æ•°çš„å£°æ˜ã€‚
 
 ********************************************************************************
 */
@@ -41,25 +41,25 @@ namespace CraftEngineNet {
 
 public ref class Conversions {
 public:
-	//½« int ±íÊ¾µÄÆå²½×ª»»Îª Move ±íÊ¾µÄÆå²½
+	//å°† int è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸º Move è¡¨ç¤ºçš„æ£‹æ­¥
 	static Move intToMove(int theInt);
 
-	//½« Move ±íÊ¾µÄÆå²½×ª»»Îª int ±íÊ¾µÄÆå²½
+	//å°† Move è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸º int è¡¨ç¤ºçš„æ£‹æ­¥
 	static int moveToInt(Move theMove);
 
-	//½« int ±íÊ¾µÄ×ßÆå·½×ª»»Îª Chess ±íÊ¾µÄ×ßÆå·½
+	//å°† int è¡¨ç¤ºçš„èµ°æ£‹æ–¹è½¬æ¢ä¸º Chess è¡¨ç¤ºçš„èµ°æ£‹æ–¹
 	static Chess intToChess(int theInt);
 
-	//½« Chess ±íÊ¾µÄ×ßÆå·½×ª»»Îª int ±íÊ¾µÄ×ßÆå·½
+	//å°† Chess è¡¨ç¤ºçš„èµ°æ£‹æ–¹è½¬æ¢ä¸º int è¡¨ç¤ºçš„èµ°æ£‹æ–¹
 	static int chessToInt(Chess theChess);
 
-	//½« Move ¶ÔÏó±íÊ¾µÄÆå²½×ª»»Îª×Ö·û´®±íÊ¾µÄÆå²½
+	//å°† Move å¯¹è±¡è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸ºå­—ç¬¦ä¸²è¡¨ç¤ºçš„æ£‹æ­¥
 	static System::String^ moveToString(Move theMove);
 
-	//½« int ±íÊ¾µÄÆå²½×ª»»Îª×Ö·û´®±íÊ¾µÄÆå²½
+	//å°† int è¡¨ç¤ºçš„æ£‹æ­¥è½¬æ¢ä¸ºå­—ç¬¦ä¸²è¡¨ç¤ºçš„æ£‹æ­¥
 	static System::String^ intToString(int theInt);
 
-	//½«Board^±íÊ¾µÄÆåÅÌ×ª»»ÎªCraftEngine½ÓÊÜµÄ¸ñÊ½
+	//å°†Board^è¡¨ç¤ºçš„æ£‹ç›˜è½¬æ¢ä¸ºCraftEngineæ¥å—çš„æ ¼å¼
 	static void convertBoard(Board board, int dest[]);
 
 };

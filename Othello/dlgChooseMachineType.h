@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -29,9 +29,9 @@
 /*
 ********************************************************************************
 								dlgChooseMachineType.h
-		×÷Õß£ºPatrick
-		¸ÅÊö£º°üº¬Àà dlgChooseMachineType µÄÉùÃ÷¡£
-			dlgChooseMachineType ÀàÊµÏÖ¡°Ñ¡ÔñºÚ£¨°×£©·½¡±´°Ìå¡£
+		ä½œè€…ï¼šPatrick
+		æ¦‚è¿°ï¼šåŒ…å«ç±» dlgChooseMachineType çš„å£°æ˜Žã€‚
+			dlgChooseMachineType ç±»å®žçŽ°â€œé€‰æ‹©é»‘ï¼ˆç™½ï¼‰æ–¹â€çª—ä½“ã€‚
 
 ********************************************************************************
 */
@@ -71,7 +71,7 @@ namespace Othello {
 		}
 		dlgChooseMachineType(Chess color, PlayerType defaultType) {
 			InitializeComponent();
-			this->Text = (color == Chess::BLACK) ? "ÇëÑ¡ÔñºÚ·½¼¶±ð" : "ÇëÑ¡Ôñ°×·½¼¶±ð";
+			this->Text = (color == Chess::BLACK) ? "è¯·é€‰æ‹©é»‘æ–¹çº§åˆ«" : "è¯·é€‰æ‹©ç™½æ–¹çº§åˆ«";
 			switch (defaultType) {
 			case PlayerType::BIG_EAT:
 				optBigEat->Checked = true;
@@ -166,7 +166,7 @@ namespace Othello {
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(96, 32);
 			this->btnOK->TabIndex = 12;
-			this->btnOK->Text = L"È·¶¨";
+			this->btnOK->Text = L"ç¡®å®š";
 			this->btnOK->UseVisualStyleBackColor = true;
 			this->btnOK->Click += gcnew System::EventHandler(this, &dlgChooseMachineType::btnOK_Click);
 			// 
@@ -178,7 +178,7 @@ namespace Othello {
 			this->btnCancel->Name = L"btnCancel";
 			this->btnCancel->Size = System::Drawing::Size(96, 32);
 			this->btnCancel->TabIndex = 13;
-			this->btnCancel->Text = L"È¡Ïû";
+			this->btnCancel->Text = L"å–æ¶ˆ";
 			this->btnCancel->UseVisualStyleBackColor = true;
 			this->btnCancel->Click += gcnew System::EventHandler(this, &dlgChooseMachineType::btnCancel_Click);
 			// 
@@ -191,7 +191,7 @@ namespace Othello {
 			this->optEarth->Size = System::Drawing::Size(95, 17);
 			this->optEarth->TabIndex = 5;
 			this->optEarth->TabStop = true;
-			this->optEarth->Text = L"µØÇò(Earth)";
+			this->optEarth->Text = L"åœ°çƒ(Earth)";
 			this->optEarth->UseVisualStyleBackColor = true;
 			this->optEarth->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optEarth_CheckedChanged);
 			// 
@@ -204,7 +204,7 @@ namespace Othello {
 			this->optBigEat->Size = System::Drawing::Size(107, 17);
 			this->optBigEat->TabIndex = 4;
 			this->optBigEat->TabStop = true;
-			this->optBigEat->Text = L"´óÊ³(Big Eat)";
+			this->optBigEat->Text = L"å¤§é£Ÿ(Big Eat)";
 			this->optBigEat->UseVisualStyleBackColor = true;
 			this->optBigEat->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optBigEat_CheckedChanged);
 			// 
@@ -217,7 +217,7 @@ namespace Othello {
 			this->optRandom->Size = System::Drawing::Size(101, 17);
 			this->optRandom->TabIndex = 3;
 			this->optRandom->TabStop = true;
-			this->optRandom->Text = L"Ëæ»ú(Random)";
+			this->optRandom->Text = L"éšæœº(Random)";
 			this->optRandom->UseVisualStyleBackColor = true;
 			this->optRandom->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optRandom_CheckedChanged);
 			// 
@@ -230,7 +230,7 @@ namespace Othello {
 			this->optClouds->Size = System::Drawing::Size(101, 17);
 			this->optClouds->TabIndex = 6;
 			this->optClouds->TabStop = true;
-			this->optClouds->Text = L"ÔÆ¶ä(Clouds)";
+			this->optClouds->Text = L"äº‘æœµ(Clouds)";
 			this->optClouds->UseVisualStyleBackColor = true;
 			this->optClouds->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optClouds_CheckedChanged);
 			// 
@@ -243,7 +243,7 @@ namespace Othello {
 			this->optOrbit->Size = System::Drawing::Size(95, 17);
 			this->optOrbit->TabIndex = 7;
 			this->optOrbit->TabStop = true;
-			this->optOrbit->Text = L"¹ìµÀ(Orbit)";
+			this->optOrbit->Text = L"è½¨é“(Orbit)";
 			this->optOrbit->UseVisualStyleBackColor = true;
 			this->optOrbit->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optOrbit_CheckedChanged);
 			// 
@@ -256,7 +256,7 @@ namespace Othello {
 			this->optMoon->Size = System::Drawing::Size(89, 17);
 			this->optMoon->TabIndex = 8;
 			this->optMoon->TabStop = true;
-			this->optMoon->Text = L"ÔÂÁÁ(Moon)";
+			this->optMoon->Text = L"æœˆäº®(Moon)";
 			this->optMoon->UseVisualStyleBackColor = true;
 			this->optMoon->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optMoon_CheckedChanged);
 			// 
@@ -269,7 +269,7 @@ namespace Othello {
 			this->optStar->Size = System::Drawing::Size(89, 17);
 			this->optStar->TabIndex = 9;
 			this->optStar->TabStop = true;
-			this->optStar->Text = L"ÐÇÐÇ(Star)";
+			this->optStar->Text = L"æ˜Ÿæ˜Ÿ(Star)";
 			this->optStar->UseVisualStyleBackColor = true;
 			this->optStar->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optStar_CheckedChanged);
 			// 
@@ -282,7 +282,7 @@ namespace Othello {
 			this->optGalaxy->Size = System::Drawing::Size(101, 17);
 			this->optGalaxy->TabIndex = 10;
 			this->optGalaxy->TabStop = true;
-			this->optGalaxy->Text = L"ÐÇÏµ(Galaxy)";
+			this->optGalaxy->Text = L"æ˜Ÿç³»(Galaxy)";
 			this->optGalaxy->UseVisualStyleBackColor = true;
 			this->optGalaxy->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optGalaxy_CheckedChanged);
 			// 
@@ -295,7 +295,7 @@ namespace Othello {
 			this->optUniverse->Size = System::Drawing::Size(113, 17);
 			this->optUniverse->TabIndex = 11;
 			this->optUniverse->TabStop = true;
-			this->optUniverse->Text = L"ÓîÖæ(Universe)";
+			this->optUniverse->Text = L"å®‡å®™(Universe)";
 			this->optUniverse->UseVisualStyleBackColor = true;
 			this->optUniverse->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optUniverse_CheckedChanged);
 			// 
@@ -306,7 +306,7 @@ namespace Othello {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(317, 12);
 			this->label1->TabIndex = 14;
-			this->label1->Text = L"¡ª¡ª¼òµ¥¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª";
+			this->label1->Text = L"â€”â€”ç®€å•â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”";
 			// 
 			// label2
 			// 
@@ -315,7 +315,7 @@ namespace Othello {
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(317, 12);
 			this->label2->TabIndex = 14;
-			this->label2->Text = L"¡ª¡ªÖÐµÈ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª";
+			this->label2->Text = L"â€”â€”ä¸­ç­‰â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”";
 			// 
 			// label3
 			// 
@@ -324,7 +324,7 @@ namespace Othello {
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(317, 12);
 			this->label3->TabIndex = 14;
-			this->label3->Text = L"¡ª¡ªÀ§ÄÑ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª";
+			this->label3->Text = L"â€”â€”å›°éš¾â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”";
 			// 
 			// dlgChooseMachineType
 			// 
@@ -353,7 +353,7 @@ namespace Othello {
 			this->Name = L"dlgChooseMachineType";
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
-			this->Text = L"ÇëÑ¡Ôñ¶ÔÊÖ¼¶±ð";
+			this->Text = L"è¯·é€‰æ‹©å¯¹æ‰‹çº§åˆ«";
 			this->Load += gcnew System::EventHandler(this, &dlgChooseMachineType::dlgChooseMachineType_Load);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &dlgChooseMachineType::dlgChooseMachineType_FormClosed);
 			this->ResumeLayout(false);
