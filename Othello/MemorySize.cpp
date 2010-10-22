@@ -1,0 +1,48 @@
+/*
+*************************************************************************
+    Craft is an othello program with relatively high AI.
+    Copyright (C) 2008-2010  Patrick
+
+    This file is part of Craft.
+
+    Craft is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Craft is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Craft.  If not, see <http://www.gnu.org/licenses/>.
+
+    Craft-Othello on Google Code: <http://code.google.com/p/craft-othello/>
+
+    Patrick's E-mail: patrick880905@sina.com
+    Patrick's Blog: <http://blog.sina.com.cn/patwonder>
+*************************************************************************
+*/
+
+/*
+********************************************************************************
+								MemorySize.cpp
+		作者：Patrick
+		概述：包含函数 getMemorySize 的定义。
+
+********************************************************************************
+*/
+
+#include "stdafx.h"
+#include "MemorySize.h"
+#include <Windows.h>
+
+using namespace Othello;
+
+unsigned long long Othello::getMemorySize() {
+	MEMORYSTATUSEX mem_stat;
+	mem_stat.dwLength = sizeof(mem_stat);
+	GlobalMemoryStatusEx(&mem_stat);
+	return mem_stat.ullTotalPhys;
+}
