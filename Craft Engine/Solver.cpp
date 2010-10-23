@@ -53,13 +53,21 @@ namespace CraftEngine {
 
 volatile int Solver::initPart = 0;
 volatile int Solver::initPercent = 0;
+#ifdef COMPACT
+unsigned char Solver::bitTable[0x10000];
+#else
 int Solver::bitTable[0x10000];
+#endif
 BitBoard Solver::posTable[MAXSTEP];
 BitBoard Solver::lineTable[MAXSTEP][MAXSTEP];
 unsigned int Solver::bZobrist[0x10000];
 unsigned int Solver::wZobrist[0x10000];
 char Solver::fastFlipPattern[8 * 256 * 256][2];
+#ifdef COMPACT
+unsigned char Solver::fastCountPattern[8 * 256];
+#else
 int Solver::fastCountPattern[8 * 256];
+#endif
 BitBoard Solver::neighborhood[MAXSTEP];
 Solver::TPInfo* Solver::tpNew = NULL;
 Solver::TPInfo* Solver::tpDeep = NULL;

@@ -55,6 +55,7 @@
 #define USE_ETC_AT_ROOT
 #define STABILITY
 #define USE_STABILITY
+#define COMPACT
 
 namespace CraftEngine {
 
@@ -249,7 +250,13 @@ private:
 	static const unsigned char DIR15 = DIR1 | DIR5;
 	static const unsigned char DIR2468 = DIR2 | DIR4 | DIR6 | DIR8;
 	static const unsigned char DIR37 = DIR3 | DIR7;
+#ifdef COMPACT
+	static unsigned char bitTable[0x10000];
+	static unsigned char fastCountPattern[8 * 256];
+#else
 	static int bitTable[0x10000];
+	static int fastCountPattern[8 * 256];
+#endif
 	static BitBoard posTable[MAXSTEP];
 	static int moveOrder[MAXSTEP];
 	static BitBoard orderTable[MAXSTEP];
@@ -257,7 +264,6 @@ private:
 	static unsigned char dirMask[MAXSTEP];
 	static char fastFlipPattern[8 * 256 * 256][2];
 	static BitBoard neighborhood[MAXSTEP];
-	static int fastCountPattern[8 * 256];
 
 	// MPC-related
 	static const int MIN_MPC_DEPTH = 7;
@@ -334,8 +340,13 @@ private:
 #ifdef STABILITY
 	// stability cut
 	static int twoTo3Base[256];
+#ifdef COMPACT
+	static unsigned char stab_my[6561];
+	static unsigned char stab_op[6561];
+#else
 	static unsigned int stab_my[6561];
 	static unsigned int stab_op[6561];
+#endif
 	static int bits32(unsigned int num);
 	static void lineSearch(unsigned int my, unsigned int op, unsigned int& stable_my, unsigned int& stable_op);
 	static void calcStabilityBound(const BitBoard& my, const BitBoard& op, int& lower, int& upper);

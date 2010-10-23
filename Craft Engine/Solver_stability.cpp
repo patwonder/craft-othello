@@ -42,7 +42,11 @@ using namespace CraftEngine;
 
 #ifdef STABILITY
 
+#ifdef COMPACT
+unsigned char Solver::stab_my[6561] = {
+#else
 unsigned int Solver::stab_my[6561] = {
+#endif
 	0, 1, 0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 0, 1, 
 	0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 
 	15, 0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 
@@ -374,7 +378,11 @@ unsigned int Solver::stab_my[6561] = {
 	0
 };
 
+#ifdef COMPACT
+unsigned char Solver::stab_op[6561] = {
+#else
 unsigned int Solver::stab_op[6561] = {
+#endif
 	0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 0, 
 	1, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 0, 1, 0, 0, 3, 0, 0, 1, 0, 
 	0, 1, 0, 0, 3, 0, 0, 1, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 0, 1, 
