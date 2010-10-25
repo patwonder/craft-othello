@@ -185,7 +185,7 @@ int main(array<System::String ^> ^args) {
 #endif
 		return EXIT_SUCCESS;
 	} catch (Exception^ e) {
-		MessageBox::Show(e->ToString(), "Sorry, an error has occured");
+		MessageBox::Show(e->ToString(), "Sorry, an error has occured", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		return EXIT_FAILURE;
 	} finally {
 

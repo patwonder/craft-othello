@@ -120,9 +120,10 @@ struct CLASSINDLL_CLASS_DECL CutPair {
 	CutPair() {
 		shallowDepth = 0;
 		deepDepth = 0;
-		a = 0.0f;
+		a = 1.0f;
 		b = 0.0f;
 		sigma = 0.0f;
+		a_r = 1.0f;
 	}
 
 	CutPair(int shallow, int deep, float a, float b, float sigma) {
