@@ -37,6 +37,7 @@
 
 #include "StdAfx.h"
 #include "Craft.h"
+#include "Conversions.h"
 
 using namespace Othello;
 using namespace System::Threading;
@@ -150,6 +151,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
+		displayer->showPrincipleVariation("--");
 		return 0;
 	}
 	empties--;
@@ -161,8 +163,11 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
+		displayer->showPrincipleVariation(Conversions::pointToString(thisMove));
 		return 0;
 	}
+
+	int pv[PV_LENGTH];
 	isDone = false;
 	bool startThinking = true;
 	displayer->searchStarted();
@@ -185,6 +190,10 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 				);
 				setFocusedMove(solver->getFocusedMove());
 				setSelectedMove(solver->getSelectedMove());
+			}
+			if (userInfo->ShowPrincipleVariation) {
+				int len = solver->getPV(pv, PV_LENGTH);
+				displayer->showPrincipleVariation(pvToString(pv, len));
 			}
 			unsigned long long totalNum = solver->getEvNum();
 			int speed = (int)(totalNum / (unsigned long long)elapsedMilliseconds);
@@ -210,6 +219,10 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 	displayer->setTotalNum(getTotalNumDescription(totalNum));
 	displayer->setProgress(100);
 	displayer->setSearchState(false);
+	if (userInfo->ShowPrincipleVariation) {
+		int len = solver->getPV(pv, PV_LENGTH);
+		displayer->showPrincipleVariation(pvToString(pv, len));
+	}
 	displayer->searchEnded();
 	int move = res->getBestMove();
 	if (move < 0) move = -move - 1;
@@ -348,4 +361,13 @@ int Craft::getTip(GameContext^ gc, Move lastMove, bool endSolve) {
 	if (gc->getAvailableCount()) solver->unMakeMove();
 	if (lastMove.getColor() != Chess::AVAILABLE) solver->unMakeMove();
 	return result;
+}
+
+System::String^ Craft::pvToString(int pv[], int len) {
+	System::String^ str;
+	str += Conversions::intToString(pv[0]);
+	for (int i = 1; i < len; i++) {
+		str += " " + Conversions::intToString(pv[i]);
+	}
+	return str;
 }

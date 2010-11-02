@@ -285,6 +285,7 @@ namespace Othello {
 		static array<String^>^ row = {"1", "2", "3", "4", "5", "6", "7", "8"};
 		array<ChessOption, 2>^ imageBoard;
 		int ssPlayersOffset;
+		int ssPVOffset;
 		Point selection;
 		static String^ applicationName = __APP_NAME__;
 		static String^ applicationVersion = __APP_VERSION__;
@@ -494,6 +495,13 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnu1GB;
 private: System::Windows::Forms::ToolStripMenuItem^  mnu2GB;
 private: System::Windows::Forms::Label^  lblEmpty;
 private: System::Windows::Forms::Label^  label7;
+private: System::Windows::Forms::StatusStrip^  statusBar2;
+private: System::Windows::Forms::ToolStripStatusLabel^  ssPV;
+private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
+
+
+
+
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -641,6 +649,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuShowEvaluation = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuShowSpeed = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuShowProgress = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->mnuShowPV = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuHelp = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuHelpContents = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->toolStripMenuItem4 = (gcnew System::Windows::Forms::ToolStripSeparator());
@@ -648,8 +657,8 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuAbout = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tmrLayout = (gcnew System::Windows::Forms::Timer(this->components));
 				 this->infoPanel = (gcnew System::Windows::Forms::Panel());
-				 this->picWhite = (gcnew System::Windows::Forms::PictureBox());
 				 this->btnStart = (gcnew System::Windows::Forms::Button());
+				 this->picWhite = (gcnew System::Windows::Forms::PictureBox());
 				 this->picBPointer = (gcnew System::Windows::Forms::PictureBox());
 				 this->picWPointer = (gcnew System::Windows::Forms::PictureBox());
 				 this->lblEmpty = (gcnew System::Windows::Forms::Label());
@@ -669,6 +678,8 @@ private: System::Windows::Forms::Label^  label7;
 				 this->label1 = (gcnew System::Windows::Forms::Label());
 				 this->lstSteps = (gcnew System::Windows::Forms::ListBox());
 				 this->tmrGame = (gcnew System::Windows::Forms::Timer(this->components));
+				 this->statusBar2 = (gcnew System::Windows::Forms::StatusStrip());
+				 this->ssPV = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBoard))->BeginInit();
 				 this->statusBar->SuspendLayout();
 				 this->toolBar->SuspendLayout();
@@ -678,15 +689,17 @@ private: System::Windows::Forms::Label^  label7;
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBPointer))->BeginInit();
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picWPointer))->BeginInit();
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBlack))->BeginInit();
+				 this->statusBar2->SuspendLayout();
 				 this->SuspendLayout();
 				 // 
 				 // picBoard
 				 // 
+				 this->picBoard->BackColor = System::Drawing::SystemColors::Control;
 				 this->picBoard->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 				 this->picBoard->Location = System::Drawing::Point(0, 64);
 				 this->picBoard->Margin = System::Windows::Forms::Padding(0);
 				 this->picBoard->Name = L"picBoard";
-				 this->picBoard->Size = System::Drawing::Size(490, 456);
+				 this->picBoard->Size = System::Drawing::Size(492, 434);
 				 this->picBoard->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 				 this->picBoard->TabIndex = 3;
 				 this->picBoard->TabStop = false;
@@ -697,13 +710,12 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 // statusBar
 				 // 
-				 this->statusBar->GripStyle = System::Windows::Forms::ToolStripGripStyle::Visible;
 				 this->statusBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {this->ssPlayers, this->ssResult, 
 					 this->ssSpeed, this->ssNodes, this->ssSpace, this->tspb1});
-				 this->statusBar->Location = System::Drawing::Point(0, 520);
+				 this->statusBar->Location = System::Drawing::Point(0, 519);
 				 this->statusBar->Name = L"statusBar";
 				 this->statusBar->RenderMode = System::Windows::Forms::ToolStripRenderMode::ManagerRenderMode;
-				 this->statusBar->Size = System::Drawing::Size(659, 22);
+				 this->statusBar->Size = System::Drawing::Size(659, 23);
 				 this->statusBar->TabIndex = 4;
 				 this->statusBar->Text = L"状态栏";
 				 // 
@@ -711,7 +723,7 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->ssPlayers->AutoSize = false;
 				 this->ssPlayers->Name = L"ssPlayers";
-				 this->ssPlayers->Size = System::Drawing::Size(240, 17);
+				 this->ssPlayers->Size = System::Drawing::Size(240, 18);
 				 this->ssPlayers->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
 				 // ssResult
@@ -719,7 +731,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->ssResult->AutoSize = false;
 				 this->ssResult->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssResult->Name = L"ssResult";
-				 this->ssResult->Size = System::Drawing::Size(108, 17);
+				 this->ssResult->Size = System::Drawing::Size(108, 18);
 				 this->ssResult->Text = L"空闲";
 				 this->ssResult->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
@@ -727,26 +739,26 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 this->ssSpeed->AutoSize = false;
 				 this->ssSpeed->Name = L"ssSpeed";
-				 this->ssSpeed->Size = System::Drawing::Size(70, 17);
+				 this->ssSpeed->Size = System::Drawing::Size(70, 18);
 				 this->ssSpeed->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				 // 
 				 // ssNodes
 				 // 
 				 this->ssNodes->AutoSize = false;
 				 this->ssNodes->Name = L"ssNodes";
-				 this->ssNodes->Size = System::Drawing::Size(90, 17);
+				 this->ssNodes->Size = System::Drawing::Size(90, 18);
 				 // 
 				 // ssSpace
 				 // 
 				 this->ssSpace->AutoSize = false;
 				 this->ssSpace->Name = L"ssSpace";
-				 this->ssSpace->Size = System::Drawing::Size(15, 17);
+				 this->ssSpace->Size = System::Drawing::Size(15, 18);
 				 // 
 				 // tspb1
 				 // 
 				 this->tspb1->MarqueeAnimationSpeed = 50;
 				 this->tspb1->Name = L"tspb1";
-				 this->tspb1->Size = System::Drawing::Size(100, 16);
+				 this->tspb1->Size = System::Drawing::Size(100, 17);
 				 this->tspb1->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
 				 // 
 				 // toolBar
@@ -1244,7 +1256,7 @@ private: System::Windows::Forms::Label^  label7;
 				 this->menuBar->Name = L"menuBar";
 				 this->menuBar->Size = System::Drawing::Size(659, 25);
 				 this->menuBar->TabIndex = 7;
-				 this->menuBar->Text = L"menuStrip1";
+				 this->menuBar->Text = L"主菜单";
 				 // 
 				 // mnuGame
 				 // 
@@ -1690,8 +1702,8 @@ private: System::Windows::Forms::Label^  label7;
 				 // 
 				 // mnuView
 				 // 
-				 this->mnuView->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {this->mnuShowEvaluation, 
-					 this->mnuShowSpeed, this->mnuShowProgress});
+				 this->mnuView->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->mnuShowEvaluation, 
+					 this->mnuShowSpeed, this->mnuShowProgress, this->mnuShowPV});
 				 this->mnuView->Name = L"mnuView";
 				 this->mnuView->Size = System::Drawing::Size(60, 21);
 				 this->mnuView->Text = L"查看(&V)";
@@ -1716,6 +1728,13 @@ private: System::Windows::Forms::Label^  label7;
 				 this->mnuShowProgress->Size = System::Drawing::Size(141, 22);
 				 this->mnuShowProgress->Text = L"搜索进度(&P)";
 				 this->mnuShowProgress->Click += gcnew System::EventHandler(this, &frmMain::mnuShowProgress_Click);
+				 // 
+				 // mnuShowPV
+				 // 
+				 this->mnuShowPV->Name = L"mnuShowPV";
+				 this->mnuShowPV->Size = System::Drawing::Size(141, 22);
+				 this->mnuShowPV->Text = L"最优序列(&V)";
+				 this->mnuShowPV->Click += gcnew System::EventHandler(this, &frmMain::mnuShowPV_Click);
 				 // 
 				 // mnuHelp
 				 // 
@@ -1781,18 +1800,8 @@ private: System::Windows::Forms::Label^  label7;
 				 this->infoPanel->Dock = System::Windows::Forms::DockStyle::Right;
 				 this->infoPanel->Location = System::Drawing::Point(495, 64);
 				 this->infoPanel->Name = L"infoPanel";
-				 this->infoPanel->Size = System::Drawing::Size(164, 456);
+				 this->infoPanel->Size = System::Drawing::Size(164, 455);
 				 this->infoPanel->TabIndex = 10;
-				 // 
-				 // picWhite
-				 // 
-				 this->picWhite->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"picWhite.Image")));
-				 this->picWhite->Location = System::Drawing::Point(41, 64);
-				 this->picWhite->Name = L"picWhite";
-				 this->picWhite->Size = System::Drawing::Size(40, 40);
-				 this->picWhite->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-				 this->picWhite->TabIndex = 14;
-				 this->picWhite->TabStop = false;
 				 // 
 				 // btnStart
 				 // 
@@ -1807,6 +1816,16 @@ private: System::Windows::Forms::Label^  label7;
 				 this->btnStart->UseVisualStyleBackColor = true;
 				 this->btnStart->Visible = false;
 				 this->btnStart->Click += gcnew System::EventHandler(this, &frmMain::btnStart_Click);
+				 // 
+				 // picWhite
+				 // 
+				 this->picWhite->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"picWhite.Image")));
+				 this->picWhite->Location = System::Drawing::Point(41, 64);
+				 this->picWhite->Name = L"picWhite";
+				 this->picWhite->Size = System::Drawing::Size(40, 40);
+				 this->picWhite->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
+				 this->picWhite->TabIndex = 14;
+				 this->picWhite->TabStop = false;
 				 // 
 				 // picBPointer
 				 // 
@@ -2007,7 +2026,7 @@ private: System::Windows::Forms::Label^  label7;
 					 static_cast<System::Byte>(134)));
 				 this->lstSteps->FormattingEnabled = true;
 				 this->lstSteps->ItemHeight = 14;
-				 this->lstSteps->Location = System::Drawing::Point(0, 216);
+				 this->lstSteps->Location = System::Drawing::Point(0, 215);
 				 this->lstSteps->Name = L"lstSteps";
 				 this->lstSteps->ScrollAlwaysVisible = true;
 				 this->lstSteps->Size = System::Drawing::Size(164, 240);
@@ -2019,11 +2038,32 @@ private: System::Windows::Forms::Label^  label7;
 				 this->tmrGame->Interval = 1;
 				 this->tmrGame->Tick += gcnew System::EventHandler(this, &frmMain::tmrGame_Tick);
 				 // 
+				 // statusBar2
+				 // 
+				 this->statusBar2->BackColor = System::Drawing::SystemColors::Control;
+				 this->statusBar2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->ssPV});
+				 this->statusBar2->Location = System::Drawing::Point(0, 497);
+				 this->statusBar2->Name = L"statusBar2";
+				 this->statusBar2->RenderMode = System::Windows::Forms::ToolStripRenderMode::ManagerRenderMode;
+				 this->statusBar2->Size = System::Drawing::Size(495, 22);
+				 this->statusBar2->SizingGrip = false;
+				 this->statusBar2->TabIndex = 11;
+				 this->statusBar2->Text = L"状态栏2";
+				 // 
+				 // ssPV
+				 // 
+				 this->ssPV->AutoSize = false;
+				 this->ssPV->Name = L"ssPV";
+				 this->ssPV->Size = System::Drawing::Size(470, 17);
+				 this->ssPV->Text = L"Principle Variation";
+				 this->ssPV->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+				 // 
 				 // frmMain
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 				 this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 				 this->ClientSize = System::Drawing::Size(659, 542);
+				 this->Controls->Add(this->statusBar2);
 				 this->Controls->Add(this->picBoard);
 				 this->Controls->Add(this->infoPanel);
 				 this->Controls->Add(this->toolBar);
@@ -2057,6 +2097,8 @@ private: System::Windows::Forms::Label^  label7;
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBPointer))->EndInit();
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picWPointer))->EndInit();
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBlack))->EndInit();
+				 this->statusBar2->ResumeLayout(false);
+				 this->statusBar2->PerformLayout();
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
 
@@ -2177,6 +2219,8 @@ private: System::Windows::Forms::Label^  label7;
 	private:System::Void mnuStopSearch_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void mnuUseBook_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void mnuAutoClean_Click(System::Object^  sender, System::EventArgs^  e);
+	private:System::Void mnuShowPV_Click(System::Object^  sender, System::EventArgs^  e);
+
 	private:
 		void setSelection(int x, int y);
 		AbstractPlayer^ createPlayer(PlayerType type, Chess colorReserved);
@@ -2273,6 +2317,8 @@ private: System::Windows::Forms::Label^  label7;
 		void notifyUser();
 		void saveBook();
 		void autoClear();
+		bool needShowPV();
+		void showPVChanged();
 #ifdef CHRISTMAS
 		void showChristmasWish();
 #endif
@@ -2310,6 +2356,7 @@ private: System::Windows::Forms::Label^  label7;
 		virtual void setProgress(int percent);
 		virtual void setFocusedMove(int x, int y);
 		virtual void setSelectedMove(int x, int y);
+		virtual void showPrincipleVariation(System::String^ pv);
 		virtual void resetComponents();
 		virtual void searchStarted();
 		virtual void searchEnded();

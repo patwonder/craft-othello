@@ -139,6 +139,7 @@ private:
 	System::String^ theme;
 	bool useBook;
 	bool autoCleanTable;
+	bool showPrincipleVariation;
 public:
 	UserInfo(void) {
 		playerTypeCount = 0;
@@ -165,6 +166,7 @@ public:
 #endif
 		UseBook = true;
 		AutoCleanTable = true;
+		ShowPrincipleVariation = false;
 	}
 	void addStatistics(PlayerType type, Statistics^ stat) {
 		for (int i = 0; i < playerTypeCount; i++)
@@ -236,6 +238,17 @@ public:
 		void set(bool value)
 		{
 			showEvaluation = value;
+		}
+	}
+	property bool ShowPrincipleVariation
+	{
+		bool get()
+		{
+			return showPrincipleVariation;
+		}
+		void set(bool value)
+		{
+			showPrincipleVariation = value;
 		}
 	}
 	property bool ShowProgress

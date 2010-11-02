@@ -191,6 +191,7 @@ public:
 	int getEpcPercentage() const {
 		return currentEpcPercentage;
 	}
+	int getPV(int pv[], int length);
 
 	// the transposition table stuff
 	static void clearCache();
@@ -418,11 +419,14 @@ private:
 	static int getEndSortSearchUpperBound(int beta);
 
 	// used for dynamic search state display
+	static const int MAX_PV_LENGTH = 20;
 	volatile int percent, subPercent, currentBlock;
 	volatile unsigned long long evnum;
 	volatile int partialResult, partialDepth;
 	volatile int focusedMove, selectedMove;
 	volatile bool aborted;
+	int principleVariation[MAX_PV_LENGTH];
+	volatile int pvLength;
 
 	// the transposition table stuff
 	struct TPInfo {
@@ -433,6 +437,12 @@ private:
 		BitBoard my;
 		BitBoard op;
 	};
+
+	void initPV();
+	void setPV(BitBoard& my, BitBoard& op, int depth, int firstMove);
+	void setBookPV(BitBoard& my, BitBoard& op, int firstMove);
+	// extract principle variation from transposition table ONLY - no ETC used
+	int searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd);
 
 	static unsigned int bZobrist[0x10000];
 	static unsigned int wZobrist[0x10000];

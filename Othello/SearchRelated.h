@@ -50,6 +50,7 @@ public:
 	virtual void setProgress(int percent) = 0;
 	virtual void setFocusedMove(int x, int y) = 0;
 	virtual void setSelectedMove(int x, int y) = 0;
+	virtual void showPrincipleVariation(System::String^ pv);
 	virtual void resetComponents() = 0;
 	virtual void searchStarted() = 0;
 	virtual void searchEnded() = 0;

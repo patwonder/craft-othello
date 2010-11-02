@@ -1151,11 +1151,17 @@ System::Void frmMain::frmMain_ResizeBegin(System::Object^  sender, System::Event
 }
 System::Void frmMain::frmMain_ResizeEnd(System::Object^  sender, System::EventArgs^  e) {
 }
+
+bool frmMain::needShowPV() {
+	return userInfo->ShowPrincipleVariation && !endGameMode && !analyzeMode && !fairGame;
+}
+
 void frmMain::setLayout() {
 	static int const listOffSet = -15;
 	//infoPanel->SetBounds(this->ClientSize.Width - infoPanel->Width, infoPanel->Top, infoPanel->Width, statusBar->Top - infoPanel->Top);
 	lstSteps->Height = infoPanel->Height - lblCurrentStep->Bottom + listOffSet;
-	picBoard->Size = System::Drawing::Size(infoPanel->Left, statusBar->Top - toolBar->Bottom);
+	picBoard->Size = System::Drawing::Size(infoPanel->Left, 
+		(userInfo->ShowPrincipleVariation ? statusBar2 : statusBar)->Top - toolBar->Bottom);
 	int width = picBoard->ClientSize.Width;
 	int height = picBoard->ClientSize.Height;
 	double widthOffSet;
@@ -1198,6 +1204,7 @@ void frmMain::setLayout() {
 		}
 	if (analyzeMode) ssPlayers->Width = statusBar->Width - 15;
 	else ssPlayers->Width = statusBar->Width - ssPlayersOffset;
+	ssPV->Width = statusBar2->Width - ssPVOffset;
 }
 
 void frmMain::setMnuTableSize() {
@@ -1733,6 +1740,7 @@ frmMain::frmMain() {
 	//ulCorner = Point(222, 144);
 	//lrCorner = Point(1118, 1040);
 	ssPlayersOffset = statusBar->Width - ssPlayers->Width;
+	ssPVOffset = statusBar2->Width - ssPV->Width;
 	board = gcnew array<ChessPicBox^, 2>(WIDTH, HEIGHT);
 	for (int i = 0; i < WIDTH; i++)
 		for (int j = 0; j < HEIGHT; j++) {
@@ -1754,7 +1762,6 @@ frmMain::frmMain() {
 			board[i, j]->MouseHover += gcnew EventHandler(this, & frmMain::picBoard_MouseHover);
 		}
 	imageBoard = gcnew array<ChessOption, 2>(WIDTH, HEIGHT);
-	setLayout();
 	setMnuTheme();
 	picBoard->Visible = true;
 	if (!canPlaySound) {
@@ -1773,6 +1780,9 @@ frmMain::frmMain() {
 	mnuShowEvaluation->Checked = userInfo->ShowEvaluation;
 	mnuShowProgress->Checked = userInfo->ShowProgress;
 	mnuShowSpeed->Checked = userInfo->ShowSpeed;
+	mnuShowPV->Checked = userInfo->ShowPrincipleVariation;
+	statusBar2->Visible = userInfo->ShowPrincipleVariation;
+	setLayout();
 	mnuUseBook->Checked = userInfo->UseBook;
 	if (!userInfo->UseBook) userInfo->FreeMode = true;
 	mnuFreeMode->Checked = userInfo->FreeMode;
@@ -2242,6 +2252,7 @@ void frmMain::loadConfig() {
 		userInfo->Theme = br->ReadString();
 		userInfo->UseBook = br->ReadBoolean();
 		userInfo->AutoCleanTable = br->ReadBoolean();
+		userInfo->ShowPrincipleVariation = br->ReadBoolean();
 	} catch (System::Exception^) {
 		br->Close();
 		return;
@@ -2346,6 +2357,7 @@ void frmMain::saveConfig() {
 		bw->Write(userInfo->Theme);
 		bw->Write(userInfo->UseBook);
 		bw->Write(userInfo->AutoCleanTable);
+		bw->Write(userInfo->ShowPrincipleVariation);
 	} catch (System::Exception^) {
 		bw->Close();
 		return;
@@ -2755,6 +2767,7 @@ void frmMain::setGameInfo() {
 		+ ((fairGame) ? ("(剩余 " + goBackChance + " 次)") : "");
 	tsbtnTip->ToolTipText = tsbtnTip->Text 
 		+ ((fairGame) ? ("(剩余 " + tipChance + " 次)") : "");
+	showPVChanged();
 }
 
 void frmMain::setFairness() {
@@ -3101,12 +3114,18 @@ void frmMain::setSelectedMove(int x, int y) {
 	}
 }
 
+void frmMain::showPrincipleVariation(System::String^ pv) {
+	if (needShowPV())
+		ssPV->Text = "最优着法序列: " + pv;
+}
+
 void frmMain::resetComponents() {
 	picBoard->Cursor = ::Cursors::Default;
 	ssResult->Image = iconRest;
 	ssResult->Text = "空闲";
 	ssSpeed->Text = "";
 	ssNodes->Text = "";
+	ssPV->Text = "最优着法序列: N/A";
 	tspb1->Value = 0;
 	tspb1->Style = ProgressBarStyle::Continuous;
 	setSelectedMove(-1, -1);
@@ -3170,6 +3189,7 @@ void frmMain::enterAnalyzeMode() {
 	ssResult->Visible = false;
 	ssPlayers->Width = statusBar->Width - 15;
 	ssPlayers->Text = "分析模式";
+	showPVChanged();
 }
 
 void frmMain::leaveAnalyzeMode() {
@@ -3201,6 +3221,7 @@ void frmMain::leaveAnalyzeMode() {
 	userInfo->Analyzer = analyzer->getAnalyzerType();
 	setGameInfo();
 	analyzer = nullptr;
+	showPVChanged();
 }
 
 void frmMain::setTranspositionTableAllowed(bool allowed) {
@@ -3622,3 +3643,18 @@ void frmMain::autoClear() {
 		Solver::clearCache();
 }
 
+System::Void frmMain::mnuShowPV_Click(System::Object^  sender, System::EventArgs^  e) {
+	userInfo->ShowPrincipleVariation = !userInfo->ShowPrincipleVariation;
+	mnuShowPV->Checked = userInfo->ShowPrincipleVariation;
+	showPVChanged();
+}
+
+void frmMain::showPVChanged() {
+	if (!needShowPV()) {
+		ssPV->Text = "最优着法序列: N/A";
+	}
+	bool visible = userInfo->ShowPrincipleVariation;
+	if (visible == statusBar2->Visible) return;
+	statusBar2->Visible = visible;
+	setLayout();
+}

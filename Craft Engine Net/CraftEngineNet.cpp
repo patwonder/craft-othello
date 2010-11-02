@@ -147,7 +147,11 @@ void Engine::setBookTolerance(int tolerance) {
 }
 
 void Engine::setCacheSize(size_t newCacheSize) {
-	Solver::setCacheSize(newCacheSize);
+	try {
+		Solver::setCacheSize(newCacheSize);
+	} catch (...) {
+		throw gcnew System::OutOfMemoryException("Craft engine failed to allocate memory.");
+	}
 }
 
 SearchResult Engine::solve(Chess side, int depth) {

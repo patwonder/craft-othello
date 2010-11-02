@@ -40,6 +40,7 @@
 #include "Solver.h"
 #include "Setting.h"
 #include "SearchRelated.h"
+using namespace System;
 
 namespace Othello {
 
@@ -48,6 +49,7 @@ private:
 	static System::Random^ random = gcnew System::Random();
 	int myColor, opColor;
 	int empties;
+	static const int PV_LENGTH = 20;
 	SearchOptions options;
 	UserInfo^ userInfo;
 	System::String^ myName;
@@ -63,6 +65,7 @@ private:
 	int focusedMove;
 	int selectedMove;
 
+	System::String^ pvToString(int pv[], int len);
 	void solverStarter();
 	System::String^ getResultDescription();
 	System::String^ getPartialResultDescription(int partialResult, int partialDepth, int percentage);

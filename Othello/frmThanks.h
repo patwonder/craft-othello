@@ -107,7 +107,7 @@ namespace Othello {
 				static_cast<System::Byte>(134)));
 			this->label1->Location = System::Drawing::Point(12, 9);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(205, 39);
+			this->label1->Size = System::Drawing::Size(217, 39);
 			this->label1->TabIndex = 2;
 			this->label1->Text = L"感谢下列人员在 Craft 开发过程中给予的支持和帮助：";
 			// 
@@ -117,12 +117,11 @@ namespace Othello {
 				static_cast<System::Byte>(134)));
 			this->lstHelpers->FormattingEnabled = true;
 			this->lstHelpers->ItemHeight = 17;
-			this->lstHelpers->Items->AddRange(gcnew cli::array< System::Object^  >(2) {L"Maxi", L"Zach"});
+			this->lstHelpers->Items->AddRange(gcnew cli::array< System::Object^  >(3) {L"Maxi", L"Zach", L"Coder"});
 			this->lstHelpers->Location = System::Drawing::Point(12, 51);
 			this->lstHelpers->Name = L"lstHelpers";
 			this->lstHelpers->SelectionMode = System::Windows::Forms::SelectionMode::None;
-			this->lstHelpers->Size = System::Drawing::Size(205, 106);
-			this->lstHelpers->Sorted = true;
+			this->lstHelpers->Size = System::Drawing::Size(217, 106);
 			this->lstHelpers->TabIndex = 1;
 			// 
 			// btnOK
@@ -131,7 +130,7 @@ namespace Othello {
 			this->btnOK->FlatStyle = System::Windows::Forms::FlatStyle::System;
 			this->btnOK->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
-			this->btnOK->Location = System::Drawing::Point(139, 163);
+			this->btnOK->Location = System::Drawing::Point(151, 163);
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(78, 29);
 			this->btnOK->TabIndex = 0;
@@ -144,7 +143,7 @@ namespace Othello {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->CancelButton = this->btnOK;
-			this->ClientSize = System::Drawing::Size(229, 201);
+			this->ClientSize = System::Drawing::Size(241, 201);
 			this->Controls->Add(this->btnOK);
 			this->Controls->Add(this->lstHelpers);
 			this->Controls->Add(this->label1);

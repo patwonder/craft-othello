@@ -765,6 +765,10 @@ Solver::Solver(int board[MAXSTEP]) {
 	analyzeResult = NULL;
 	aborted = false;
 	sortStackPtr = 0;
+	pvLength = 0;
+	selectedMove = focusedMove = -1;
+	partialDepth = 0;
+	partialResult = 0;
 }
 
 void Solver::setBookTolerance(int tolerance) {
@@ -774,7 +778,7 @@ void Solver::setBookTolerance(int tolerance) {
 void Solver::setBoard(int board[MAXSTEP]) {
 	black = 0; white = 0;
 	stackptr = 0;
-	maxEval = 0; // reduce the affect of 1st book node eval
+	maxEval = -INFINITE;
 	for (int i = 0; i < MAXSTEP; i++) {
 		black <<= 1; white <<= 1;
 		if (board[i] == BLACK)
@@ -2591,12 +2595,17 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	if (info2->my == my && info2->op == op)
 		if (info2->depth >= tabledepth) {
 			//hit++;
-			if (info2->valueType == TYPE_EXACT)
+			if (info2->valueType == TYPE_EXACT) {
+				setPV(my, op, tabledepth, info2->pos);
 				return SolverResult(info2->value, info2->pos);
+			}
 			if (info2->valueType == TYPE_ALPHA) {
 				if (info2->value < beta) beta = info2->value;
 			} else if (info2->valueType == TYPE_BETA) {
-				if (info2->value >= beta) return SolverResult(info2->value, info2->pos);
+				if (info2->value >= beta) {
+					setPV(my, op, tabledepth, info2->pos);
+					return SolverResult(info2->value, info2->pos);
+				}
 				if (info2->value > alpha) {
 					alpha = info2->value;
 					maxresult = alpha;
@@ -2614,12 +2623,17 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		}
 	if (info->my == my && info->op == op)
 		if (info->depth >= tabledepth) {
-			if (info->valueType == TYPE_EXACT)
+			if (info->valueType == TYPE_EXACT) {
+				setPV(my, op, tabledepth, info->pos);
 				return SolverResult(info->value, info->pos);
+			}
 			if (info->valueType == TYPE_ALPHA) {
 				if (info->value < beta) beta = info->value;
 			} else if (info->valueType == TYPE_BETA) {
-				if (info->value >= beta) return SolverResult(info->value, info->pos);
+				if (info->value >= beta) {
+					setPV(my, op, tabledepth, info->pos);
+					return SolverResult(info->value, info->pos);
+				}
 				if (info->value > alpha) {
 					alpha = info->value;
 					maxresult = alpha;
@@ -2665,7 +2679,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
 				}
 				else 
-					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
+					results[pptr] = -fastSearch(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 				if (aborted) {
 					return SolverResult(0, 0);
 				}
@@ -2703,6 +2717,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			choice = maxptr;
 			if (alpha >= beta) {
 				unMakeMove();
+				setPV(my, op, tabledepth, choice);
 				return SolverResult(alpha, choice);
 			}
 		}
@@ -2715,6 +2730,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			choice = maxptr;
 			if (alpha >= beta) {
 				unMakeMove();
+				setPV(my, op, tabledepth, choice);
 				return SolverResult(alpha, choice);
 			}
 		}
@@ -2728,6 +2744,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		partialResult = adjustedIterResult;
 		selectedMove = positions[0]->pos;
 	}
+	setPV(my, op, partialDepth, positions[0]->pos);
+
 #ifdef USE_EVEN_DEEPENING
 	const int ITER_END = (empties > 26) ? (16 - (empties & 1)) : (empties - 10);
 	const int ITER_START = (adjustedIterStart == -1) ? (MIN_ITER_START - ((MIN_ITER_START ^ ITER_END) & 1)) : (adjustedIterStart + ((adjustedIterStart ^ ITER_END) & 1));
@@ -2781,6 +2799,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 							positions[j + 1] = positions[j];
 						}
 						results[0] = tmp; positions[0] = tmp2;
+						setPV(my, op, iterdepth, positions[0]->pos);
 						partialResult = results[0];
 						selectedMove = positions[0]->pos;
 					}
@@ -2789,6 +2808,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 				if (results[i] >= INFINITE) {
 					unMakeMove();
 					percent = 100;
+					setPV(my, op, iterdepth, pos->pos);
 					return SolverResult(INFINITE - (INFINITE - MAXSTEP), pos->pos);
 				}
 				if (results[i] > iteralpha) { // if result == alpha, might be mistakenly cutoff by mpc
@@ -2811,6 +2831,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			unMakeMove();
 			if (results[i] >= INFINITE) {
 				percent = 100;
+				setPV(my, op, iterdepth, pos->pos);
 				return SolverResult(INFINITE - (INFINITE - MAXSTEP), pos->pos);
 			}
 			if (results[i] > itermax) {
@@ -2826,14 +2847,19 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					positions[j + 1] = positions[j];
 				}
 				results[0] = tmp; positions[0] = tmp2;
+				setPV(my, op, iterdepth, positions[0]->pos);
 			}
 			partialDepth = iterdepth;
 			partialResult = results[0];
 			selectedMove = positions[0]->pos;
+			if (i == 0) {
+				setPV(my, op, iterdepth, positions[0]->pos);
+			}
 			if (results[0] >= iterbeta) break;
 		}
 		if (itermax == -INFINITE) {
 			percent = 100;
+			setPV(my, op, iterdepth, positions[0]->pos);
 			return SolverResult(itermax - (-INFINITE + MAXSTEP), positions[0]->pos);
 		}
 	}
@@ -2845,6 +2871,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		partialDepth = winLoss ? PARTIALDEPTH_WLD : PARTIALDEPTH_EXACT;
 		partialResult = adjustedIterResult;
 		selectedMove = positions[0]->pos;
+		setPV(my, op, adjustedIterStart - 1, positions[0]->pos);
 	}
 	if (empties > MIN_EPC_DEPTH && alpha < beta) {// only use iter widening when there's possibility to cut
 		const int EPC_START = (adjustedIterStart <= empties) ? 0 : (adjustedIterStart - empties);
@@ -2881,6 +2908,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 								positions[j + 1] = positions[j];
 							}
 							results[0] = iteralpha; positions[0] = emptyPtr[choice];
+							setPV(my, op, empties + currentEpcStage, positions[0]->pos);
 							currentEpcPercentage = EPC_PERCENTAGE[currentEpcStage];
 							partialDepth = winLoss ? PARTIALDEPTH_WLD : PARTIALDEPTH_EXACT;
 							partialResult = results[0];
@@ -2918,11 +2946,15 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 						positions[j + 1] = positions[j];
 					}
 					results[0] = tmp; positions[0] = tmp2;
+					setPV(my, op, empties + currentEpcStage, positions[0]->pos);
 				}
 				currentEpcPercentage = EPC_PERCENTAGE[currentEpcStage];
 				partialDepth = winLoss ? PARTIALDEPTH_WLD : PARTIALDEPTH_EXACT;
 				partialResult = results[0];
 				selectedMove = positions[0]->pos;
+				if (i == 0 && iteralpha == piteralpha) {
+					setPV(my, op, empties + currentEpcStage, positions[0]->pos);
+				}
 				if (results[0] >= iterbeta) break;
 			}
 		}
@@ -2942,6 +2974,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		partialDepth = (winLoss) ? PARTIALDEPTH_WLD : PARTIALDEPTH_EXACT;
 		partialResult = maxresult;
 		selectedMove = choice;
+		setPV(my, op, tabledepth, choice);
 	}
 	if (alpha >= beta) {
 		percent = 100;
@@ -2978,6 +3011,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 				maxresult = results[i];
 				maxptr = current;
 				choice = maxptr;
+				setPV(my, op, tabledepth, choice);
 				break;
 			}
 			// only tell the user when we are sure it's not a false cutoff
@@ -3001,18 +3035,23 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			if (maxresult >= beta) {
 				maxptr = current;
 				choice = maxptr;
+				setPV(my, op, tabledepth, choice);
 				break;
 			}
 			if (maxresult > alpha) {
 				alpha = maxresult;
 				maxptr = current;
 				choice = maxptr;
+				setPV(my, op, tabledepth, choice);
 			}
 		}
 		currentEpcPercentage = EPC_PERCENTAGE[currentEpcStage];
 		partialDepth = (winLoss) ? PARTIALDEPTH_WLD : PARTIALDEPTH_EXACT;
 		partialResult = maxresult;
 		selectedMove = choice;
+		if (i == 0 && alpha == palpha) {
+			setPV(my, op, tabledepth, choice);
+		}
 	}
 	percent = 100;
 
@@ -3594,6 +3633,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	partialDepth = 0;
 	selectedMove = -1;
 	focusedMove = -1;
+	initPV();
 
 	if (depth >= empties) { // switch to endgame search
 		SolverResult endResult = solveExact(color, false);
@@ -3642,6 +3682,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				unsigned int rnd;
 				rand_s(&rnd);
 				int moveIndex = rnd % randomRange;
+				setBookPV(my, op, node.getMove(moveIndex));
 				return SolverResult(node.getEval(moveIndex), -node.getMove(moveIndex) - 1);
 			}
 	}
@@ -3656,13 +3697,18 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	TPInfo* info2 = &tpDeep[zobPos];
 	if (info2->my == my && info2->op == op)
 		if (info2->depth == depth) {
-			if (info2->valueType == TYPE_EXACT)
+			if (info2->valueType == TYPE_EXACT) {
+				setPV(my, op, depth, info2->pos);
 				return SolverResult(info2->value, info2->pos);
+			}
 			if (info2->valueType == TYPE_ALPHA) {
 //				if (info2->value <= alpha) return SolverResult(info2->value, info2->pos);
 				if (info2->value < beta) beta = info2->value;
 			} else if (info2->valueType == TYPE_BETA) {
-				if (info2->value >= beta) return SolverResult(info2->value, info2->pos);
+				if (info2->value >= beta) {
+					setPV(my, op, depth, info2->pos);
+					return SolverResult(info2->value, info2->pos);
+				}
 				if (info2->value > alpha) {
 					alpha = info2->value;
 					maxresult = alpha;
@@ -3678,13 +3724,17 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	TPInfo* info = &tpNew[zobPos];
 	if (info->my == my && info->op == op)
 		if (info->depth == depth) {
-			if (info->valueType == TYPE_EXACT)
+			if (info->valueType == TYPE_EXACT) {
+				setPV(my, op, depth, info->pos);
 				return SolverResult(info->value, info->pos);
-			if (info->valueType == TYPE_ALPHA) {
+			} if (info->valueType == TYPE_ALPHA) {
 //				if (info->value <= alpha) return SolverResult(info->value, info->pos);
 				if (info->value < beta) beta = info->value;
 			} else if (info->valueType == TYPE_BETA) {
-				if (info->value >= beta) return SolverResult(info->value, info->pos);
+				if (info->value >= beta) {
+					setPV(my, op, depth, info->pos);
+					return SolverResult(info->value, info->pos);
+				}
 				if (info->value > alpha) {
 					alpha = info->value;
 					maxresult = alpha;
@@ -3721,7 +3771,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH)
 						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
 				else 
-					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
+					results[pptr] = -fastSearch(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 				if (aborted) {
 					return SolverResult(0, 0);
 				}
@@ -3761,6 +3811,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			maxptr = pos;
 			if (alpha >= beta) {
 				unMakeMove();
+				setPV(my, op, depth, maxptr);
 				return SolverResult(alpha, maxptr);
 			}
 		}
@@ -3772,6 +3823,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			maxptr = pos;
 			if (alpha >= beta) {
 				unMakeMove();
+				setPV(my, op, depth, maxptr);
 				return SolverResult(alpha, maxptr);
 			}
 		}
@@ -3785,6 +3837,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		partialResult = adjustedIterResult;
 		selectedMove = positions[0];
 	}
+
+	setPV(my, op, partialDepth, positions[0]);
 #ifdef USE_EVEN_DEEPENING
 	const int ITER_START = (adjustedIterStart == -1) ? (MIN_ITER_START - ((MIN_ITER_START ^ depth) & 1)) : (adjustedIterStart + ((adjustedIterStart ^ depth) & 1));
 	const int ITER_END = depth - 2;
@@ -3844,6 +3898,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 							positions[j + 1] = positions[j];
 						}
 						results[0] = tmp; positions[0] = tmp2;
+						setPV(my, op, iterdepth, positions[0]);
 						partialResult = results[0];
 						selectedMove = positions[0];
 					}
@@ -3852,6 +3907,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				if (results[i] >= iterbeta) {
 					unMakeMove();
 					percent = 100;
+					setPV(my, op, iterdepth, pos);
 					return SolverResult(results[i], pos);
 				}
 				if (results[i] > iteralpha) { // if result == alpha, might be mistakenly cutoff by mpc
@@ -3873,6 +3929,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			unMakeMove();
 			if (results[i] >= iterbeta) {
 				percent = 100;
+				setPV(my, op, iterdepth, pos);
 				return SolverResult(results[i], pos);
 			}
 			if (results[i] > itermax) {
@@ -3887,10 +3944,14 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					positions[j + 1] = positions[j];
 				}
 				results[0] = tmp; positions[0] = tmp2;
+				setPV(my, op, iterdepth, positions[0]);
 			}
 			partialDepth = iterdepth;
 			partialResult = results[0];
 			selectedMove = positions[0];
+			if (i == 0) {
+				setPV(my, op, iterdepth, positions[0]);
+			}
 		}
 		if (itermax <= -MID_SEARCH_BOUND) {
 			percent = 100;
@@ -3903,6 +3964,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		partialDepth = depth;
 		partialResult = maxresult;
 		selectedMove = maxptr;
+		setPV(my, op, depth, maxptr);
 	} else {
 		maxptr = positions[0];
 	}
@@ -3920,6 +3982,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		else if (depth == 2)
 			results[i] = -checkedSearch(op, my, depth - 1, -beta, -alpha, true);
 		else {
+			results[i] = alpha;
 #ifdef MIDGAME_USE_NEGASCOUT
 			if ((depth >= 4) && (i != 0) && alphacuttable(alpha) && (beta - alpha >= MID_WINDOW_SIZE)) {
 #else
@@ -3944,6 +4007,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 						maxptr = pos;
 						partialResult = maxresult;
 						selectedMove = maxptr;
+						setPV(my, op, depth, maxptr);
 					}
 					continue;
 				}
@@ -3951,27 +4015,28 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					unMakeMove();
 					maxresult = results[i];
 					maxptr = pos;
+					setPV(my, op, depth, maxptr);
 					break;
 				}
 				if (results[i] > alpha) { // if result == alpha, might be mistakenly cutoff by mpc
-					maxresult = alpha = results[i];
-					maxptr = pos;
 					selectedMove = maxptr;
 				}
 			}
 
 			// otherwise, return to normal search
 			results[i] = (depth > MPC_DEPTH_THRESHOLD)
-				? -search_mpc(op, my, depth - 1, -beta, -alpha, true)
-				: -search(op, my, depth - 1, -beta, -alpha, true);
+				? -search_mpc(op, my, depth - 1, -beta, -results[i], true)
+				: -search(op, my, depth - 1, -beta, -results[i], true);
 		}
 		if (aborted) {
 			return SolverResult(0, 0);
 		}
 		unMakeMove();
+		// maxresult will always be increased at least once
 		if (results[i] > maxresult) {
 			maxresult = results[i];
 			maxptr = pos;
+			setPV(my, op, depth, maxptr);
 			if (maxresult >= beta) {
 				break;
 			}
@@ -5273,6 +5338,7 @@ void Solver::clearSearchStats() {
 	partialDepth = 0;
 	selectedMove = -1;
 	focusedMove = -1;
+	pvLength = 0;
 }
 
 int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, bool lastFound) {
@@ -6612,5 +6678,134 @@ void Solver::calcStabilityBound(const BitBoard& my, const BitBoard& op, int& low
 	upper = MAXSTEP - (stop << 1);
 }
 #endif
+
+int Solver::getPV(int pv[], int length) {
+	int len = min(length, pvLength);
+	memcpy(pv, principleVariation, len * sizeof(int));
+	return len;
+}
+
+void Solver::initPV() {
+	pvLength = 0;
+}
+
+void Solver::setPV(BitBoard& my, BitBoard& op, int depth, int firstMove) {
+	principleVariation[0] = firstMove;
+	if (checkedMakeMove(firstMove, my, op)) {
+		pvLength = 1 + searchPV(op, my, depth - 1, true, principleVariation + 1, principleVariation + MAX_PV_LENGTH);
+		unMakeMove();
+	} else {
+		pvLength = 1;
+	}
+}
+
+int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd) {
+	if (pvStart == pvEnd) return 0;
+
+	BitBoard mob = mobility(my, op);
+	if (mob == 0) {
+		if (lastFound)
+			return searchPV(op, my, depth, false, pvStart, pvEnd);
+		else return 0;
+	}
+
+	int lower, upper;
+	calcStabilityBound(my, op, lower, upper);
+
+	if (depth < empties) {
+		lower = endToMid(lower);
+		upper = endToMid(upper);
+	}
+
+	int bestMove = -1;
+
+	int zobPos = getZobKey() & currentTableMask;
+	TPInfo* info = &tpDeep[zobPos];
+	if (((depth >= empties && info->depth >= depth) || info->depth == depth) 
+			&& info->my == my && info->op == op) {
+		if (info->valueType == TYPE_EXACT) {
+			*pvStart = info->pos;
+			if (!checkedMakeMove(info->pos, my, op)) return 0;
+			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+			unMakeMove();
+			return len;
+		} else if (info->valueType == TYPE_BETA) {
+			if (info->value >= upper) {
+				*pvStart = info->pos;
+				if (!checkedMakeMove(info->pos, my, op)) return 0;
+				int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+				unMakeMove();
+				return len;
+			}
+			if (info->value > lower) {
+				lower = info->value;
+				bestMove = info->pos;
+			}
+		} else {
+			if (info->value < upper) {
+				upper = info->value;
+			}
+		}
+	}
+
+	info = &tpNew[zobPos];
+	if (((depth >= empties && info->depth >= depth) || info->depth == depth) 
+			&& info->my == my && info->op == op) {
+		if (info->valueType == TYPE_EXACT) {
+			*pvStart = info->pos;
+			if (!checkedMakeMove(info->pos, my, op)) return 0;
+			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+			unMakeMove();
+			return len;
+		} else if (info->valueType == TYPE_BETA) {
+			if (info->value >= upper) {
+				*pvStart = info->pos;
+				if (!checkedMakeMove(info->pos, my, op)) return 0;
+				int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+				unMakeMove();
+				return len;
+			}
+			if (info->value > lower) {
+				lower = info->value;
+				bestMove = info->pos;
+			}
+		} else {
+			if (info->value < upper) {
+				upper = info->value;
+			}
+		}
+	}
+
+	if (bestMove == -1) {
+		if (lower < upper)
+			return 0;
+		bestMove = 0;
+		while ((orderTable[bestMove] & mob) == 0) {
+			bestMove++;
+		}
+		bestMove = moveOrder[bestMove];
+	}
+
+	*pvStart = bestMove;
+	if (!checkedMakeMove(bestMove, my, op)) return 0;
+	int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+	unMakeMove();
+	return len;
+}
+
+void Solver::setBookPV(BitBoard& my, BitBoard& op, int firstMove) {
+	BitBoard work_my = my, work_op = op;
+	int pvLength = 1;
+	principleVariation[0] = firstMove;
+	BookNode node;
+	putChess(firstMove, work_my, work_op);
+	BitBoard tmp = work_my; work_my = work_op; work_op = tmp;
+	while (pvLength < MAX_PV_LENGTH && (node = book->get(work_my, work_op)) && node.getMoveCount()) {
+		principleVariation[pvLength++] = node.getMove(0);
+		putChess(node.getMove(0), work_my, work_op);
+		tmp = work_my; work_my = work_op; work_op = tmp;
+	}
+	this->pvLength = pvLength;
+}
 
 } // namespace Othello
