@@ -217,12 +217,12 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 	displayer->setResult(getResultDescription());
 	displayer->setSpeed(getSpeedDescription(speed));
 	displayer->setTotalNum(getTotalNumDescription(totalNum));
-	displayer->setProgress(100);
-	displayer->setSearchState(false);
 	if (userInfo->ShowPrincipleVariation) {
 		int len = solver->getPV(pv, PV_LENGTH);
 		displayer->showPrincipleVariation(pvToString(pv, len));
 	}
+	displayer->setProgress(100);
+	displayer->setSearchState(false);
 	displayer->searchEnded();
 	int move = res->getBestMove();
 	if (move < 0) move = -move - 1;

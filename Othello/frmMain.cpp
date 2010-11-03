@@ -2555,7 +2555,7 @@ bool frmMain::checkMem(unsigned long long tableSize) {
 		setPaused(false);
 		return false;
 	}
-	if ((tableSize + fixedMem) >= memorySize * 3 / 5) {
+	if ((tableSize + fixedMem) >= memorySize / 2) {
 		setPaused(true);
 		int phyMem = (int)((double)memorySize / 1048576 + 0.5);
 		int tbSize = (int)((double)tableSize / 1048576 + 0.5);
@@ -3037,6 +3037,7 @@ System::Void frmMain::mnuShortkeys_Click(System::Object^  sender, System::EventA
 
 void frmMain::setSearchState(bool searching) {
 	if (searchState = searching) { /* !! Not '==' !! */
+		resetComponents();
 		ssResult->Image = iconBusy;
 		ssResult->Text = "思考中";
 		picBoard->Cursor = ::Cursors::WaitCursor;
@@ -3054,6 +3055,14 @@ void frmMain::setSearchState(bool searching) {
 		}
 		tsbtnStopSearch->Enabled = false;
 		mnuStopSearch->Enabled = false;
+
+		if (!userInfo->ShowSpeed || endGameMode) {
+			ssNodes->Text = "";
+			ssSpeed->Text = "";
+		}
+		if (!needShowPV()) {
+			ssPV->Text = "最优着法序列: N/A";
+		}
 	}
 }
 
@@ -3070,7 +3079,7 @@ void frmMain::setTotalNum(System::String^ totalNum) {
 		ssNodes->Text = totalNum;
 }
 void frmMain::setProgress(int percent) {
-	if (userInfo->ShowProgress) {
+	//if (userInfo->ShowProgress) {
 		tspb1->Value = percent;
 		if (percent == 0) {
 			if (tspb1->Style != ProgressBarStyle::Marquee)
@@ -3079,7 +3088,7 @@ void frmMain::setProgress(int percent) {
 			if (tspb1->Style != ProgressBarStyle::Continuous)
 				tspb1->Style = ProgressBarStyle::Continuous;
 		}
-	}
+	//}
 }
 void frmMain::setFocusedMove(int x, int y) {
 	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
@@ -3650,7 +3659,7 @@ System::Void frmMain::mnuShowPV_Click(System::Object^  sender, System::EventArgs
 }
 
 void frmMain::showPVChanged() {
-	if (!needShowPV()) {
+	if (searchState && !needShowPV()) {
 		ssPV->Text = "最优着法序列: N/A";
 	}
 	bool visible = userInfo->ShowPrincipleVariation;
