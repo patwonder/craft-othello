@@ -6534,15 +6534,18 @@ int Solver::mtdExact_main(BitBoard& my, BitBoard& op, int alpha, int beta, bool 
 	if (eval > upper) eval = upper;
 	if (eval < lower) eval = lower;
 
-	int window;
+	int window_lower, window_upper;
 	do {
-		if (eval == lower)
-			window = eval + 2;
-		else window = eval;
-		eval = (this->*mainSearchFunction)(my, op, window - 2, window, lastFound);
-		if (eval < window)
+		window_upper = eval + 2;
+		window_lower = eval - 2;
+		if (window_upper > upper) window_upper = upper;
+		if (window_lower < lower) window_lower = lower;
+		eval = (this->*mainSearchFunction)(my, op, window_lower, window_upper, lastFound);
+		if (eval <= window_lower)
 			upper = eval;
-		else lower = eval;
+		else if (eval >= window_upper)
+			lower = eval;
+		else return eval;
 	} while (lower < upper);
 	return eval;
 }
@@ -6776,9 +6779,9 @@ int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int*
 		}
 	}
 
+	if (lower < upper)
+		return 0;
 	if (bestMove == -1) {
-		if (lower < upper)
-			return 0;
 		bestMove = 0;
 		while ((orderTable[bestMove] & mob) == 0) {
 			bestMove++;

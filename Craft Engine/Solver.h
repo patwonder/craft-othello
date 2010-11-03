@@ -50,6 +50,7 @@
 //#define REEVALUATE
 #define ENDGAME_USE_NEGASCOUT
 #define MIDGAME_USE_NEGASCOUT
+//#define USE_MTD_F
 // ETC(Enhanced Transposition Cutoff)
 //#define USE_ETC
 #define USE_ETC_AT_ROOT
@@ -313,7 +314,6 @@ private:
 	static const int MID_SEARCH_BOUND = INFINITE - MAXSTEP + 1;
 
 	// MTD(f)
-//#define USE_MTD_F
 #ifdef USE_MTD_F
 	int mtdExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool lastFound);
 	int mtdExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, bool lastFound);
