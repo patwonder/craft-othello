@@ -2679,7 +2679,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
 				}
 				else 
-					results[pptr] = -fastSearch(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
+					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 				if (aborted) {
 					return SolverResult(0, 0);
 				}
@@ -3771,7 +3771,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH)
 						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
 				else 
-					results[pptr] = -fastSearch(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
+					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 				if (aborted) {
 					return SolverResult(0, 0);
 				}
