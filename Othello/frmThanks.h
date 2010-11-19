@@ -117,7 +117,7 @@ namespace Othello {
 				static_cast<System::Byte>(134)));
 			this->lstHelpers->FormattingEnabled = true;
 			this->lstHelpers->ItemHeight = 17;
-			this->lstHelpers->Items->AddRange(gcnew cli::array< System::Object^  >(3) {L"Maxi", L"Zach", L"Coder"});
+			this->lstHelpers->Items->AddRange(gcnew cli::array< System::Object^  >(4) {L"Maxi", L"Zach", L"Coder", L"(And all others~)"});
 			this->lstHelpers->Location = System::Drawing::Point(12, 51);
 			this->lstHelpers->Name = L"lstHelpers";
 			this->lstHelpers->SelectionMode = System::Windows::Forms::SelectionMode::None;

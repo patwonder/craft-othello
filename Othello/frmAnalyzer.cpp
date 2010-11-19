@@ -463,7 +463,7 @@ void frmAnalyzer::saveResult(String^ fileName) {
 	}
 	IO::StreamWriter^ writer = gcnew IO::StreamWriter(fs, System::Text::Encoding::UTF8);
 	try {
-		String^ versionInfo = __APP_NAME__ + " Version " + __APP_VERSION__ + " 分析结果文件";
+		String^ versionInfo = __APP_NAME__ + " " + __APP_VERSION__ + " 分析结果文件";
 		String^ now = System::DateTime::Now.ToString("yyyy年M月d日 H:mm:ss",
 			Globalization::CultureInfo::CreateSpecificCulture("zh-CN"));
 		String^ symbolDescription = "黑棋: " + black + "  白棋: " + white + "  空格: " + av

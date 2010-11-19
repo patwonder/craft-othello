@@ -42,7 +42,7 @@ namespace MPC_Calc {
 		private bool processing = false;
 		private Task task = null;
 		private const String TASK_FILE = "task.ini";
-		private bool close_lock = true;
+		//private bool close_lock = true;
 
 		public MainForm() {
 			InitializeComponent();
@@ -100,7 +100,7 @@ namespace MPC_Calc {
 			}
 			processing = false;
 			MessageBox.Show(this, "处理完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			close_lock = false;
+			//close_lock = false;
 			this.Close();
 		}
 
@@ -118,7 +118,7 @@ namespace MPC_Calc {
 			processor.stopProcess();
 			processing = false;
 			saveTask(task);
-			close_lock = false;
+			//close_lock = false;
 			this.Close();
 		}
 
@@ -162,14 +162,14 @@ namespace MPC_Calc {
 
 			processing = false;
 
-			close_lock = false;
+			//close_lock = false;
 			this.Close();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e) {
 			task = getTask();
 			if (task == null) {
-				close_lock = false;
+				//close_lock = false;
 				this.Close();
 				return;
 			}

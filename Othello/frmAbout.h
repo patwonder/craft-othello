@@ -125,7 +125,7 @@ namespace Othello {
 			this->btnOK->FlatStyle = System::Windows::Forms::FlatStyle::System;
 			this->btnOK->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
-			this->btnOK->Location = System::Drawing::Point(228, 303);
+			this->btnOK->Location = System::Drawing::Point(228, 327);
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(78, 29);
 			this->btnOK->TabIndex = 0;
@@ -169,13 +169,15 @@ namespace Othello {
 			// 
 			this->lblPage->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
-			this->lblPage->Location = System::Drawing::Point(13, 277);
+			this->lblPage->LinkArea = System::Windows::Forms::LinkArea(16, 39);
+			this->lblPage->Location = System::Drawing::Point(13, 285);
 			this->lblPage->Name = L"lblPage";
-			this->lblPage->Size = System::Drawing::Size(293, 23);
+			this->lblPage->Size = System::Drawing::Size(293, 39);
 			this->lblPage->TabIndex = 1;
 			this->lblPage->TabStop = true;
-			this->lblPage->Text = L"http://code.google.com/p/craft-othello/";
+			this->lblPage->Text = L"欢迎访问 Craft 的主页\r\nhttp://code.google.com/p/craft-othello/";
 			this->lblPage->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->lblPage->UseCompatibleTextRendering = true;
 			this->lblPage->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &frmAbout::lblPage_LinkClicked);
 			// 
 			// label1
@@ -194,7 +196,7 @@ namespace Othello {
 			this->btnThanks->FlatStyle = System::Windows::Forms::FlatStyle::System;
 			this->btnThanks->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
-			this->btnThanks->Location = System::Drawing::Point(16, 303);
+			this->btnThanks->Location = System::Drawing::Point(16, 327);
 			this->btnThanks->Name = L"btnThanks";
 			this->btnThanks->Size = System::Drawing::Size(78, 29);
 			this->btnThanks->TabIndex = 2;
@@ -220,8 +222,7 @@ namespace Othello {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->CancelButton = this->btnOK;
-			this->ClientSize = System::Drawing::Size(318, 344);
-			this->Controls->Add(this->lblPage);
+			this->ClientSize = System::Drawing::Size(318, 368);
 			this->Controls->Add(this->lblTitle);
 			this->Controls->Add(this->picGPL);
 			this->Controls->Add(this->pic);
@@ -229,6 +230,7 @@ namespace Othello {
 			this->Controls->Add(this->lblInfo);
 			this->Controls->Add(this->btnThanks);
 			this->Controls->Add(this->btnOK);
+			this->Controls->Add(this->lblPage);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->KeyPreview = true;
 			this->MaximizeBox = false;
@@ -246,7 +248,7 @@ namespace Othello {
 		}
 #pragma endregion
 	private: System::Void frmAbout_Load(System::Object^  sender, System::EventArgs^  e) {
-				String^ title = __APP_NAME__ + " Ver. " + __APP_VERSION__;
+				String^ title = __APP_NAME__ + " " + __APP_VERSION__;
 				lblTitle->Text = title;
 				Text = "关于 " + __APP_NAME__;
 			 }

@@ -105,7 +105,6 @@ namespace Othello {
 	private: System::Windows::Forms::ProgressBar^  pbStartUp;
 	private: System::Windows::Forms::Label^  lblState;
 	private: System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::Timer^  tmrStartUp;
 #pragma region Windows Form Designer generated code
 			 /// <summary>
 			 /// Required method for Designer support - do not modify
@@ -121,7 +120,6 @@ namespace Othello {
 				 this->pbStartUp = (gcnew System::Windows::Forms::ProgressBar());
 				 this->lblState = (gcnew System::Windows::Forms::Label());
 				 this->label2 = (gcnew System::Windows::Forms::Label());
-				 this->tmrStartUp = (gcnew System::Windows::Forms::Timer(this->components));
 				 this->SuspendLayout();
 				 // 
 				 // lblVersion
@@ -149,7 +147,7 @@ namespace Othello {
 				 this->lblName->Name = L"lblName";
 				 this->lblName->Size = System::Drawing::Size(144, 64);
 				 this->lblName->TabIndex = 0;
-				 this->lblName->Text = L"Craft";
+				 this->lblName->Text = "";
 				 // 
 				 // label1
 				 // 
@@ -196,12 +194,6 @@ namespace Othello {
 				 this->label2->TabIndex = 5;
 				 this->label2->Text = L"Author: Patrick\r\nE-mail: patrick880905@sina.com\r\nQQ: 511754081\r\n";
 				 // 
-				 // tmrStartUp
-				 // 
-				 this->tmrStartUp->Enabled = true;
-				 this->tmrStartUp->Interval = 1;
-				 this->tmrStartUp->Tick += gcnew System::EventHandler(this, &frmStartUp::tmrStartUp_Tick);
-				 // 
 				 // frmStartUp
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
@@ -219,10 +211,11 @@ namespace Othello {
 				 this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 				 this->Name = L"frmStartUp";
 				 this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-				 this->Text = L"Craft 启动中……";
+				 this->Text = " 启动中……";
 				 this->ShowInTaskbar = false;
 				 this->Cursor = Cursors::WaitCursor;
 				 this->Load += gcnew System::EventHandler(this, &frmStartUp::frmStartUp_Load);
+				 this->Shown += gcnew System::EventHandler(this, &frmStartUp::frmStartUp_Shown);
 				 this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &frmStartUp::frmStartUp_FormClosing);
 				 this->ResumeLayout(false);
 				 this->PerformLayout();
@@ -246,17 +239,7 @@ namespace Othello {
 
 				 isDone = true;
 			 }
-	private: System::Void frmStartUp_Load(System::Object^  sender, System::EventArgs^  e) {
-				 this->Text = __APP_NAME__ + " 启动中";
-				 lblName->Text = __APP_NAME__;
-				 lblVersion->Text = "Version " + __APP_VERSION__;
-			 }
-	private: System::Void frmStartUp_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
-				 if (!canClose)
-					 e->Cancel = true;
-			 }
-	private: System::Void tmrStartUp_Tick(System::Object^  sender, System::EventArgs^  e) {
-				 tmrStartUp->Enabled = false;
+			 void doInit() {
 				 using namespace System::Threading;
 				 Thread^ startUpThread = gcnew Thread(gcnew ThreadStart(this, &frmStartUp::initStarter));
 				 startUpThread->Start();
@@ -269,19 +252,19 @@ namespace Othello {
 					 part = Solver::getInitPart();
 					 percent = Solver::getInitPercent();
 					 switch (part) {
-						 case 0:
-						 case 1:
-						 case 2:
-							 lblState->Text = "正在初始化……";
-							 break;
-						 case 3:
-							 lblState->Text = "正在载入模板……";
-							 break;
-						 case 4:
-							 lblState->Text = "正在载入棋谱……";
-							 break;
-						 case 5:
-							 lblState->Text = "完成";
+								 case 0:
+								 case 1:
+								 case 2:
+									 lblState->Text = "正在初始化……";
+									 break;
+								 case 3:
+									 lblState->Text = "正在载入模板……";
+									 break;
+								 case 4:
+									 lblState->Text = "正在载入棋谱……";
+									 break;
+								 case 5:
+									 lblState->Text = "完成";
 					 }
 					 pbStartUp->Value = percent;
 					 Application::DoEvents();
@@ -292,10 +275,23 @@ namespace Othello {
 				 } else {
 					 mainForm = gcnew frmMain();
 				 }
-				 DialogResult = successful ? Windows::Forms::DialogResult::Yes 
+				 DialogResult = successful ? Windows::Forms::DialogResult::Yes
 					 : Windows::Forms::DialogResult::No;
 				 canClose = true;
 				 this->Close();
+			 }
+	private: System::Void frmStartUp_Load(System::Object^  sender, System::EventArgs^  e) {
+				 this->Text = __APP_NAME__ + " 启动中";
+				 lblName->Text = __APP_NAME__;
+				 lblVersion->Text = "版本 " + __APP_VERSION__;
+			 }
+	private: System::Void frmStartUp_FormClosing(System::Object^ sender, System::Windows::Forms::FormClosingEventArgs^ e) {
+				 if (!canClose)
+					 e->Cancel = true;
+			 }
+	private: delegate void SimpleDelegate();
+	private: System::Void frmStartUp_Shown(System::Object^  sender, System::EventArgs^  e) {
+				 BeginInvoke(gcnew SimpleDelegate(this, &frmStartUp::doInit));
 			 }
 	};
 }

@@ -408,7 +408,6 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuNew;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuExit;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnExit;
-	private: System::Windows::Forms::Timer^  tmrGame;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuControl;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuBack;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuForward;
@@ -489,19 +488,15 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripButton^  tsbtnForceEndSolve;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnStopSearch;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuStopSearch;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuUseBook;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuAutoClean;
-private: System::Windows::Forms::ToolStripMenuItem^  mnu1GB;
-private: System::Windows::Forms::ToolStripMenuItem^  mnu2GB;
-private: System::Windows::Forms::Label^  lblEmpty;
-private: System::Windows::Forms::Label^  label7;
-private: System::Windows::Forms::StatusStrip^  statusBar2;
-private: System::Windows::Forms::ToolStripStatusLabel^  ssPV;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
-
-
-
-
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuUseBook;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuAutoClean;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnu1GB;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnu2GB;
+	private: System::Windows::Forms::Label^  lblEmpty;
+	private: System::Windows::Forms::Label^  label7;
+	private: System::Windows::Forms::StatusStrip^  statusBar2;
+	private: System::Windows::Forms::ToolStripStatusLabel^  ssPV;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -677,7 +672,6 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 				 this->label2 = (gcnew System::Windows::Forms::Label());
 				 this->label1 = (gcnew System::Windows::Forms::Label());
 				 this->lstSteps = (gcnew System::Windows::Forms::ListBox());
-				 this->tmrGame = (gcnew System::Windows::Forms::Timer(this->components));
 				 this->statusBar2 = (gcnew System::Windows::Forms::StatusStrip());
 				 this->ssPV = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBoard))->BeginInit();
@@ -2033,11 +2027,6 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 				 this->lstSteps->TabIndex = 12;
 				 this->lstSteps->TabStop = false;
 				 // 
-				 // tmrGame
-				 // 
-				 this->tmrGame->Interval = 1;
-				 this->tmrGame->Tick += gcnew System::EventHandler(this, &frmMain::tmrGame_Tick);
-				 // 
 				 // statusBar2
 				 // 
 				 this->statusBar2->BackColor = System::Drawing::SystemColors::Control;
@@ -2117,7 +2106,6 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 	private:System::Void mnuExit_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tsbtnExit_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void frmMain_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);
-	private:System::Void tmrGame_Tick(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void btnStart_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tsmnuManBlackToMachine_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tsmnuManWhiteToMachine_Click(System::Object ^sender, System::EventArgs ^e);

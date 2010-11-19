@@ -2947,11 +2947,8 @@
         Dfw/5UlXr2C3baEAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="tmrGame.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>450, 17</value>
-  </data>
   <data name="statusBar2.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>557, 17</value>
+    <value>446, 17</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

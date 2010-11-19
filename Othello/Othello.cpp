@@ -75,7 +75,7 @@ namespace Othello {
 
 	void doUninstall(String^ productCode) {
 		Windows::Forms::DialogResult res = MessageBox::Show(
-			"确实要卸载 " + __APP_NAME__ + " Version " + __APP_VERSION__ + " 吗？"
+			"确实要卸载 " + __APP_NAME__ + " " + __APP_VERSION__ + " 吗？"
 			/*+ "\nProductCode: " + productCode*/,
 			"卸载 " + __APP_NAME__, MessageBoxButtons::YesNo, MessageBoxIcon::Warning,
 			MessageBoxDefaultButton::Button2);

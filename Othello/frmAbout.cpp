@@ -44,7 +44,7 @@ using namespace Othello;
 System::Void frmAbout::lblPage_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
 	if (e->Button != Windows::Forms::MouseButtons::Left) return;
 	try {
-		System::Diagnostics::Process::Start(lblPage->Text);
+		System::Diagnostics::Process::Start("http://code.google.com/p/craft-othello/");
 		lblPage->LinkVisited = true;
 	} catch (Exception^) {
 

@@ -341,26 +341,6 @@ bool frmMain::OnIdle() {
 	return continueGame;
 }
 
-System::Void frmMain::tmrGame_Tick(System::Object ^sender, System::EventArgs ^e) {
-/*	if (gamePaused)
-		return;
-	if (!game->canGoOn())
-		return;
-	tmrGame->Enabled = false;
-	if (gameRunning) {
-		//PlayerType current = (gcBlack->getCurrentPlayer() == Chess::BLACK) ? (blackType) : (whiteType);
-		//bool toggle = current != PlayerType::GUI && current != PlayerType::BIG_EAT && current != PlayerType::RANDOM;
-		//if (toggle)
-		//	for each (ToolStripMenuItem ^tsmnu in mnuTableSize->DropDownItems)
-		//		tsmnu->Enabled = false;
-		game->goOn();
-		//if (toggle)
-		//	for each (ToolStripMenuItem ^tsmnu in mnuTableSize->DropDownItems)
-		//		tsmnu->Enabled = true;
-	}
-*/
-}
-
 System::Void frmMain::mnu2GB_Click(System::Object^  sender, System::EventArgs^  e) {
 #ifdef MACHINE_X64
 	setTableSize(0x2000000);
@@ -1788,10 +1768,9 @@ frmMain::frmMain() {
 	mnuFreeMode->Checked = userInfo->FreeMode;
 	mnuAutoClean->Checked = userInfo->AutoCleanTable;
 	tspb1->Visible = userInfo->ShowProgress;
-	tmrGame->Interval = 1;
 	tsbtnLearn->Enabled = false;
 	mnuLearn->Enabled = false;
-	this->Text = applicationName + " Version " + applicationVersion;
+	this->Text = applicationName + " " + applicationVersion;
 	memorySize = getMemorySize();
 	guiTipper = createPlayer(PlayerType::STAR, Chess::AVAILABLE);
 	searchState = false;
@@ -2481,7 +2460,7 @@ void frmMain::setSelection(int x, int y) {
 }
 
 void frmMain::showAbout() {
-	//String^ message = applicationName + " Version " + applicationVersion + "\r\n"
+	//String^ message = applicationName + " " + applicationVersion + "\r\n"
 	//	+ "程序设计: Patrick\r\n"
 	//	+ "E-mail: patrick880905@sina.com\r\n"
 	//	+ "QQ: 511754081\r\n"
@@ -2697,7 +2676,7 @@ void frmMain::saveGameFile(String^ fileName) {
 	}
 	IO::StreamWriter^ writer = gcnew IO::StreamWriter(fs, System::Text::Encoding::UTF8);
 	try {
-		String^ versionInfo = __APP_NAME__ + " Version " + __APP_VERSION__; // reserved for further detection
+		String^ versionInfo = __APP_NAME__ + " " + __APP_VERSION__; // reserved for further detection
 		writer->WriteLine(versionInfo);
 		Board^ board = game->getInitialBoard();
 		for (int i = 0; i < HEIGHT; i++) {
@@ -3061,7 +3040,7 @@ void frmMain::setSearchState(bool searching) {
 			ssSpeed->Text = "";
 		}
 		if (!needShowPV()) {
-			ssPV->Text = "最优着法序列: N/A";
+			ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 		}
 	}
 }
@@ -3134,7 +3113,7 @@ void frmMain::resetComponents() {
 	ssResult->Text = "空闲";
 	ssSpeed->Text = "";
 	ssNodes->Text = "";
-	ssPV->Text = "最优着法序列: N/A";
+	ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 	tspb1->Value = 0;
 	tspb1->Style = ProgressBarStyle::Continuous;
 	setSelectedMove(-1, -1);
@@ -3579,7 +3558,7 @@ void frmMain::showChristmasWish() {
 	playSound(startSound);
 	frmWish^ wishWindow = gcnew frmWish(this);
 	wishWindow->Opacity = 0.0;
-	wishWindow->Text = applicationName + " Version " + applicationVersion;
+	wishWindow->Text = applicationName + " " + applicationVersion;
 	wishWindow->Show();
 	while (wishShowing) {
 		Threading::Thread::Sleep(50);
@@ -3660,7 +3639,7 @@ System::Void frmMain::mnuShowPV_Click(System::Object^  sender, System::EventArgs
 
 void frmMain::showPVChanged() {
 	if (searchState && !needShowPV()) {
-		ssPV->Text = "最优着法序列: N/A";
+		ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 	}
 	bool visible = userInfo->ShowPrincipleVariation;
 	if (visible == statusBar2->Visible) return;

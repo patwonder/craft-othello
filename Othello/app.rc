@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,3,0,3593
- PRODUCTVERSION 1,3,0,3593
+ FILEVERSION 1,3,0,3610
+ PRODUCTVERSION 1,3,0,3610
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -71,7 +71,7 @@ BEGIN
         BEGIN
             VALUE "Comments", "Patrick µÄºÚ°×Æå³ÌÐò"
             VALUE "CompanyName", "Patrick"
-            VALUE "FileDescription", "Craft Version 1.3.0"
+            VALUE "FileDescription", "Craft 1.3.0"
             VALUE "FileVersion", "1.3.0"
             VALUE "InternalName", "Craft"
             VALUE "LegalCopyright", "Copyright (C) 2008-2010  Patrick"
