@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPC_Calc", "..\MPC_Calc\MPC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptableCraft", "..\ScriptableCraft\ScriptableCraft.csproj", "{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Craft Setup - x64", "..\Craft Setup - x64\Craft Setup - x64.vdproj", "{9A653098-DCB9-4BA7-9547-E1957D305D28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -73,6 +75,10 @@ Global
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|Win32.Build.0 = Release|x86
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|x64.ActiveCfg = Release|x64
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|x64.Build.0 = Release|x64
+		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Debug|Win32.ActiveCfg = Debug
+		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Debug|x64.ActiveCfg = Debug
+		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Release|Win32.ActiveCfg = Release
+		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
