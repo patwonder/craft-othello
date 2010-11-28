@@ -3616,7 +3616,12 @@ SolverResult Solver::particularSolve(int color, int depth, int move) {
 	makeMove(move, my, op);
 	if (depth == 1) result = SolverResult(strongEvaluate(op, my), move);
 	else if (depth == 2) result = SolverResult(checkedSearch(op, my, depth - 1, -INFINITE, INFINITE, true), move);
-	else result = SolverResult(search_mpc(op, my, depth - 1, -MID_SEARCH_BOUND, MID_SEARCH_BOUND, true), move);
+	else {
+		if (depth <= MPC_DEPTH_THRESHOLD)
+			result = SolverResult(search(op, my, depth - 1, -MID_SEARCH_BOUND, MID_SEARCH_BOUND, true), move);
+		else
+			result = SolverResult(search_mpc(op, my, depth - 1, -MID_SEARCH_BOUND, MID_SEARCH_BOUND, true), move);
+	}
 	unMakeMove();
 	return result;
 }
