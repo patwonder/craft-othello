@@ -46,6 +46,7 @@ using namespace System::Collections;
 using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Drawing;
+using namespace System::IO;
 using namespace CraftEngine;
 
 namespace Othello {
@@ -228,17 +229,42 @@ namespace Othello {
 
 				 String^ executablePath = Application::ExecutablePath;
 
-				 String^ bookPath = executablePath->Substring(0, executablePath->LastIndexOf('\\') + 1) + "book.craft";
-				 String^ patternPath = executablePath->Substring(0, executablePath->LastIndexOf('\\') + 1) + "data.craft";
+				 String^ bookPath = Path::GetDirectoryName(executablePath) + "\\book.craft";
+				 String^ patternPath = Path::GetDirectoryName(executablePath) + "\\data.craft";
+				 // we store book in appdata path in order to solve UAC-related problems
+				 String^ bookStorePath = Application::LocalUserAppDataPath + "\\book.craft";
+				 
+				 // determine whether we should copy book file from the installation path
+				 bool needCopy = true;
+				 if (File::Exists(bookStorePath)) {
+					try {
+						DateTime org = File::GetLastWriteTimeUtc(bookPath);
+						DateTime store = File::GetLastWriteTimeUtc(bookStorePath);
+						if (org.CompareTo(store) <= 0) {
+							needCopy = false;
+						}
+					} catch (...) {
 
-				 char* bp = (char*)(int)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bookPath);
-				 char* pp = (char*)(int)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(patternPath);
+					}
+				 }
+
+				 if (needCopy) {
+					// copy the file
+					try {
+						File::Copy(bookPath, bookStorePath, true);
+					} catch (...) {
+					}
+				 }
+
+				 char* bp = (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bookStorePath);
+				 char* pp = (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(patternPath);
 				 successful = Solver::initialize(pp, bp);
 				 System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)bp);
 				 System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)pp);
 
 				 isDone = true;
 			 }
+
 			 void doInit() {
 				 using namespace System::Threading;
 				 Thread^ startUpThread = gcnew Thread(gcnew ThreadStart(this, &frmStartUp::initStarter));

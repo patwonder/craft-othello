@@ -111,12 +111,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1EEAD54B0CA544C3B947D7BFDCECF4EA"
-        "OwnerKey" = "8:_FD17EB3EDBEC4043AC0D4B0F9718C82C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_26E0AA102CDB4DF98097B7B8AFBED0F9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -225,6 +219,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5F36BB6076EE408A8BA839F6C2F1B14A"
+        "OwnerKey" = "8:_81424EE753C74E77B31689C9587C7CE1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5FE256308A004808821FDC23978B42EF"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -299,6 +299,18 @@
         {
         "MsmKey" = "8:_7F22FFF28E4E40F0A841DE8C68482C3F"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_81424EE753C74E77B31689C9587C7CE1"
+        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_81424EE753C74E77B31689C9587C7CE1"
+        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -597,18 +609,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD17EB3EDBEC4043AC0D4B0F9718C82C"
-        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_FD17EB3EDBEC4043AC0D4B0F9718C82C"
-        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "MsmSig" = "8:_UNDEFINED"
@@ -734,7 +734,7 @@
             "TargetName" = "8:wth_1978.wtb"
             "Tag" = "8:"
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
-            "Condition" = "8:"
+            "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -814,7 +814,7 @@
             "TargetName" = "8:wth_1977.wtb"
             "Tag" = "8:"
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
-            "Condition" = "8:"
+            "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -1694,7 +1694,7 @@
             "TargetName" = "8:WTH_2009.wtb"
             "Tag" = "8:"
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
-            "Condition" = "8:"
+            "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2074,7 +2074,7 @@
             "TargetName" = "8:wth_1979.wtb"
             "Tag" = "8:"
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
-            "Condition" = "8:"
+            "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2434,7 +2434,7 @@
             "TargetName" = "8:WTH_2010.wtb"
             "Tag" = "8:"
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
-            "Condition" = "8:"
+            "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
             "ReadOnly" = "11:FALSE"
@@ -2766,7 +2766,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Craft 1.3.0"
         "ProductCode" = "8:{7BC27173-AE8F-48D0-891D-DC688DBA89F4}"
-        "PackageCode" = "8:{9C149FE7-C91E-4D36-A569-DAFD800FE490}"
+        "PackageCode" = "8:{D29F23DD-2169-478F-B382-AEDF8EC1F3C4}"
         "UpgradeCode" = "8:{874DC322-366F-4F04-98A2-238FC1C23BCE}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -3640,11 +3640,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_1EEAD54B0CA544C3B947D7BFDCECF4EA"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_5F36BB6076EE408A8BA839F6C2F1B14A"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
+            "SourcePath" = "8:microsoft_vc90_crt_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -3654,11 +3654,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_FD17EB3EDBEC4043AC0D4B0F9718C82C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_81424EE753C74E77B31689C9587C7CE1"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -3673,7 +3673,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B4EF5CE3B3A242FF85941BBD12F36DC5"
             {
-            "SourcePath" = "8:..\\Othello\\Release\\CraftEngine.dll"
+            "SourcePath" = "8:..\\Othello\\x64\\Release\\CraftEngine.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"
@@ -3701,7 +3701,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F0A3136F4A4B417AA28EEC8C02286EBB"
             {
-            "SourcePath" = "8:..\\Othello\\Release\\Craft.exe"
+            "SourcePath" = "8:..\\Othello\\x64\\Release\\Craft.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"

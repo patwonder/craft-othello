@@ -82,6 +82,14 @@ namespace Othello {
 		if (res == Windows::Forms::DialogResult::No) return;
 		execute(UNINSTALLER + " /x " + productCode + " /passive");
 	}
+
+	void doReset() {
+		try {
+			File::Delete(Application::LocalUserAppDataPath + "\\book.craft");
+			File::Delete(Application::LocalUserAppDataPath + "\\config.craft");
+		} catch (...) {
+		}
+	}
 	
 	ref class GlobalObjects {
 	public:
@@ -108,6 +116,13 @@ int main(array<System::String ^> ^args) {
 		if (args->Length == 2 && 
 			(args[0]->ToUpper()->Equals("/UNINSTALL") || args[0]->ToUpper()->Equals("-UNINSTALL"))) {
 				doUninstall(args[1]);
+				return EXIT_SUCCESS;
+		}
+
+		//Reset user profile
+		if (args->Length == 1 && 
+			(args[0]->ToUpper()->Equals("/RESET") || args[0]->ToUpper()->Equals("-RESET"))) {
+				doReset();
 				return EXIT_SUCCESS;
 		}
 
