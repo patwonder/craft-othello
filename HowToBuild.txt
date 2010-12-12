@@ -1,0 +1,17 @@
+How to build Craft
+
+1    Check out Craft source from "http://craft-othello.googlecode.com/svn/trunk/". You can use whatever svn client you like.
+
+2    Open "Othello\Craft.sln" using Microsoft Visual Studio 2008 or higher.
+
+3    Right click "Craft Engine" in the solution explorer, and choose "Properties".
+
+4    Expand to "Configuration\Linker\Optimization". Make sure "Link time code generation" option has been set to "/ltcg" for the "Release" configurations you want to build(Win32 and x64). The picture "Optimize.png" illustrates this step.
+
+5    Build the project.
+
+6    To run Craft, copy the contents under "Othello\Game" folder into where the executable is built. For example, "Release|Win32" -> "Othello\Release", "Release|x64" -> "Othello\x64\Release". 
+
+Notes
+
+Since the offical release is built using Profile-Guided Optimizations(PGO), your own build may not be as fast as the official one. If you want to create your own PGO build, follow the instructions at http://msdn.microsoft.com/en-us/library/e7k32f4k(VS.80).aspx .
