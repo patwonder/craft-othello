@@ -45,6 +45,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_03B842CDF04347D6BF69EFA4AE5FE8FB"
+        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_03B842CDF04347D6BF69EFA4AE5FE8FB"
+        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_0D62F09AA5AA49A3A2F3F41E0DF13BBC"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -435,6 +447,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B77CD2A810AA4BD591F06E5EE7287C7A"
+        "OwnerKey" = "8:_03B842CDF04347D6BF69EFA4AE5FE8FB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B874A062321A47F7ADF252C5E8B1EB72"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -461,18 +479,6 @@
         {
         "MsmKey" = "8:_C0555AD2DB534EBDB2DDE4EFAD587AFC"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C0B11DABCF914CF7BF5AD7248E618FBF"
-        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C0B11DABCF914CF7BF5AD7248E618FBF"
-        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -539,12 +545,6 @@
         {
         "MsmKey" = "8:_E0768C54530146989BB2D3CBB39425D0"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_E2DA9607AE75448396B6FE009A913D7A"
-        "OwnerKey" = "8:_C0B11DABCF914CF7BF5AD7248E618FBF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -736,7 +736,7 @@
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
             "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -816,7 +816,7 @@
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
             "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -1696,7 +1696,7 @@
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
             "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -2076,7 +2076,7 @@
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
             "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -2436,7 +2436,7 @@
             "Folder" = "8:_479F9228A7F342299B5391B60B3048BC"
             "Condition" = "8:CBTHOR=1"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -3640,11 +3640,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C0B11DABCF914CF7BF5AD7248E618FBF"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_03B842CDF04347D6BF69EFA4AE5FE8FB"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
                 "Properties"
                 {
                 }
@@ -3654,11 +3654,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E2DA9607AE75448396B6FE009A913D7A"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B77CD2A810AA4BD591F06E5EE7287C7A"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86_x64.msm"
+            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
                 "Properties"
                 {
                 }
@@ -3673,7 +3673,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B4EF5CE3B3A242FF85941BBD12F36DC5"
             {
-            "SourcePath" = "8:..\\Othello\\x64\\Release\\CraftEngine.dll"
+            "SourcePath" = "8:..\\Othello\\Release\\CraftEngine.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"
@@ -3701,7 +3701,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F0A3136F4A4B417AA28EEC8C02286EBB"
             {
-            "SourcePath" = "8:..\\Othello\\x64\\Release\\Craft.exe"
+            "SourcePath" = "8:..\\Othello\\Release\\Craft.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"
