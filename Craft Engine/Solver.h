@@ -349,7 +349,7 @@ private:
 	static unsigned int stab_my[6561];
 	static unsigned int stab_op[6561];
 #endif
-	static int bits32(unsigned int num);
+	static int bits16(unsigned int num);
 	static void lineSearch(unsigned int my, unsigned int op, unsigned int& stable_my, unsigned int& stable_op);
 	static void calcStabilityBound(const BitBoard& my, const BitBoard& op, int& lower, int& upper);
 #endif
@@ -405,6 +405,8 @@ private:
 	bool checkedMakeMove(int pos, BitBoard& my, BitBoard& op);
 	bool testPutChess(int pos, const BitBoard& my, const BitBoard& op);
 	int evaluate(const BitBoard& my, const BitBoard& op);
+	int evaluate_direct(const BitBoard& my, const BitBoard& op);
+	int evaluate_diff(const BitBoard& my, const BitBoard& op);
 	int strongEvaluate(BitBoard& my, BitBoard& op);
 	int getResult(const BitBoard& my);
 	int getResultNoEmpty(const BitBoard& my);
@@ -582,13 +584,19 @@ private:
 	static float correctionDeltaSum[STAGES];
 	static int correctionOccurance[STAGES];
 
-	static int myPV[256][8][ACTUAL_PATTERNS];
-	static int opPV[256][8][ACTUAL_PATTERNS];
-	static int pPtr[256][8][ACTUAL_PATTERNS];
-	static int pVCount[256][8];
+	static unsigned short myPV[256][8][ACTUAL_PATTERNS]; // max 59049 < 65535
+	//static int opPV[256][8][ACTUAL_PATTERNS]; // since opPV = 2 * myPV
+	static unsigned char pPtr[256][8][ACTUAL_PATTERNS];
+	static unsigned char pVCount[256][8];
 	static int posDepend[MAXSTEP][ACTUAL_PATTERNS];
 	static int patternDependCount[ACTUAL_PATTERNS];
 	static int patternOffset[STAGES][ACTUAL_PATTERNS];
+
+	// for evaluate_diff
+	int pattern[ACTUAL_PATTERNS];
+	BitBoard diff_my_last;
+	BitBoard diff_op_last;
+	BitBoard diff_empty_last;
 
 	// learing part
 	static bool initPatterns(std::string patternPath);

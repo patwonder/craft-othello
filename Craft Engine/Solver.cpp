@@ -79,10 +79,10 @@ int *Solver::occurance;
 int Solver::patternCorrection[STAGES];
 float Solver::correctionDeltaSum[STAGES];
 int Solver::correctionOccurance[STAGES];
-int Solver::myPV[256][8][ACTUAL_PATTERNS];
-int Solver::opPV[256][8][ACTUAL_PATTERNS];
-int Solver::pPtr[256][8][ACTUAL_PATTERNS];
-int Solver::pVCount[256][8];
+unsigned short Solver::myPV[256][8][ACTUAL_PATTERNS];
+//int Solver::opPV[256][8][ACTUAL_PATTERNS];
+unsigned char Solver::pPtr[256][8][ACTUAL_PATTERNS];
+unsigned char Solver::pVCount[256][8];
 int Solver::posDepend[MAXSTEP][ACTUAL_PATTERNS];
 int Solver::patternDependCount[ACTUAL_PATTERNS];
 int Solver::patternOffset[STAGES][ACTUAL_PATTERNS];
@@ -769,6 +769,12 @@ Solver::Solver(int board[MAXSTEP]) {
 	selectedMove = focusedMove = -1;
 	partialDepth = 0;
 	partialResult = 0;
+
+	// for evaluate_diff
+	memset(pattern, 0, sizeof(pattern));
+	diff_my_last = 0;
+	diff_op_last = 0;
+	diff_empty_last = ~(diff_my_last | diff_op_last);
 }
 
 void Solver::setBookTolerance(int tolerance) {
@@ -1660,6 +1666,96 @@ int Solver::strongEvaluate(BitBoard& my, BitBoard& op) {
 }
 
 int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
+	return evaluate_diff(my, op);
+}
+
+int Solver::evaluate_diff(const BitBoard& my, const BitBoard& op) {
+	if (my && op) { // wipeout detection
+		BitBoard plusOne = (my & diff_empty_last) | (op & diff_my_last); // 0 -> 1 && 1 -> 2
+		BitBoard plusTwo = (op & diff_empty_last); // 0 -> 2
+		BitBoard empty = ~(my | op);
+		BitBoard minusOne = (my & diff_op_last) | (empty & diff_my_last); // 2 -> 1 && 1 -> 0
+		BitBoard minusTwo = (empty & diff_op_last); // 2 -> 0
+
+		diff_my_last = my;
+		diff_op_last = op;
+		diff_empty_last = empty;
+
+		unsigned char* ucmy = (unsigned char*)&plusOne;
+		unsigned char* ucop = (unsigned char*)&plusTwo;
+		unsigned char* ucrmy = (unsigned char*)&minusOne;
+		unsigned char* ucrop = (unsigned char*)&minusTwo;
+
+		int stage = rstage[empties];
+		int mybyte, opbyte, pCount, pCountM1;
+		for (int i = 0; i < 8; i++) {
+			mybyte = ucmy[i];
+			pCount = pVCount[mybyte][i];
+			pCountM1 = pCount - 1;
+			unsigned char* pPtrMybyte = pPtr[mybyte][i];
+			unsigned short* myPVMybyte = myPV[mybyte][i];
+			for (int j = 0; j < pCountM1; j += 2) {
+				pattern[pPtrMybyte[j]] += myPVMybyte[j];
+				pattern[pPtrMybyte[j + 1]] += myPVMybyte[j + 1];
+			}
+			if (pCount & 1) {
+				pattern[pPtrMybyte[pCountM1]] += myPVMybyte[pCountM1];
+			}
+			opbyte = ucop[i];
+			pCount = pVCount[opbyte][i];
+			pCountM1 = pCount - 1;
+			unsigned char* pPtrOpbyte = pPtr[opbyte][i];
+			unsigned short* opPVOpbyte = myPV[opbyte][i];
+			for (int j = 0; j < pCountM1; j += 2) {
+				pattern[pPtrOpbyte[j]] += (opPVOpbyte[j] << 1);
+				pattern[pPtrOpbyte[j + 1]] += (opPVOpbyte[j + 1] << 1);
+			}
+			if (pCount & 1) {
+				pattern[pPtrOpbyte[pCountM1]] += (opPVOpbyte[pCountM1] << 1);
+			}
+
+			// rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+			mybyte = ucrmy[i];
+			pCount = pVCount[mybyte][i];
+			pCountM1 = pCount - 1;
+			pPtrMybyte = pPtr[mybyte][i];
+			myPVMybyte = myPV[mybyte][i];
+			for (int j = 0; j < pCountM1; j += 2) {
+				pattern[pPtrMybyte[j]] -= myPVMybyte[j];
+				pattern[pPtrMybyte[j + 1]] -= myPVMybyte[j + 1];
+			}
+			if (pCount & 1) {
+				pattern[pPtrMybyte[pCountM1]] -= myPVMybyte[pCountM1];
+			}
+			opbyte = ucrop[i];
+			pCount = pVCount[opbyte][i];
+			pCountM1 = pCount - 1;
+			pPtrOpbyte = pPtr[opbyte][i];
+			opPVOpbyte = myPV[opbyte][i];
+			for (int j = 0; j < pCountM1; j += 2) {
+				pattern[pPtrOpbyte[j]] -= (opPVOpbyte[j] << 1);
+				pattern[pPtrOpbyte[j + 1]] -= (opPVOpbyte[j + 1] << 1);
+			}
+			if (pCount & 1) {
+				pattern[pPtrOpbyte[pCountM1]] -= (opPVOpbyte[pCountM1] << 1);
+			}
+		}
+		int sum = 0;
+		int *stageOffset = patternOffset[stage];
+		for (int i = 0; i < ACTUAL_PATTERNS; i += 2) {
+			sum += patternValues[pattern[i] + stageOffset[i]]
+				+ patternValues[pattern[i + 1] + stageOffset[i + 1]];
+		}
+		if (empties & 1) sum += patternCorrection[stage];
+
+		evnum++;
+		return sum;
+	} else {
+		return endToMid(getResult(my));
+	}
+}
+
+int Solver::evaluate_direct(const BitBoard& my, const BitBoard& op) {
 	if (my && op) { // wipeout detection
 		int pattern[ACTUAL_PATTERNS];
 		unsigned char* ucmy = (unsigned char*)&my;
@@ -1671,8 +1767,8 @@ int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
 			mybyte = ucmy[i];
 			pCount = pVCount[mybyte][i];
 			pCountM1 = pCount - 1;
-			int* pPtrMybyte = pPtr[mybyte][i];
-			int* myPVMybyte = myPV[mybyte][i];
+			unsigned char* pPtrMybyte = pPtr[mybyte][i];
+			unsigned short* myPVMybyte = myPV[mybyte][i];
 			for (int j = 0; j < pCountM1; j += 2) {
 				pattern[pPtrMybyte[j]] += myPVMybyte[j];
 				pattern[pPtrMybyte[j + 1]] += myPVMybyte[j + 1];
@@ -1683,14 +1779,14 @@ int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
 			opbyte = ucop[i];
 			pCount = pVCount[opbyte][i];
 			pCountM1 = pCount - 1;
-			int* pPtrOpbyte = pPtr[opbyte][i];
-			int* opPVOpbyte = opPV[opbyte][i];
+			unsigned char* pPtrOpbyte = pPtr[opbyte][i];
+			unsigned short* opPVOpbyte = myPV[opbyte][i];
 			for (int j = 0; j < pCountM1; j += 2) {
-				pattern[pPtrOpbyte[j]] += opPVOpbyte[j];
-				pattern[pPtrOpbyte[j + 1]] += opPVOpbyte[j + 1];
+				pattern[pPtrOpbyte[j]] += (opPVOpbyte[j] << 1);
+				pattern[pPtrOpbyte[j + 1]] += (opPVOpbyte[j + 1] << 1);
 			}
 			if (pCount & 1) {
-				pattern[pPtrOpbyte[pCountM1]] += opPVOpbyte[pCountM1];
+				pattern[pPtrOpbyte[pCountM1]] += (opPVOpbyte[pCountM1] << 1);
 			}
 		}
 		int sum = 0;
@@ -3264,7 +3360,7 @@ bool Solver::initPatterns(std::string patternPath) {
 	patternValues = new int[ALL_STAGE_PATTERN_COUNT];
 
 	memset(myPV, 0, sizeof(myPV));
-	memset(opPV, 0, sizeof(opPV));
+	//memset(opPV, 0, sizeof(opPV));
 	memset(pPtr, 0, sizeof(pPtr));
 	memset(pVCount, 0, sizeof(pVCount));
 	memset(posDepend, 0, sizeof(posDepend));
@@ -3399,14 +3495,14 @@ bool Solver::initPatterns(std::string patternPath) {
 			if (i & (1 << (7 - j)))
 				for (int k = 0; k < 8; k++)
 					for (int l = 0; l < ACTUAL_PATTERNS; l++) {
-						myPV[i][k][l] += posDepend[k * HEIGHT + j][l];
+						myPV[i][k][l] += (unsigned short)posDepend[k * HEIGHT + j][l];
 					}
 	for (int i = 0; i < 256; i++)
 		for (int j = 0; j < 8; j++)
 			for (int k = 0; k < ACTUAL_PATTERNS; k++)
 				if (myPV[i][j][k] != 0) {
-					pPtr[i][j][pVCount[i][j]] = k;
-					opPV[i][j][pVCount[i][j]] = myPV[i][j][k] << 1;
+					pPtr[i][j][pVCount[i][j]] = (unsigned char)k;
+					//opPV[i][j][pVCount[i][j]] = myPV[i][j][k] << 1;
 					myPV[i][j][pVCount[i][j]++] = myPV[i][j][k];
 				}
 	return true;
@@ -6650,8 +6746,8 @@ SolverResult Solver::partialSolveExact(int color, bool winLoss, int percentage, 
 }
 
 #ifdef STABILITY
-int Solver::bits32(unsigned int num) {
-	return bitTable[num >> 16] + bitTable[num & 0xffff];
+int Solver::bits16(unsigned int num) {
+	return bitTable[num];
 }
 
 void Solver::calcStabilityBound(const BitBoard& my, const BitBoard& op, int& lower, int& upper) {
@@ -6661,26 +6757,26 @@ void Solver::calcStabilityBound(const BitBoard& my, const BitBoard& op, int& low
 	unsigned int line_my = (unsigned int)(my >> 56);
 	unsigned int line_op = (unsigned int)(op >> 56);
 	int index = twoTo3Base[line_my] + (twoTo3Base[line_op] << 1);
-	stmy += bits32(stab_my[index]);
-	stop += bits32(stab_op[index]);
+	stmy += bits16(stab_my[index]);
+	stop += bits16(stab_op[index]);
 	// A1-H1
 	line_my = (unsigned int)(((my & 0x8080808080808080ull) * 0x2040810204081ull) >> 56);
 	line_op = (unsigned int)(((op & 0x8080808080808080ull) * 0x2040810204081ull) >> 56);
 	index = twoTo3Base[line_my] + (twoTo3Base[line_op] << 1);
-	stmy += bits32(CENTER_MASK & stab_my[index]);
-	stop += bits32(CENTER_MASK & stab_op[index]);
+	stmy += bits16(CENTER_MASK & stab_my[index]);
+	stop += bits16(CENTER_MASK & stab_op[index]);
 	// H1-H8
 	line_my = (unsigned int)(my & 0xffull);
 	line_op = (unsigned int)(op & 0xffull);
 	index = twoTo3Base[line_my] + (twoTo3Base[line_op] << 1);
-	stmy += bits32(stab_my[index]);
-	stop += bits32(stab_op[index]);
+	stmy += bits16(stab_my[index]);
+	stop += bits16(stab_op[index]);
 	// A8-H8
 	line_my = (unsigned int)(((my & 0x0101010101010101ull) * 0x102040810204080ull) >> 56);
 	line_op = (unsigned int)(((op & 0x0101010101010101ull) * 0x102040810204080ull) >> 56);
 	index = twoTo3Base[line_my] + (twoTo3Base[line_op] << 1);
-	stmy += bits32(CENTER_MASK & stab_my[index]);
-	stop += bits32(CENTER_MASK & stab_op[index]);
+	stmy += bits16(CENTER_MASK & stab_my[index]);
+	stop += bits16(CENTER_MASK & stab_op[index]);
 
 	lower = (stmy << 1) - MAXSTEP;
 	upper = MAXSTEP - (stop << 1);
