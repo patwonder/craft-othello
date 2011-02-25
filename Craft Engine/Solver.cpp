@@ -813,8 +813,17 @@ inline unsigned int Solver::getZobKey(const BitBoard& my, const BitBoard& op){
 }
 
 inline int Solver::bits(const BitBoard& bb) {
-	unsigned short* rbb = (unsigned short*)&bb;
-	return bitTable[*rbb] + bitTable[*(rbb + 1)] + bitTable[*(rbb + 2)] + bitTable[*(rbb + 3)];
+	//unsigned short* rbb = (unsigned short*)&bb;
+	//return bitTable[*rbb] + bitTable[*(rbb + 1)] + bitTable[*(rbb + 2)] + bitTable[*(rbb + 3)];
+	const unsigned long long m1 = 0x5555555555555555ull;
+	const unsigned long long m2 = 0x3333333333333333ull;
+	const unsigned long long m4 = 0x0f0f0f0f0f0f0f0full;
+	const unsigned long long h01 = 0x0101010101010101ull;
+	BitBoard x = bb;
+	x -= (x >> 1) & m1;
+	x = (x & m2) + ((x >> 2) & m2);
+	x = (x + (x >> 4)) & m4;
+	return (x * h01) >> 56;
 }
 
 // count the mobility of b1 over b2
@@ -2112,8 +2121,14 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 			}
 		}
 	}
-	if (alpha == -MAXSTEP) {
-		palpha--;
+	int lowerbound = 
+#ifdef USE_STABILITY
+		lower;
+#else
+		-MAXSTEP;
+#endif
+	if (maxresult == lowerbound) {
+		palpha = alpha - 1;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
 	if (palpha == alpha)
@@ -2994,7 +3009,9 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 
 		// otherwise, return to normal search
 #ifdef USE_MTD_F
-		results[i] = -mtdExact(op, my, -beta, -results[i], true);
+		results[i] = (epcStage >= EPC_STAGES)
+			? -mtdExact(op, my, -beta, -results[i], true)
+			: -mtdExact_epc(op, my, -beta, -results[i], true);
 #else
 		results[i] = -(this->*searchFunction)(op, my, -beta, -results[i], true);
 #endif
@@ -3027,8 +3044,14 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	}
 	percent = 100;
 
-	if (maxresult == -MAXSTEP) {
-		palpha--;
+	int lowerbound = 
+#ifdef USE_STABILITY
+		lower;
+#else
+		-MAXSTEP;
+#endif
+	if (maxresult == lowerbound) {
+		palpha = alpha - 1;
 		maxptr = choice;
 	}
 	if (maxresult >= beta && pbeta == beta) 
@@ -5732,8 +5755,14 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 			}
 		}
 	}
-	if (alpha == -MAXSTEP) {
-		palpha--;
+	int lowerbound = 
+#ifdef USE_STABILITY
+		lower;
+#else
+		-MAXSTEP;
+#endif
+	if (maxresult == lowerbound) {
+		palpha = alpha - 1;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
 	if (palpha == alpha)
@@ -6094,8 +6123,14 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 			}
 		}
 	}
-	if (alpha == -MAXSTEP) {
-		palpha--;
+	int lowerbound = 
+#ifdef USE_STABILITY
+		lower;
+#else
+		-MAXSTEP;
+#endif
+	if (maxresult == lowerbound) {
+		palpha = alpha - 1;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
 	if (palpha == alpha)
@@ -6135,19 +6170,24 @@ int Solver::mtdExact_main(BitBoard& my, BitBoard& op, int alpha, int beta, bool 
 	int eval;
 
 	// use transposition table to predict evaluation
-	int zobPos = getZobKey() & currentTableMask;
-	TPInfo* info2 = &tpDeep[zobPos];
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	TPInfo* info2 = &entry->deeper;
 	if (info2->my == my && info2->op == op && info2->depth >= empties) {
-		eval = info2->value;
+		eval = info2->lower;
+		if (eval < -MAXSTEP) eval = info2->upper;
 	} else {
-		TPInfo* info = &tpNew[zobPos];
+		TPInfo* info = &entry->newer;
 		if (info->my == my && info->op == op && info->depth >= empties)
-			eval = info->value;
+			eval = info->lower;
+			if (eval < -MAXSTEP) eval = info->upper;
 		else {
 			if (info2->my == my && info2->op == op) {
-				eval = (info2->value + RULER) / RULER / 2 * 2;
+				int value = (info2->lower < -INFINITE) ? info2->upper : info2->lower;
+				eval = (value + RULER) / RULER / 2 * 2;
 			} else if (info->my == my && info->op == op) {
-				eval = (info->value + RULER) / RULER / 2 * 2;
+				int value = (info->lower < -INFINITE) ? info->upper : info->lower;
+				eval = (value + RULER) / RULER / 2 * 2;
 			} else
 				eval = (lower + upper) / 4 * 2;
 		}
@@ -6455,7 +6495,7 @@ void Solver::saveTp(int zobPos, const BitBoard& my, const BitBoard& op,
 		}
 		return;
 	}
-	if (depth >= info->depth - DEEP_COVER) {
+	if (depth >= entry->deeper.depth - DEEP_COVER) {
 		entry->newer = entry->deeper;
 		info = &entry->deeper;
 	}
