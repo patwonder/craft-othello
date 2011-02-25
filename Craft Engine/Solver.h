@@ -398,8 +398,6 @@ private:
 	int fastSearchExact_ThreeEmpty(BitBoard& my, BitBoard& op, int empty1, int empty2, int empty3, int alpha, int beta, bool lastFound);
 	int fastSearchExact_FourEmpty(BitBoard& my, BitBoard& op, int empty1, int empty2, int empty3, int empty4, int alpha, int beta, bool lastFound);
 	int searchBigEat(int color, int alpha, int beta, int depth, bool lastFound);
-	int uncertainSearch(BitBoard& my, BitBoard& op, int leastdepth, int alpha, int beta, bool lastFound);
-	SolverResult trySolveExact(BitBoard& my, BitBoard& op, bool& successful);
 	int endToMid(int value);
 	void makeMove(int pos, BitBoard& my, BitBoard& op);
 	bool checkedMakeMove(int pos, BitBoard& my, BitBoard& op);
@@ -432,13 +430,15 @@ private:
 
 	// the transposition table stuff
 	struct TPInfo {
-		int value;
-		int valueType;
-		int depth;
-		int pos;
+		int lower;
+		int upper;
+		short depth;
+		short pos;
+		unsigned int flags;
 		BitBoard my;
 		BitBoard op;
 	};
+	static const unsigned int TP_MPC = 0x1; // mark mpc nodes
 
 	void initPV();
 	void setPV(BitBoard& my, BitBoard& op, int depth, int firstMove);
@@ -458,8 +458,15 @@ private:
 	static const int TYPE_BETA = 2;
 	//static const int RESERVED_EMPTY = 5;
 
-	static TPInfo* tpDeep;
-	static TPInfo* tpNew;
+	// new table structure, 64 bytes long which fits perfectly in a cache line
+	struct TPEntry {
+		TPInfo deeper;
+		TPInfo newer;
+	};
+
+	static TPEntry* tp;
+	void saveTp(int zobPos, const BitBoard& my, const BitBoard& op, 
+		int lower, int upper, int pos, int depth, unsigned int flags);
 
 	static void initTable();
 	static bool checkTableSize(size_t tableSize);

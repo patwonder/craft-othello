@@ -69,8 +69,7 @@ unsigned char Solver::fastCountPattern[8 * 256];
 int Solver::fastCountPattern[8 * 256];
 #endif
 BitBoard Solver::neighborhood[MAXSTEP];
-Solver::TPInfo* Solver::tpNew = NULL;
-Solver::TPInfo* Solver::tpDeep = NULL;
+Solver::TPEntry* Solver::tp = NULL;
 size_t Solver::currentTableSize;
 unsigned int Solver::currentTableMask;
 int *Solver::patternValues;
@@ -678,8 +677,7 @@ void Solver::lineSearch(unsigned int my, unsigned int op, unsigned int& stable_m
 #endif
 
 void Solver::initTable() {
-	tpDeep = new TPInfo[TABLE_LEN];
-	tpNew = new TPInfo[TABLE_LEN];
+	tp = new TPEntry[TABLE_LEN];
 	currentTableSize = TABLE_LEN;
 	currentTableMask = TABLE_MASK;
 	clearCache();
@@ -745,13 +743,11 @@ bool Solver::initialize(std::string patternPath, std::string bookPath) {
 }
 
 void Solver::cleanup() {
-	delete[] tpDeep;
-	delete[] tpNew;
+	delete[] tp;
 	delete[] patternValues;
 	delete book;
 	delete staticSolver;
-	tpDeep = NULL;
-	tpNew = NULL;
+	tp = NULL;
 	patternValues = NULL;
 	book = NULL;
 	staticSolver = NULL;
@@ -1834,125 +1830,76 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 #endif
 	int sortSearchDepth = getEndSortSearchDepth();
 	int tabledepth = empties + EPC_STAGES;
-	TPInfo* info;
-	TPInfo* info2;
+	TPInfo* infoNewer;
+	TPInfo* infoDeeper;
 	int palpha = alpha, pbeta = beta;
 	int result, maxresult = -INFINITE;
 	int bestMove = -1, bestMove2 = -1, maxptr = -1;
 	// using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth == tabledepth) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				return info2->value;
-			case TYPE_ALPHA :
-				if (info2->value <= alpha)
-					return info2->value;
-				if (info2->value < beta) 
-					beta = info2->value;
-				break;
-			default :
-				if (info2->value >= beta) 
-					return info2->value;
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op) {
+		if (infoDeeper->depth == tabledepth) {
+			if (infoDeeper->lower >= beta)
+				return infoDeeper->lower;
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
-		} else if (info2->depth < empties) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+			if (infoDeeper->upper < beta)
+				beta = infoDeeper->upper;
+		} else if (infoDeeper->depth < empties) {
+			if (infoDeeper->lower >= getEndSortSearchUpperBound(beta))
+				return infoDeeper->lower - INFINITE + MAXSTEP;
+			if (infoDeeper->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoDeeper->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
-		}		
-		if (info2->depth >= sortSearchDepth && info2->value < END_WIPEOUT_THRESHOLD)
-			bestMove = info2->pos;
+			if (infoDeeper->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoDeeper->upper + INFINITE - MAXSTEP;
+			if (infoDeeper->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoDeeper->upper + INFINITE - MAXSTEP;
+		}
+		if (infoDeeper->depth >= sortSearchDepth && infoDeeper->lower < END_WIPEOUT_THRESHOLD)
+			bestMove = infoDeeper->pos;
 	}
 
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth == tabledepth) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				return info->value;
-			case TYPE_ALPHA :
-				if (info->value <= alpha)
-					return info->value;
-				if (info->value < beta) 
-					beta = info->value;
-				break;
-			default :
-				if (info->value >= beta) 
-					return info->value;
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op) {
+		if (infoNewer->depth == tabledepth) {
+			if (infoNewer->lower >= beta)
+				return infoNewer->lower;
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
-		} else if (info->depth < empties) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+			if (infoNewer->upper < beta)
+				beta = infoNewer->upper;
+		} else if (infoNewer->depth < empties) {
+			if (infoNewer->lower >= getEndSortSearchUpperBound(beta))
+				return infoNewer->lower - INFINITE + MAXSTEP;
+			if (infoNewer->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoNewer->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoNewer->upper + INFINITE - MAXSTEP;
+			if (infoNewer->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoNewer->upper + INFINITE - MAXSTEP;
 		}
-		if (info->pos != bestMove && info->depth >= sortSearchDepth && info->value < END_WIPEOUT_THRESHOLD)
-			bestMove2 = info->pos;
+		if (infoNewer->pos != bestMove && infoNewer->depth >= sortSearchDepth && infoNewer->lower < END_WIPEOUT_THRESHOLD)
+			bestMove2 = infoNewer->pos;
 	}
-	
+
 	BitBoard mob = mobility(my, op);
 
 	if (mob == 0) {
@@ -2018,37 +1965,38 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 			emptySortStack[sortStackPtr++] = i;
 		}
 	}
-	
+
 #ifdef USE_ETC
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		EmptyNode* pos = emptySortStack[i];
 		makeMove(pos->pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry->deeper;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		info = &entry->newer;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
 		unMakeMove();
 	}
@@ -2063,9 +2011,9 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 				sortResultStack[j] = result = (sortSearchDepth == 1) ?
 					(-evaluate(op, my))
 					: ((sortSearchDepth <= MID_USE_SORT_DEPTH) ? 
-						-fastSearch(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true)
-						: -search(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true));
-					/*-fastSearch(op, my, 1, -INFINITE, INFINITE, true);*/
+					-fastSearch(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true)
+					: -search(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true));
+				/*-fastSearch(op, my, 1, -INFINITE, INFINITE, true);*/
 				if (aborted) return 0;
 				if (result >= END_WIPEOUT_THRESHOLD)
 					sortResultStack[j] += END_VERY_HIGH_EVAL_BONUS;
@@ -2079,26 +2027,17 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 				}
 				unMakeMove();
 				if (sortSearchDepth == 1) continue;
+				int tmpRes = result - INFINITE + MAXSTEP;
 				if (result >= getEndSortSearchUpperBound(beta)) {
-					if (info2->depth - DEEP_COVER <= tabledepth) {
-						(*info) = (*info2);
-						info2->my = my; info2->op = op;
-						info2->depth = tabledepth;
-						info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info2->value = result - INFINITE + MAXSTEP;
-						info2->pos = current;
-					} else {
-						info->my = my; info->op = op;
-						info->depth = tabledepth;
-						info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info->value = result - INFINITE + MAXSTEP;
-						info->pos = current;
-					}
+					if (beta == pbeta)
+						saveTp(zobPos, my, op, tmpRes, MAXSTEP + 1, current, tabledepth, 0);
+					else
+						saveTp(zobPos, my, op, tmpRes, tmpRes, current, tabledepth, 0);
 					sortStackPtr = pSortStackPtr;
-					return result - INFINITE + MAXSTEP;
+					return tmpRes;
 				}
 				if (result > getEndSortSearchUpperBound(alpha)) {
-					alpha = result - INFINITE + MAXSTEP;
+					alpha = tmpRes;
 					maxresult = alpha;
 					maxptr = current;
 				}
@@ -2142,20 +2081,10 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 			}
 			if (result >= beta) {
 				unMakeMoveAndSetEmpties();
-				if (info2->depth - DEEP_COVER <= tabledepth) {
-					(*info) = (*info2);
-					info2->my = my; info2->op = op;
-					info2->depth = tabledepth;
-					info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info2->value = result;
-					info2->pos = current;
-				} else {
-					info->my = my; info->op = op;
-					info->depth = tabledepth;
-					info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info->value = result;
-					info->pos = current;
-				}
+				if (beta == pbeta)
+					saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+				else
+					saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 				sortStackPtr = pSortStackPtr;
 				return result;
 			}
@@ -2168,20 +2097,10 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 		if (aborted) return 0;
 		unMakeMoveAndSetEmpties();
 		if (result >= beta) {
-			if (info2->depth - DEEP_COVER <= tabledepth) {
-				(*info) = (*info2);
-				info2->my = my; info2->op = op;
-				info2->depth = tabledepth;
-				info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info2->value = result;
-				info2->pos = current;
-			} else {
-				info->my = my; info->op = op;
-				info->depth = tabledepth;
-				info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info->value = result;
-				info->pos = current;
-			}
+			if (beta == pbeta)
+				saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+			else
+				saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 			sortStackPtr = pSortStackPtr;
 			return result;
 		}
@@ -2197,22 +2116,10 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 		palpha--;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
-	if (info2->depth - DEEP_COVER <= tabledepth) {
-		(*info) = (*info2);
-		if (palpha == alpha) info2->valueType = TYPE_ALPHA;
-		else info2->valueType = TYPE_EXACT;
-		info2->my = my; info2->op = op;
-		info2->depth = tabledepth;
-		info2->value = maxresult;
-		info2->pos = maxptr;
-	} else {
-		if (palpha == alpha) info->valueType = TYPE_ALPHA;
-		else info->valueType = TYPE_EXACT;
-		info->my = my; info->op = op;
-		info->depth = tabledepth;
-		info->value = maxresult;
-		info->pos = maxptr;
-	}
+	if (palpha == alpha)
+		saveTp(zobPos, my, op, -MAXSTEP - 1, maxresult, maxptr, tabledepth, 0);
+	else
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, tabledepth, 0);
 	sortStackPtr = pSortStackPtr;
 	return maxresult;
 }
@@ -2233,23 +2140,16 @@ int Solver::fastSearchExact_TwoEmpty(BitBoard& my, BitBoard& op, int empty1, int
 			if (maxresult >= beta) return maxresult;
 		} else {
 			// ev will remain unchanged or increase by at least 2(ev >= 0)
-			if (ev >= 0) {
-				if (ev + 2 >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev + 2;
-				}
-			} else {
-				if (ev >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev;
-				}
+			maxresult = ev + 2 - (((unsigned int)(ev & 0x80000000UL)) >> 30);
+			if (maxresult >= beta) {
+				black = bstack[stackptr]; white = wstack[stackptr];
+				return maxresult;
 			}
 			if (flipped = countFunction[empty2](my)) {
 				maxresult = ev + (flipped + 1) * 2;
 				black = bstack[stackptr]; white = wstack[stackptr];
 				if (maxresult >= beta) return maxresult;
 			} else {
-				maxresult = (ev >= 0) ? ev + 2 : ev;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			}
 		}
@@ -2264,22 +2164,15 @@ int Solver::fastSearchExact_TwoEmpty(BitBoard& my, BitBoard& op, int empty1, int
 			black = bstack[stackptr]; white = wstack[stackptr];
 		} else {
 			// ev will remain unchanged or increase by at least 2(ev >= 0)
-			if (ev >= 0) {
-				if (ev + 2 >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev + 2;
-				}
-			} else {
-				if (ev >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev;
-				}
+			result = ev + 2 - (((unsigned int)(ev & 0x80000000UL)) >> 30);
+			if (result >= beta) {
+				black = bstack[stackptr]; white = wstack[stackptr];
+				return result;
 			}
 			if (flipped = countFunction[empty1](my)) {
 				result = ev + (flipped + 1) * 2;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			} else {
-				result = (ev >= 0) ? ev + 2 : ev;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			}
 		}
@@ -2314,23 +2207,16 @@ int Solver::fastSearchExact_TwoEmpty_NoLastFound(BitBoard& my, BitBoard& op, int
 			if (maxresult >= beta) return maxresult;
 		} else {
 			// ev will remain unchanged or increase by at least 2(ev >= 0)
-			if (ev >= 0) {
-				if (ev + 2 >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev + 2;
-				}
-			} else {
-				if (ev >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev;
-				}
+			maxresult = ev + 2 - (((unsigned int)(ev & 0x80000000UL)) >> 30);
+			if (maxresult >= beta) {
+				black = bstack[stackptr]; white = wstack[stackptr];
+				return maxresult;
 			}
 			if (flipped = countFunction[empty2](my)) {
 				maxresult = ev + (flipped + 1) * 2;
 				black = bstack[stackptr]; white = wstack[stackptr];
 				if (maxresult >= beta) return maxresult;
 			} else {
-				maxresult = (ev >= 0) ? ev + 2 : ev;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			}
 		}
@@ -2345,22 +2231,15 @@ int Solver::fastSearchExact_TwoEmpty_NoLastFound(BitBoard& my, BitBoard& op, int
 			black = bstack[stackptr]; white = wstack[stackptr];
 		} else {
 			// ev will remain unchanged or increase by at least 2(ev >= 0)
-			if (ev >= 0) {
-				if (ev + 2 >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev + 2;
-				}
-			} else {
-				if (ev >= beta) {
-					black = bstack[stackptr]; white = wstack[stackptr];
-					return ev;
-				}
+			result = ev + 2 - (((unsigned int)(ev & 0x80000000UL)) >> 30);
+			if (result >= beta) {
+				black = bstack[stackptr]; white = wstack[stackptr];
+				return result;
 			}
 			if (flipped = countFunction[empty1](my)) {
 				result = ev + (flipped + 1) * 2;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			} else {
-				result = (ev >= 0) ? ev + 2 : ev;
 				black = bstack[stackptr]; white = wstack[stackptr];
 			}
 		}
@@ -2683,67 +2562,62 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	int adjustedIterStart = -1;
 	int adjustedIterResult = 0;
 	int choice = -1;
-	//using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	TPInfo* info = &tpNew[zobPos];
 	int bestMove = -1/*, bestMove2 = -1*/;
-	TPInfo* info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op)
-		if (info2->depth >= tabledepth) {
-			//hit++;
-			if (info2->valueType == TYPE_EXACT) {
-				setPV(my, op, tabledepth, info2->pos);
-				return SolverResult(info2->value, info2->pos);
+
+	//using transposition table
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	TPInfo* infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op)
+		if (infoDeeper->depth >= tabledepth) {
+			if (infoDeeper->lower == infoDeeper->upper) {
+				setPV(my, op, tabledepth, infoDeeper->pos);
+				return SolverResult(infoDeeper->lower, infoDeeper->pos);
 			}
-			if (info2->valueType == TYPE_ALPHA) {
-				if (info2->value < beta) beta = info2->value;
-			} else if (info2->valueType == TYPE_BETA) {
-				if (info2->value >= beta) {
-					setPV(my, op, tabledepth, info2->pos);
-					return SolverResult(info2->value, info2->pos);
-				}
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-					choice = maxptr;
-				}
+			if (infoDeeper->upper < beta) beta = infoDeeper->upper;
+			if (infoDeeper->lower >= beta) {
+				setPV(my, op, tabledepth, infoDeeper->pos);
+				return SolverResult(infoDeeper->lower, infoDeeper->pos);
 			}
-		} else if ((info2->depth >= MIN_ITER_START) 
-			&& ((info2->valueType == TYPE_EXACT) ||
-				(info2->value == MAXSTEP && info2->valueType == TYPE_BETA && info2->depth >= empties))) {
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
+				choice = maxptr;
+			}
+		} else if ((infoDeeper->depth >= MIN_ITER_START) 
+			&& ((infoDeeper->lower == infoDeeper->upper) ||
+				(infoDeeper->lower == MAXSTEP && infoDeeper->depth >= empties))) {
 				//adjust iterative deepening
-				bestMove = info2->pos;
-				adjustedIterStart = info2->depth + 1;
-				adjustedIterResult = info2->value;
+				bestMove = infoDeeper->pos;
+				adjustedIterStart = infoDeeper->depth + 1;
+				adjustedIterResult = infoDeeper->lower;
 		}
-	if (info->my == my && info->op == op)
-		if (info->depth >= tabledepth) {
-			if (info->valueType == TYPE_EXACT) {
-				setPV(my, op, tabledepth, info->pos);
-				return SolverResult(info->value, info->pos);
+	TPInfo* infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op)
+		if (infoNewer->depth >= tabledepth) {
+			if (infoNewer->lower == infoNewer->upper) {
+				setPV(my, op, tabledepth, infoNewer->pos);
+				return SolverResult(infoNewer->lower, infoNewer->pos);
 			}
-			if (info->valueType == TYPE_ALPHA) {
-				if (info->value < beta) beta = info->value;
-			} else if (info->valueType == TYPE_BETA) {
-				if (info->value >= beta) {
-					setPV(my, op, tabledepth, info->pos);
-					return SolverResult(info->value, info->pos);
-				}
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-					choice = maxptr;
-				}
+			if (infoNewer->upper < beta) beta = infoNewer->upper;
+			if (infoNewer->lower >= beta) {
+				setPV(my, op, tabledepth, infoNewer->pos);
+				return SolverResult(infoNewer->lower, infoNewer->pos);
 			}
-		} else if ((info->depth >= MIN_ITER_START)
-			&& ((info->valueType == TYPE_EXACT) ||
-				(info->value == MAXSTEP && info->valueType == TYPE_BETA && info->depth >= empties))
-			&& (info->depth >= adjustedIterStart)) { //adjust iterative deepening
-				bestMove = info->pos;
-				adjustedIterStart = info->depth + 1;
-				adjustedIterResult = info->value;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
+				choice = maxptr;
+			}
+		} else if ((infoNewer->depth >= MIN_ITER_START)
+			&& ((infoNewer->lower == infoNewer->upper) ||
+				(infoNewer->lower == MAXSTEP && infoNewer->depth >= empties))
+			&& (infoNewer->depth >= adjustedIterStart)) { //adjust iterative deepening
+				bestMove = infoNewer->pos;
+				adjustedIterStart = infoNewer->depth + 1;
+				adjustedIterResult = infoNewer->lower;
 		}
 	int pptr = 0;
 	int opColor = BLACK + WHITE - color;
@@ -2763,16 +2637,17 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			}
 			makeMove(i->pos, my, op);
 
-			int zobKey2 = getZobKey();
-			TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-			if (info3->my == op && info3->op == my 
-				&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH) {
-					results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
+			int zobKey2 = getZobKey(op, my);
+			TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
+			TPInfo* info = &entry2->deeper;
+			if (info->my == op && info->op == my 
+				&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
+					results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
 			} else {
-				info3 = &tpNew[zobKey2 & currentTableMask];
-				if (info3->my == op && info3->op == my 
-					&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH) {
-						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
+				info = &entry2->newer;
+				if (info->my == op && info->op == my 
+					&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
+						results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
 				}
 				else 
 					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
@@ -2803,11 +2678,12 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		EmptyNode* pos = positions[i];
 		makeMove(pos->pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry2->deeper;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos->pos;
 			choice = maxptr;
@@ -2817,10 +2693,10 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 				return SolverResult(alpha, choice);
 			}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		info = &entry2->newer;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos->pos;
 			choice = maxptr;
@@ -3155,30 +3031,12 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		palpha--;
 		maxptr = choice;
 	}
-	if (info2->depth - DEEP_COVER <= tabledepth) {
-		(*info) = (*info2);
-		info2->my = my; info2->op = op;
-		info2->depth = tabledepth;
-		if (maxresult >= beta && pbeta == beta) 
-			info2->valueType = TYPE_BETA;
-		else if (palpha == alpha) 
-			info2->valueType = TYPE_ALPHA;
-		else 
-			info2->valueType = TYPE_EXACT;
-		info2->pos = maxptr;
-		info2->value = maxresult;
-	} else {
-		info->my = my; info->op = op;
-		info->depth = tabledepth;
-		if (maxresult >= beta && pbeta == beta) 
-			info->valueType = TYPE_BETA;
-		else if (palpha == alpha) 
-			info->valueType = TYPE_ALPHA;
-		else 
-			info->valueType = TYPE_EXACT;
-		info->pos = maxptr;
-		info->value = maxresult;
-	}
+	if (maxresult >= beta && pbeta == beta) 
+		saveTp(zobPos, my, op, maxresult, MAXSTEP + 1, maxptr, tabledepth, 0);
+	else if (palpha == alpha) 
+		saveTp(zobPos, my, op, -MAXSTEP - 1, maxresult, maxptr, tabledepth, 0);
+	else 
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, tabledepth, 0);
 	return SolverResult(maxresult, choice);
 }
 
@@ -3794,63 +3652,58 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	int adjustedIterResult = 0;
 
 	//using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	TPInfo* info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op)
-		if (info2->depth == depth) {
-			if (info2->valueType == TYPE_EXACT) {
-				setPV(my, op, depth, info2->pos);
-				return SolverResult(info2->value, info2->pos);
+	unsigned int flags = (depth > MPC_DEPTH_THRESHOLD) ? TP_MPC : 0;
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	TPInfo* infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op)
+		if (infoDeeper->depth == depth && ((infoDeeper->flags & TP_MPC) == 0 || (flags & TP_MPC))) {
+			if (infoDeeper->lower == infoDeeper->upper) {
+				setPV(my, op, depth, infoDeeper->pos);
+				return SolverResult(infoDeeper->lower, infoDeeper->pos);
 			}
-			if (info2->valueType == TYPE_ALPHA) {
-//				if (info2->value <= alpha) return SolverResult(info2->value, info2->pos);
-				if (info2->value < beta) beta = info2->value;
-			} else if (info2->valueType == TYPE_BETA) {
-				if (info2->value >= beta) {
-					setPV(my, op, depth, info2->pos);
-					return SolverResult(info2->value, info2->pos);
-				}
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+			if (infoDeeper->upper < beta) beta = infoDeeper->upper;
+			if (infoDeeper->lower >= beta) {
+				setPV(my, op, depth, infoDeeper->pos);
+				return SolverResult(infoDeeper->lower, infoDeeper->pos);
 			}
-		} else if ((info2->depth >= MIN_ITER_START) && (info2->depth < depth) 
-			&& (info2->valueType == TYPE_EXACT)) { //adjust iterative deepening
-				bestMove = info2->pos;
-				adjustedIterStart = info2->depth + 1;
-				adjustedIterResult = info2->value;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
+			}
+		} else if ((infoDeeper->depth >= MIN_ITER_START) && (infoDeeper->depth < depth) 
+			&& (infoDeeper->lower == infoDeeper->upper)) { //adjust iterative deepening
+				bestMove = infoDeeper->pos;
+				adjustedIterStart = infoDeeper->depth + 1;
+				adjustedIterResult = infoDeeper->lower;
 		}
-	TPInfo* info = &tpNew[zobPos];
-	if (info->my == my && info->op == op)
-		if (info->depth == depth) {
-			if (info->valueType == TYPE_EXACT) {
-				setPV(my, op, depth, info->pos);
-				return SolverResult(info->value, info->pos);
-			} if (info->valueType == TYPE_ALPHA) {
-//				if (info->value <= alpha) return SolverResult(info->value, info->pos);
-				if (info->value < beta) beta = info->value;
-			} else if (info->valueType == TYPE_BETA) {
-				if (info->value >= beta) {
-					setPV(my, op, depth, info->pos);
-					return SolverResult(info->value, info->pos);
-				}
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	TPInfo* infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op)
+		if (infoNewer->depth == depth && ((infoNewer->flags & TP_MPC) == 0 || (flags & TP_MPC))) {
+			if (infoNewer->lower == infoNewer->upper) {
+				setPV(my, op, depth, infoNewer->pos);
+				return SolverResult(infoNewer->lower, infoNewer->pos);
 			}
-		} else if ((info->depth >= MIN_ITER_START) && (info->depth < depth) 
-			&& (info->valueType == TYPE_EXACT) && (info->depth >= adjustedIterStart)) { //adjust iterative deepening
-				bestMove = info->pos;
-				adjustedIterStart = info->depth + 1;
-				adjustedIterResult = info->value;
+			if (infoNewer->upper < beta) beta = infoNewer->upper;
+			if (infoNewer->lower >= beta) {
+				setPV(my, op, depth, infoNewer->pos);
+				return SolverResult(infoNewer->lower, infoNewer->pos);
+			}
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
+			}
+		} else if ((infoNewer->depth >= MIN_ITER_START) && (infoNewer->depth < depth) 
+			&& (infoNewer->lower == infoNewer->upper) && (infoNewer->depth >= adjustedIterStart)) { //adjust iterative deepening
+				bestMove = infoNewer->pos;
+				adjustedIterStart = infoNewer->depth + 1;
+				adjustedIterResult = infoNewer->lower;
 		}
 	int pptr = 0;
 	int opColor = BLACK + WHITE - color;
-	
+
 	// sort the moves
 	if (bestMove != -1)
 		positions[pptr++] = bestMove;
@@ -3861,16 +3714,17 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				pptr++; continue;
 			}
 			makeMove(moveOrder[i], my, op);
-			int zobKey2 = getZobKey();
-			TPInfo* info3 = &tpNew[zobKey2 & currentTableMask];
-			if (info3->my == op && info3->op == my 
-				&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH) {
-					results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
+			int zobKey2 = getZobKey(op, my);
+			TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
+			TPInfo* info = &entry2->deeper;
+			if (info->my == op && info->op == my 
+				&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
+					results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
 			} else {
-				info3 = &tpDeep[zobKey2 & currentTableMask];
-				if (info3->my == op && info3->op == my 
-					&& info3->valueType == TYPE_EXACT && info3->depth >= SORT_DEPTH)
-						results[pptr] = (info3->depth >= empties) ? (-info3->value * RULER) : (-info3->value);
+				info = &entry2->newer;
+				if (info->my == op && info->op == my 
+					&& info->lower == info->upper && info->depth >= SORT_DEPTH)
+						results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
 				else 
 					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 				if (aborted) {
@@ -3903,11 +3757,12 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		int pos = positions[i];
 		makeMove(pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry2->deeper;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& ((info->flags & TP_MPC) == 0 || (flags & TP_MPC)) && -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -3916,10 +3771,10 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				return SolverResult(alpha, maxptr);
 			}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		info = &entry2->newer;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& ((info->flags & TP_MPC) == 0 || (flags & TP_MPC)) && -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -4151,30 +4006,12 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	}
 	percent = 100;
 
-	if (info2->depth - DEEP_COVER <= depth) {
-		(*info) = (*info2);
-		info2->my = my; info2->op = op;
-		info2->depth = depth;
-		if (maxresult >= beta && pbeta == beta) 
-			info2->valueType = TYPE_BETA;
-		else if (palpha == alpha) 
-			info2->valueType = TYPE_ALPHA;
-		else 
-			info2->valueType = TYPE_EXACT;
-		info2->pos = maxptr;
-		info2->value = maxresult;
-	} else {
-		info->my = my; info->op = op;
-		info->depth = depth;
-		if (maxresult >= beta && pbeta == beta) 
-			info->valueType = TYPE_BETA;
-		else if (palpha == alpha) 
-			info->valueType = TYPE_ALPHA;
-		else 
-			info->valueType = TYPE_EXACT;
-		info->pos = maxptr;
-		info->value = maxresult;
-	}
+	if (maxresult >= beta && pbeta == beta) 
+		saveTp(zobPos, my, op, maxresult, INFINITE + 1, maxptr, depth, flags);
+	else if (palpha == alpha) 
+		saveTp(zobPos, my, op, -INFINITE - 1, maxresult, maxptr, depth, flags);
+	else 
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, depth, flags);
 	return SolverResult(maxresult, maxptr);
 }
 
@@ -4276,35 +4113,6 @@ inline int Solver::endToMid(int value) {
 	else return 0;
 }
 
-int Solver::uncertainSearch(BitBoard& my, BitBoard& op, int leastdepth, int alpha, int beta, bool lastFound) {
-	TPInfo* info;
-	TPInfo* info2;
-	int maxDepth = leastdepth - 1;
-	int result = 0;
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth > maxDepth && info2->depth < empties && info2->valueType == TYPE_EXACT) {
-			maxDepth = info2->depth;
-			result = info2->value;
-		}
-	}
-
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth > maxDepth && info->depth < empties && info->valueType == TYPE_EXACT) {
-			maxDepth = info->depth;
-			result = info->value;
-		}
-	}
-
-	if (maxDepth < leastdepth) {
-		result = search_mpc(my, op, leastdepth, alpha, beta, lastFound);
-	}
-
-	return result;
-}
-
 int Solver::getMidSortSearchDepth(int depth) {
 	return 1;
 	//if (depth <= 8) return 1;
@@ -4313,72 +4121,61 @@ int Solver::getMidSortSearchDepth(int depth) {
 	//return d;
 }
 
-int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, bool lastFound) {
+int Solver::search(BitBoard& my, BitBoard& op, int depth, int alpha, int beta, bool lastFound) {
 	if (depth == 0) {
 		return evaluate(my, op);
 	}
 #ifdef COUNT_INTERNAL_NODES
 	evnum++;
 #endif
-	TPInfo* info;
-	TPInfo* info2;
+	TPInfo* infoNewer;
+	TPInfo* infoDeeper;
 	int palpha = alpha, pbeta = beta;
 	int result, maxresult = -INFINITE - 1;
 	int bestMove = -1, bestMove2 = -1, maxptr = -1;
 	int (Solver::*searchFunction)(BitBoard&, BitBoard&, int, int, int, bool);
 	searchFunction = (depth > MID_USE_SORT_DEPTH) ? (&Solver::search) : (&Solver::fastSearch);
 	// using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth == depth) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				return info2->value;
-			case TYPE_ALPHA :
-				if (info2->value <= alpha)
-					return info2->value;
-				if (info2->value < beta)
-					beta = info2->value;
-				break;
-			default :
-				if (info2->value >= beta) 
-					return info2->value;
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op) {
+		if (infoDeeper->depth == depth && !(infoDeeper->flags & TP_MPC)) { // force no mpc
+			if (infoDeeper->lower >= beta)
+				return infoDeeper->lower;
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
+			}
+			if (infoDeeper->upper < beta) {
+				beta = infoDeeper->upper;
 			}
 		}
-		if (info2->value < MID_WIPEOUT_THRESHOLD)
-			bestMove = info2->pos;
+		if (infoDeeper->lower < MID_WIPEOUT_THRESHOLD)
+			bestMove = infoDeeper->pos;
 	}
 
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth == depth) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				return info->value;
-			case TYPE_ALPHA :
-				if (info->value <= alpha)
-					return info->value;
-				if (info->value < beta)
-					beta = info->value;
-				break;
-			default :
-				if (info->value >= beta) 
-					return info->value;
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op) {
+		if (infoNewer->depth == depth && !(infoNewer->flags & TP_MPC)) { // force no mpc
+			if (infoNewer->lower >= beta)
+				return infoNewer->lower;
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
+			}
+			if (infoNewer->upper < beta) {
+				beta = infoNewer->upper;
 			}
 		}
-		if (info->pos != bestMove && info->value < MID_WIPEOUT_THRESHOLD) {
-			bestMove2 = info->pos;
+		if (infoNewer->pos != bestMove && infoNewer->lower < MID_WIPEOUT_THRESHOLD) {
+			bestMove2 = infoNewer->pos;
 		}
 	}
 
@@ -4418,11 +4215,12 @@ int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, b
 		int pos = sortStack[i];
 		makeMove(pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry->deeper;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& !(info->flags & TP_MPC) && -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -4431,10 +4229,10 @@ int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, b
 				return alpha;
 			}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		info = &entry->newer;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& !(info->flags & TP_MPC) && -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -4496,20 +4294,10 @@ int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, b
 			}
 			if (result >= beta) {
 				unMakeMove();
-				if (info2->depth - DEEP_COVER <= depth) {
-					(*info) = (*info2);
-					info2->my = my; info2->op = op;
-					info2->depth = depth;
-					info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info2->value = result;
-					info2->pos = current;
-				} else {
-					info->my = my; info->op = op;
-					info->depth = depth;
-					info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info->value = result;
-					info->pos = current;
-				}
+				if (beta == pbeta)
+					saveTp(zobPos, my, op, result, INFINITE + 1, current, depth, 0);
+				else
+					saveTp(zobPos, my, op, result, result, current, depth, 0);
 				sortStackPtr = pSortStackPtr;
 				return result;
 			}
@@ -4522,20 +4310,10 @@ int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, b
 		if (aborted) return 0;
 		unMakeMove();
 		if (result >= beta) {
-			if (info2->depth - DEEP_COVER <= depth) {
-				(*info) = (*info2);
-				info2->my = my; info2->op = op;
-				info2->depth = depth;
-				info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info2->value = result;
-				info2->pos = current;
-			} else {
-				info->my = my; info->op = op;
-				info->depth = depth;
-				info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info->value = result;
-				info->pos = current;
-			}
+			if (beta == pbeta)
+				saveTp(zobPos, my, op, result, INFINITE + 1, current, depth, 0);
+			else
+				saveTp(zobPos, my, op, result, result, current, depth, 0);
 			sortStackPtr = pSortStackPtr;
 			return result;
 		}
@@ -4547,22 +4325,10 @@ int Solver::search(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, b
 			}
 		}
 	}
-	if (info2->depth - DEEP_COVER <= depth) {
-		(*info) = (*info2);
-		if (palpha == alpha) info2->valueType = TYPE_ALPHA;
-		else info2->valueType = TYPE_EXACT;
-		info2->my = my; info2->op = op;
-		info2->depth = depth;
-		info2->value = maxresult;
-		info2->pos = maxptr;
-	} else {
-		if (palpha == alpha) info->valueType = TYPE_ALPHA;
-		else info->valueType = TYPE_EXACT;
-		info->my = my; info->op = op;
-		info->depth = depth;
-		info->value = maxresult;
-		info->pos = maxptr;
-	}
+	if (palpha == alpha)
+		saveTp(zobPos, my, op, -INFINITE - 1, maxresult, maxptr, depth, 0);
+	else
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, depth, 0);
 	sortStackPtr = pSortStackPtr;
 	return maxresult;
 }
@@ -4616,8 +4382,7 @@ inline void Solver::unMakeMoveAndSetEmpties() {
 }
 
 void Solver::clearCache() {
-	memset(tpDeep, 0, sizeof(TPInfo) * currentTableSize);
-	memset(tpNew, 0, sizeof(TPInfo) * currentTableSize);
+	memset(tp, 0, sizeof(TPEntry) * currentTableSize);
 }
 
 bool Solver::checkTableSize(size_t tableSize) {
@@ -4626,11 +4391,9 @@ bool Solver::checkTableSize(size_t tableSize) {
 
 void Solver::setCacheSize(size_t newCacheSize) {
 	if (!checkTableSize(newCacheSize) || (currentTableSize == newCacheSize)) return;
-	delete[] tpDeep;
-	delete[] tpNew;
-	tpDeep = tpNew = NULL;
-	tpDeep = new TPInfo[newCacheSize];
-	tpNew = new TPInfo[newCacheSize];
+	delete[] tp;
+	tp = NULL;
+	tp = new TPEntry[newCacheSize];
 	currentTableSize = newCacheSize;
 	currentTableMask = ((unsigned int)newCacheSize) - 1;
 	clearCache();
@@ -4813,28 +4576,6 @@ void Solver::setBookDepth(int depth) {
 
 void Solver::setBookEndDepth(int depth) {
 	bookEndDepth = depth;
-}
-
-SolverResult Solver::trySolveExact(BitBoard& my, BitBoard& op, bool& successful) {
-	TPInfo* info;
-	TPInfo* info2;
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op
-		&& info2->depth == empties && info2->valueType == TYPE_EXACT) {
-			successful = true;
-			return SolverResult(info2->value, info2->pos);
-	}
-
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op
-		&& info->depth == empties && info->valueType == TYPE_EXACT) {
-			successful = true;
-			return SolverResult(info->value, info->pos);
-	}
-
-	successful = false;
-	return SolverResult(0, 0);
 }
 
 void Solver::expandNode(BookNode& node) {
@@ -5449,8 +5190,8 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 #ifdef COUNT_INTERNAL_NODES
 	evnum++;
 #endif
-	TPInfo* info;
-	TPInfo* info2;
+	TPInfo* infoDeeper;
+	TPInfo* infoNewer;
 	int palpha = alpha, pbeta = beta;
 	int result, maxresult = -INFINITE - 1;
 	int bestMove = -1, bestMove2 = -1, maxptr = -1;
@@ -5461,57 +5202,46 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		searchFunction = &Solver::search;
 	else searchFunction = &Solver::fastSearch;
 	// using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth == depth) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				return info2->value;
-			case TYPE_ALPHA :
-				if (info2->value <= alpha)
-					return info2->value;
-				if (info2->value < beta)
-					beta = info2->value;
-				break;
-			default :
-				if (info2->value >= beta) 
-					return info2->value;
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op) {
+		if (infoDeeper->depth == depth) {
+			if (infoDeeper->lower >= beta)
+				return infoDeeper->lower;
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
+			}
+			if (infoDeeper->upper < beta) {
+				beta = infoDeeper->upper;
 			}
 		}
-		if (info2->value < MID_WIPEOUT_THRESHOLD)
-			bestMove = info2->pos;
+		if (infoDeeper->lower < MID_WIPEOUT_THRESHOLD)
+			bestMove = infoDeeper->pos;
 	}
 
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth == depth) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				return info->value;
-			case TYPE_ALPHA :
-				if (info->value <= alpha)
-					return info->value;
-				if (info->value < beta)
-					beta = info->value;
-				break;
-			default :
-				if (info->value >= beta) 
-					return info->value;
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op) {
+		if (infoNewer->depth == depth) {
+			if (infoNewer->lower >= beta)
+				return infoNewer->lower;
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
+			}
+			if (infoNewer->upper < beta) {
+				beta = infoNewer->upper;
 			}
 		}
-		if (info->pos != bestMove && info->value < MID_WIPEOUT_THRESHOLD) {
-			bestMove2 = info->pos;
+		if (infoNewer->pos != bestMove && infoNewer->lower < MID_WIPEOUT_THRESHOLD) {
+			bestMove2 = infoNewer->pos;
 		}
 	}
 
@@ -5574,11 +5304,12 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		int pos = sortStack[i];
 		makeMove(pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry->deeper;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -5587,10 +5318,10 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 				return alpha;
 			}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth == depth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
+		info = &entry->newer;
+		if (info->my == op && info->op == my && info->depth == depth - 1
+			&& -info->upper > alpha) {
+			alpha = -info->upper;
 			maxresult = alpha;
 			maxptr = pos;
 			if (alpha >= beta) {
@@ -5651,20 +5382,10 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 			}
 			if (result >= beta) {
 				unMakeMove();
-				if (info2->depth - DEEP_COVER <= depth) {
-					(*info) = (*info2);
-					info2->my = my; info2->op = op;
-					info2->depth = depth;
-					info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info2->value = result;
-					info2->pos = current;
-				} else {
-					info->my = my; info->op = op;
-					info->depth = depth;
-					info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info->value = result;
-					info->pos = current;
-				}
+				if (beta == pbeta)
+					saveTp(zobPos, my, op, result, INFINITE + 1, current, depth, TP_MPC);
+				else
+					saveTp(zobPos, my, op, result, result, current, depth, TP_MPC);
 				sortStackPtr = pSortStackPtr;
 				return result;
 			}
@@ -5679,20 +5400,10 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		if (aborted) return 0;
 		unMakeMove();
 		if (result >= beta) {
-			if (info2->depth - DEEP_COVER <= depth) {
-				(*info) = (*info2);
-				info2->my = my; info2->op = op;
-				info2->depth = depth;
-				info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info2->value = result;
-				info2->pos = current;
-			} else {
-				info->my = my; info->op = op;
-				info->depth = depth;
-				info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info->value = result;
-				info->pos = current;
-			}
+			if (beta == pbeta)
+				saveTp(zobPos, my, op, result, INFINITE + 1, current, depth, TP_MPC);
+			else
+				saveTp(zobPos, my, op, result, result, current, depth, TP_MPC);
 			sortStackPtr = pSortStackPtr;
 			return result;
 		}
@@ -5704,22 +5415,10 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 			}
 		}
 	}
-	if (info2->depth - DEEP_COVER <= depth) {
-		(*info) = (*info2);
-		if (palpha == alpha) info2->valueType = TYPE_ALPHA;
-		else info2->valueType = TYPE_EXACT;
-		info2->my = my; info2->op = op;
-		info2->depth = depth;
-		info2->value = maxresult;
-		info2->pos = maxptr;
-	} else {
-		if (palpha == alpha) info->valueType = TYPE_ALPHA;
-		else info->valueType = TYPE_EXACT;
-		info->my = my; info->op = op;
-		info->depth = depth;
-		info->value = maxresult;
-		info->pos = maxptr;
-	}
+	if (palpha == alpha)
+		saveTp(zobPos, my, op, -INFINITE - 1, maxresult, maxptr, depth, TP_MPC);
+	else
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, depth, TP_MPC);
 	sortStackPtr = pSortStackPtr;
 	return maxresult;
 }
@@ -5731,123 +5430,74 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 	int sortSearchDepth = getEndSortSearchDepth();
 	// IN TRANSPOSITION TABLE no cuts happen when empties <= MIN_EPC_DEPTH
 	int tabledepth = empties + ((empties <= MIN_EPC_DEPTH) ? EPC_STAGES : currentEpcStage);
-	TPInfo* info;
-	TPInfo* info2;
+	TPInfo* infoNewer;
+	TPInfo* infoDeeper;
 	int palpha = alpha, pbeta = beta;
 	int result, maxresult = -INFINITE;
 	int bestMove = -1, bestMove2 = -1, maxptr = -1;
 	// using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth >= tabledepth) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				return info2->value;
-			case TYPE_ALPHA :
-				if (info2->value <= alpha)
-					return info2->value;
-				if (info2->value < beta) 
-					beta = info2->value;
-				break;
-			default :
-				if (info2->value >= beta) 
-					return info2->value;
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op) {
+		if (infoDeeper->depth >= tabledepth) {
+			if (infoDeeper->lower >= beta)
+				return infoDeeper->lower;
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
-		} else if (info2->depth < empties) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+			if (infoDeeper->upper < beta)
+				beta = infoDeeper->upper;
+		} else if (infoDeeper->depth < empties) {
+			if (infoDeeper->lower >= getEndSortSearchUpperBound(beta))
+				return infoDeeper->lower - INFINITE + MAXSTEP;
+			if (infoDeeper->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoDeeper->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
-		}		
-		if (info2->depth >= sortSearchDepth && info2->value < END_WIPEOUT_THRESHOLD)
-			bestMove = info2->pos;
+			if (infoDeeper->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoDeeper->upper + INFINITE - MAXSTEP;
+			if (infoDeeper->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoDeeper->upper + INFINITE - MAXSTEP;
+		}
+		if (infoDeeper->depth >= sortSearchDepth && infoDeeper->lower < END_WIPEOUT_THRESHOLD)
+			bestMove = infoDeeper->pos;
 	}
 
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth >= tabledepth) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				return info->value;
-			case TYPE_ALPHA :
-				if (info->value <= alpha)
-					return info->value;
-				if (info->value < beta) 
-					beta = info->value;
-				break;
-			default :
-				if (info->value >= beta) 
-					return info->value;
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op) {
+		if (infoNewer->depth >= tabledepth) {
+			if (infoNewer->lower >= beta)
+				return infoNewer->lower;
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
-		} else if (info->depth < empties) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+			if (infoNewer->upper < beta)
+				beta = infoNewer->upper;
+		} else if (infoNewer->depth < empties) {
+			if (infoNewer->lower >= getEndSortSearchUpperBound(beta))
+				return infoNewer->lower - INFINITE + MAXSTEP;
+			if (infoNewer->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoNewer->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
-		}		
-		if (info->pos != bestMove && info->depth >= sortSearchDepth && info->value < END_WIPEOUT_THRESHOLD)
-			bestMove2 = info->pos;
+			if (infoNewer->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoNewer->upper + INFINITE - MAXSTEP;
+			if (infoNewer->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoNewer->upper + INFINITE - MAXSTEP;
+		}
+		if (infoNewer->pos != bestMove && infoNewer->depth >= sortSearchDepth && infoNewer->lower < END_WIPEOUT_THRESHOLD)
+			bestMove2 = infoNewer->pos;
 	}
 
 	BitBoard mob = mobility(my, op);
@@ -5942,30 +5592,31 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 		EmptyNode* pos = emptySortStack[i];
 		makeMove(pos->pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry->deeper;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		info = &entry->newer;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
 		unMakeMove();
 	}
@@ -5996,26 +5647,17 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 				}
 				unMakeMove();
 				if (sortSearchDepth == 1) continue;
+				int tmpRes = result - INFINITE + MAXSTEP;
 				if (result >= getEndSortSearchUpperBound(beta)) {
-					if (info2->depth - DEEP_COVER <= tabledepth) {
-						(*info) = (*info2);
-						info2->my = my; info2->op = op;
-						info2->depth = tabledepth;
-						info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info2->value = result - INFINITE + MAXSTEP;
-						info2->pos = current;
-					} else {
-						info->my = my; info->op = op;
-						info->depth = tabledepth;
-						info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info->value = result - INFINITE + MAXSTEP;
-						info->pos = current;
-					}
+					if (beta == pbeta)
+						saveTp(zobPos, my, op, tmpRes, MAXSTEP + 1, current, tabledepth, 0);
+					else
+						saveTp(zobPos, my, op, tmpRes, tmpRes, current, tabledepth, 0);
 					sortStackPtr = pSortStackPtr;
-					return result - INFINITE + MAXSTEP;
+					return tmpRes;
 				}
 				if (result > getEndSortSearchUpperBound(alpha)) {
-					alpha = result - INFINITE + MAXSTEP;
+					alpha = tmpRes;
 					maxresult = alpha;
 					maxptr = current;
 				}
@@ -6059,20 +5701,10 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 			}
 			if (result >= beta) {
 				unMakeMoveAndSetEmpties();
-				if (info2->depth - DEEP_COVER <= tabledepth) {
-					(*info) = (*info2);
-					info2->my = my; info2->op = op;
-					info2->depth = tabledepth;
-					info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info2->value = result;
-					info2->pos = current;
-				} else {
-					info->my = my; info->op = op;
-					info->depth = tabledepth;
-					info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info->value = result;
-					info->pos = current;
-				}
+				if (beta == pbeta)
+					saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+				else
+					saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 				sortStackPtr = pSortStackPtr;
 				return result;
 			}
@@ -6085,20 +5717,10 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 		if (aborted) return 0;
 		unMakeMoveAndSetEmpties();
 		if (result >= beta) {
-			if (info2->depth - DEEP_COVER <= tabledepth) {
-				(*info) = (*info2);
-				info2->my = my; info2->op = op;
-				info2->depth = tabledepth;
-				info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info2->value = result;
-				info2->pos = current;
-			} else {
-				info->my = my; info->op = op;
-				info->depth = tabledepth;
-				info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info->value = result;
-				info->pos = current;
-			}
+			if (beta == pbeta)
+				saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+			else
+				saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 			sortStackPtr = pSortStackPtr;
 			return result;
 		}
@@ -6114,22 +5736,10 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 		palpha--;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
-	if (info2->depth - DEEP_COVER <= tabledepth) {
-		(*info) = (*info2);
-		if (palpha == alpha) info2->valueType = TYPE_ALPHA;
-		else info2->valueType = TYPE_EXACT;
-		info2->my = my; info2->op = op;
-		info2->depth = tabledepth;
-		info2->value = maxresult;
-		info2->pos = maxptr;
-	} else {
-		if (palpha == alpha) info->valueType = TYPE_ALPHA;
-		else info->valueType = TYPE_EXACT;
-		info->my = my; info->op = op;
-		info->depth = tabledepth;
-		info->value = maxresult;
-		info->pos = maxptr;
-	}
+	if (palpha == alpha)
+		saveTp(zobPos, my, op, -MAXSTEP - 1, maxresult, maxptr, tabledepth, 0);
+	else
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, tabledepth, 0);
 	sortStackPtr = pSortStackPtr;
 	return maxresult;
 }
@@ -6205,125 +5815,76 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 #endif
 	int sortSearchDepth = getEndSortSearchDepth();
 	int tabledepth = empties + EPC_STAGES;
-	TPInfo* info;
-	TPInfo* info2;
+	TPInfo* infoNewer;
+	TPInfo* infoDeeper;
 	int palpha = alpha, pbeta = beta;
 	int result, maxresult = -INFINITE;
 	int bestMove = -1, bestMove2 = -1, maxptr = -1;
 	// using transposition table
-	int zobPos = getZobKey() & currentTableMask;
-	info2 = &tpDeep[zobPos];
-	if (info2->my == my && info2->op == op) {
-		if (info2->depth == tabledepth) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				return info2->value;
-			case TYPE_ALPHA :
-				if (info2->value <= alpha)
-					return info2->value;
-				if (info2->value < beta) 
-					beta = info2->value;
-				break;
-			default :
-				if (info2->value >= beta) 
-					return info2->value;
-				if (info2->value > alpha) {
-					alpha = info2->value;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	infoDeeper = &entry->deeper;
+	if (infoDeeper->my == my && infoDeeper->op == op) {
+		if (infoDeeper->depth == tabledepth) {
+			if (infoDeeper->lower >= beta)
+				return infoDeeper->lower;
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
+			if (infoDeeper->lower > alpha) {
+				alpha = infoDeeper->lower;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
-		} else if (info2->depth < empties) {
-			switch (info2->valueType) {
-			case TYPE_EXACT :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info2->value <= getEndSortSearchLowerBound1(alpha))
-					return info2->value + INFINITE - MAXSTEP;
-				if (info2->value < getEndSortSearchLowerBound1(beta))
-					beta = info2->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info2->value >= getEndSortSearchUpperBound(beta))
-					return info2->value - INFINITE + MAXSTEP;
-				if (info2->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info2->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info2->pos;
-				}
+			if (infoDeeper->upper < beta)
+				beta = infoDeeper->upper;
+		} else if (infoDeeper->depth < empties) {
+			if (infoDeeper->lower >= getEndSortSearchUpperBound(beta))
+				return infoDeeper->lower - INFINITE + MAXSTEP;
+			if (infoDeeper->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoDeeper->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoDeeper->upper + INFINITE - MAXSTEP;
+			if (infoDeeper->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoDeeper->upper + INFINITE - MAXSTEP;
 		}
-		if (info2->depth >= sortSearchDepth && info2->value < END_WIPEOUT_THRESHOLD)
-			bestMove = info2->pos;
+		if (infoDeeper->depth >= sortSearchDepth && infoDeeper->lower < END_WIPEOUT_THRESHOLD)
+			bestMove = infoDeeper->pos;
 	}
 
-	info = &tpNew[zobPos];
-	if (info->my == my && info->op == op) {
-		if (info->depth == tabledepth) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				return info->value;
-			case TYPE_ALPHA :
-				if (info->value <= alpha)
-					return info->value;
-				if (info->value < beta) 
-					beta = info->value;
-				break;
-			default :
-				if (info->value >= beta) 
-					return info->value;
-				if (info->value > alpha) {
-					alpha = info->value;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+	infoNewer = &entry->newer;
+	if (infoNewer->my == my && infoNewer->op == op) {
+		if (infoNewer->depth == tabledepth) {
+			if (infoNewer->lower >= beta)
+				return infoNewer->lower;
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
+			if (infoNewer->lower > alpha) {
+				alpha = infoNewer->lower;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
-		} else if (info->depth < empties) {
-			switch (info->valueType) {
-			case TYPE_EXACT :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			case TYPE_ALPHA :
-				if (info->value <= getEndSortSearchLowerBound1(alpha))
-					return info->value + INFINITE - MAXSTEP;
-				if (info->value < getEndSortSearchLowerBound1(beta))
-					beta = info->value + INFINITE - MAXSTEP;
-				break;
-			default :
-				if (info->value >= getEndSortSearchUpperBound(beta))
-					return info->value - INFINITE + MAXSTEP;
-				if (info->value > getEndSortSearchUpperBound(alpha)) {
-					alpha = info->value - INFINITE + MAXSTEP;
-					maxresult = alpha;
-					maxptr = info->pos;
-				}
+			if (infoNewer->upper < beta)
+				beta = infoNewer->upper;
+		} else if (infoNewer->depth < empties) {
+			if (infoNewer->lower >= getEndSortSearchUpperBound(beta))
+				return infoNewer->lower - INFINITE + MAXSTEP;
+			if (infoNewer->lower > getEndSortSearchUpperBound(alpha)) {
+				alpha = infoNewer->lower - INFINITE + MAXSTEP;
+				maxresult = alpha;
+				maxptr = infoNewer->pos;
 			}
-		} 
-		if (info->pos != bestMove && info->depth >= sortSearchDepth && info->value < END_WIPEOUT_THRESHOLD)
-			bestMove2 = info->pos;
+			if (infoNewer->upper <= getEndSortSearchLowerBound1(alpha))
+				return infoNewer->upper + INFINITE - MAXSTEP;
+			if (infoNewer->upper < getEndSortSearchLowerBound1(beta))
+				beta = infoNewer->upper + INFINITE - MAXSTEP;
+		}
+		if (infoNewer->pos != bestMove && infoNewer->depth >= sortSearchDepth && infoNewer->lower < END_WIPEOUT_THRESHOLD)
+			bestMove2 = infoNewer->pos;
 	}
-	
+
 	BitBoard mob = mobility(my, op);
 
 	if (mob == 0) {
@@ -6383,37 +5944,38 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 			emptySortStack[sortStackPtr++] = i;
 		}
 	}
-	
+
 #ifdef USE_ETC
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		EmptyNode* pos = emptySortStack[i];
 		makeMove(pos->pos, my, op);
 		// Enhanced Transpositon Cutoff
-		int zobKey2 = getZobKey();
-		TPInfo* info3 = &tpDeep[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		int zobKey2 = getZobKey(op, my);
+		TPEntry* entry = &tp[zobKey2 & currentTableMask];
+		TPInfo* info = &entry->deeper;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
-		info3 = &tpNew[zobKey2 & currentTableMask];
-		if (info3->my == op && info3->op == my && info3->depth >= tabledepth - 1
-			&& info3->valueType != TYPE_BETA && -info3->value > alpha) {
-			alpha = -info3->value;
-			maxresult = alpha;
-			maxptr = pos->pos;
-			if (alpha >= beta) {
-				unMakeMove();
-				sortStackPtr = pSortStackPtr;
-				return alpha;
-			}
+		info = &entry->newer;
+		if (info->my == op && info->op == my && info->depth >= tabledepth - 1
+			&& -info->upper > alpha) {
+				alpha = -info->upper;
+				maxresult = alpha;
+				maxptr = pos->pos;
+				if (alpha >= beta) {
+					unMakeMove();
+					sortStackPtr = pSortStackPtr;
+					return alpha;
+				}
 		}
 		unMakeMove();
 	}
@@ -6428,9 +5990,9 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 				sortResultStack[j] = result = (sortSearchDepth == 1) ?
 					(-evaluate(op, my))
 					: ((sortSearchDepth <= MID_USE_SORT_DEPTH) ? 
-						-fastSearch(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true)
-						: -search(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true));
-					/*-fastSearch(op, my, 1, -INFINITE, INFINITE, true);*/
+					-fastSearch(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true)
+					: -search(op, my, sortSearchDepth - 1, -getEndSortSearchUpperBound(beta), -getEndSortSearchLowerBound(alpha), true));
+				/*-fastSearch(op, my, 1, -INFINITE, INFINITE, true);*/
 				if (aborted) return 0;
 				if (result >= END_WIPEOUT_THRESHOLD)
 					sortResultStack[j] += END_VERY_HIGH_EVAL_BONUS;
@@ -6444,26 +6006,17 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 					sortResultStack[j] += END_PARITY_WEIGHT[current];
 				}
 				if (sortSearchDepth == 1) continue;
+				int tmpRes = result - INFINITE + MAXSTEP;
 				if (result >= getEndSortSearchUpperBound(beta)) {
-					if (info2->depth - DEEP_COVER <= tabledepth) {
-						(*info) = (*info2);
-						info2->my = my; info2->op = op;
-						info2->depth = tabledepth;
-						info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info2->value = result - INFINITE + MAXSTEP;
-						info2->pos = current;
-					} else {
-						info->my = my; info->op = op;
-						info->depth = tabledepth;
-						info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-						info->value = result - INFINITE + MAXSTEP;
-						info->pos = current;
-					}
+					if (beta == pbeta)
+						saveTp(zobPos, my, op, tmpRes, MAXSTEP + 1, current, tabledepth, 0);
+					else
+						saveTp(zobPos, my, op, tmpRes, tmpRes, current, tabledepth, 0);
 					sortStackPtr = pSortStackPtr;
-					return result - INFINITE + MAXSTEP;
+					return tmpRes;
 				}
 				if (result > getEndSortSearchUpperBound(alpha)) {
-					alpha = result - INFINITE + MAXSTEP;
+					alpha = tmpRes;
 					maxresult = alpha;
 					maxptr = current;
 				}
@@ -6509,20 +6062,10 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 			if (result >= beta) {
 				unSetParity(emptySortStack[i]);
 				unMakeMoveAndSetEmpties();
-				if (info2->depth - DEEP_COVER <= tabledepth) {
-					(*info) = (*info2);
-					info2->my = my; info2->op = op;
-					info2->depth = tabledepth;
-					info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info2->value = result;
-					info2->pos = current;
-				} else {
-					info->my = my; info->op = op;
-					info->depth = tabledepth;
-					info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-					info->value = result;
-					info->pos = current;
-				}
+				if (beta == pbeta)
+					saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+				else
+					saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 				sortStackPtr = pSortStackPtr;
 				return result;
 			}
@@ -6536,20 +6079,10 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 		unSetParity(emptySortStack[i]);
 		unMakeMoveAndSetEmpties();
 		if (result >= beta) {
-			if (info2->depth - DEEP_COVER <= tabledepth) {
-				(*info) = (*info2);
-				info2->my = my; info2->op = op;
-				info2->depth = tabledepth;
-				info2->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info2->value = result;
-				info2->pos = current;
-			} else {
-				info->my = my; info->op = op;
-				info->depth = tabledepth;
-				info->valueType = (beta == pbeta) ? TYPE_BETA : TYPE_EXACT;
-				info->value = result;
-				info->pos = current;
-			}
+			if (beta == pbeta)
+				saveTp(zobPos, my, op, result, MAXSTEP + 1, current, tabledepth, 0);
+			else
+				saveTp(zobPos, my, op, result, result, current, tabledepth, 0);
 			sortStackPtr = pSortStackPtr;
 			return result;
 		}
@@ -6565,22 +6098,10 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 		palpha--;
 		maxptr = emptySortStack[pSortStackPtr]->pos;
 	}
-	if (info2->depth - DEEP_COVER <= tabledepth) {
-		(*info) = (*info2);
-		if (palpha == alpha) info2->valueType = TYPE_ALPHA;
-		else info2->valueType = TYPE_EXACT;
-		info2->my = my; info2->op = op;
-		info2->depth = tabledepth;
-		info2->value = maxresult;
-		info2->pos = maxptr;
-	} else {
-		if (palpha == alpha) info->valueType = TYPE_ALPHA;
-		else info->valueType = TYPE_EXACT;
-		info->my = my; info->op = op;
-		info->depth = tabledepth;
-		info->value = maxresult;
-		info->pos = maxptr;
-	}
+	if (palpha == alpha)
+		saveTp(zobPos, my, op, -MAXSTEP - 1, maxresult, maxptr, tabledepth, 0);
+	else
+		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, tabledepth, 0);
 	sortStackPtr = pSortStackPtr;
 	return maxresult;
 }
@@ -6823,60 +6344,57 @@ int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int*
 
 	int bestMove = -1;
 
-	int zobPos = getZobKey() & currentTableMask;
-	TPInfo* info = &tpDeep[zobPos];
-	if (((depth >= empties && info->depth >= depth) || info->depth == depth) 
+	int zobPos = getZobKey(my, op) & currentTableMask;
+	TPEntry* entry = &tp[zobPos];
+	TPInfo* info = &entry->deeper;
+	if (((depth >= empties && info->depth >= depth) || info->depth == depth)
 			&& info->my == my && info->op == op) {
-		if (info->valueType == TYPE_EXACT) {
+		if (info->lower == info->upper) {
 			*pvStart = info->pos;
 			if (!checkedMakeMove(info->pos, my, op)) return 0;
 			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
 			unMakeMove();
 			return len;
-		} else if (info->valueType == TYPE_BETA) {
-			if (info->value >= upper) {
-				*pvStart = info->pos;
-				if (!checkedMakeMove(info->pos, my, op)) return 0;
-				int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
-				unMakeMove();
-				return len;
-			}
-			if (info->value > lower) {
-				lower = info->value;
-				bestMove = info->pos;
-			}
-		} else {
-			if (info->value < upper) {
-				upper = info->value;
-			}
+		}
+		if (info->lower >= upper) {
+			*pvStart = info->pos;
+			if (!checkedMakeMove(info->pos, my, op)) return 0;
+			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+			unMakeMove();
+			return len;
+		}
+		if (info->lower > lower) {
+			lower = info->lower;
+			bestMove = info->pos;
+		}
+		if (info->upper < upper) {
+			upper = info->upper;
 		}
 	}
 
-	info = &tpNew[zobPos];
-	if (((depth >= empties && info->depth >= depth) || info->depth == depth) 
+	info = &entry->newer;
+	if (((depth >= empties && info->depth >= depth) || info->depth == depth)
 			&& info->my == my && info->op == op) {
-		if (info->valueType == TYPE_EXACT) {
+		if (info->lower == info->upper) {
 			*pvStart = info->pos;
 			if (!checkedMakeMove(info->pos, my, op)) return 0;
 			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
 			unMakeMove();
 			return len;
-		} else if (info->valueType == TYPE_BETA) {
-			if (info->value >= upper) {
-				*pvStart = info->pos;
-				if (!checkedMakeMove(info->pos, my, op)) return 0;
-				int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
-				unMakeMove();
-				return len;
-			}
-			if (info->value > lower) {
-				lower = info->value;
-				bestMove = info->pos;
-			}
-		} else {
-			if (info->value < upper) {
-				upper = info->value;
-			}
+		}
+		if (info->lower >= upper) {
+			*pvStart = info->pos;
+			if (!checkedMakeMove(info->pos, my, op)) return 0;
+			int len = 1 + searchPV(op, my, depth - 1, true, pvStart + 1, pvEnd);
+			unMakeMove();
+			return len;
+		}
+		if (info->lower > lower) {
+			lower = info->lower;
+			bestMove = info->pos;
+		}
+		if (info->upper < upper) {
+			upper = info->upper;
 		}
 	}
 
@@ -6910,6 +6428,44 @@ void Solver::setBookPV(BitBoard& my, BitBoard& op, int firstMove) {
 		tmp = work_my; work_my = work_op; work_op = tmp;
 	}
 	this->pvLength = pvLength;
+}
+
+void Solver::saveTp(int zobPos, const BitBoard& my, const BitBoard& op, 
+					int lower, int upper, int pos, int depth, unsigned int flags) {
+	TPEntry* entry = &tp[zobPos];
+	TPInfo* info = &entry->deeper;
+	if (info->depth == depth && info->my == my && info->op == op && info->flags == flags) {
+		if (lower > info->lower) {
+			info->lower = lower;
+			info->pos = pos;
+		}
+		if (upper < info->upper) {
+			info->upper = upper;
+		}
+		return;
+	}
+	info = &entry->newer;
+	if (info->depth == depth && info->my == my && info->op == op && info->flags == flags) {
+		if (lower > info->lower) {
+			info->lower = lower;
+			info->pos = pos;
+		}
+		if (upper < info->upper) {
+			info->upper = upper;
+		}
+		return;
+	}
+	if (depth >= info->depth - DEEP_COVER) {
+		entry->newer = entry->deeper;
+		info = &entry->deeper;
+	}
+	info->lower = lower;
+	info->upper = upper;
+	info->depth = depth;
+	info->pos = pos;
+	info->flags = flags;
+	info->my = my;
+	info->op = op;
 }
 
 } // namespace Othello
