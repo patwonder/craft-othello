@@ -813,17 +813,20 @@ inline unsigned int Solver::getZobKey(const BitBoard& my, const BitBoard& op){
 }
 
 inline int Solver::bits(const BitBoard& bb) {
-	//unsigned short* rbb = (unsigned short*)&bb;
-	//return bitTable[*rbb] + bitTable[*(rbb + 1)] + bitTable[*(rbb + 2)] + bitTable[*(rbb + 3)];
-	const unsigned long long m1 = 0x5555555555555555ull;
-	const unsigned long long m2 = 0x3333333333333333ull;
-	const unsigned long long m4 = 0x0f0f0f0f0f0f0f0full;
+#ifdef MACHINE_X64
+	const unsigned long long c55 = 0x5555555555555555ull;
+	const unsigned long long c33 = 0x3333333333333333ull;
+	const unsigned long long c0f = 0x0f0f0f0f0f0f0f0full;
 	const unsigned long long h01 = 0x0101010101010101ull;
 	BitBoard x = bb;
-	x -= (x >> 1) & m1;
-	x = (x & m2) + ((x >> 2) & m2);
-	x = (x + (x >> 4)) & m4;
+	x -= (x >> 1) & c55;
+	x = (x & c33) + ((x >> 2) & c33);
+	x = (x + (x >> 4)) & c0f;
 	return (x * h01) >> 56;
+#else // it seems that table-based popcount performs much better on x86 arch
+	unsigned short* rbb = (unsigned short*)&bb;
+	return bitTable[*rbb] + bitTable[*(rbb + 1)] + bitTable[*(rbb + 2)] + bitTable[*(rbb + 3)];
+#endif
 }
 
 // count the mobility of b1 over b2
@@ -1371,211 +1374,6 @@ inline bool Solver::checkedPutChess(int pos, BitBoard& b1, BitBoard& b2) {
 	return (*flipFunction[pos])(b1, b2);
 }
 
-bool Solver::testPutChess(int pos, const BitBoard& b1, const BitBoard& b2) {
-	if (!(b2 & neighborhood[pos])) return false;
-	const unsigned long long mask1 = 0x7e7e7e7e7e7e7e7eull;
-	const unsigned long long mask2 = 0x007e7e7e7e7e7e00ull;
-	const unsigned long long mask3 = 0x00ffffffffffff00ull;
-	unsigned char dir = dirMask[pos];
-	BitBoard b2m1 = b2 & mask1;
-	BitBoard b2m2 = b2 & mask2;
-	BitBoard b2m3 = b2 & mask3;
-	int current;
-	if (dir & DIR5) {
-		current = pos - 1;
-		if (posTable[current] & b2m1) { // possible
-			current--;
-			if (posTable[current] & b2m1) {
-				current--;
-				if (posTable[current] & b2m1) {
-					current--;
-					if (posTable[current] & b2m1) {
-						current--;
-						if (posTable[current] & b2m1) {
-							current--;
-							if (posTable[current] & b2m1) {
-								current--;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR1) {
-		current = pos + 1;
-		if (posTable[current] & b2m1) { // possible
-			current++;
-			if (posTable[current] & b2m1) {
-				current++;
-				if (posTable[current] & b2m1) {
-					current++;
-					if (posTable[current] & b2m1) {
-						current++;
-						if (posTable[current] & b2m1) {
-							current++;
-							if (posTable[current] & b2m1) {
-								current++;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR2) {
-		current = pos - 7;
-		if (posTable[current] & b2m2) { // possible
-			current -= 7;
-			if (posTable[current] & b2m2) {
-				current -= 7;
-				if (posTable[current] & b2m2) {
-					current -= 7;
-					if (posTable[current] & b2m2) {
-						current -= 7;
-						if (posTable[current] & b2m2) {
-							current -= 7;
-							if (posTable[current] & b2m2) {
-								current -= 7;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR4) {
-		current = pos - 9;
-		if (posTable[current] & b2m2) { // possible
-			current -= 9;
-			if (posTable[current] & b2m2) {
-				current -= 9;
-				if (posTable[current] & b2m2) {
-					current -= 9;
-					if (posTable[current] & b2m2) {
-						current -= 9;
-						if (posTable[current] & b2m2) {
-							current -= 9;
-							if (posTable[current] & b2m2) {
-								current -= 9;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR6) {
-		current = pos + 7;
-		if (posTable[current] & b2m2) { // possible
-			current += 7;
-			if (posTable[current] & b2m2) {
-				current += 7;
-				if (posTable[current] & b2m2) {
-					current += 7;
-					if (posTable[current] & b2m2) {
-						current += 7;
-						if (posTable[current] & b2m2) {
-							current += 7;
-							if (posTable[current] & b2m2) {
-								current += 7;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR8) {
-		current = pos + 9;
-		if (posTable[current] & b2m2) { // possible
-			current += 9;
-			if (posTable[current] & b2m2) {
-				current += 9;
-				if (posTable[current] & b2m2) {
-					current += 9;
-					if (posTable[current] & b2m2) {
-						current += 9;
-						if (posTable[current] & b2m2) {
-							current += 9;
-							if (posTable[current] & b2m2) {
-								current += 9;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR3) {
-		current = pos - 8;
-		if (posTable[current] & b2m3) { // possible
-			current -= 8;
-			if (posTable[current] & b2m3) {
-				current -= 8;
-				if (posTable[current] & b2m3) {
-					current -= 8;
-					if (posTable[current] & b2m3) {
-						current -= 8;
-						if (posTable[current] & b2m3) {
-							current -= 8;
-							if (posTable[current] & b2m3) {
-								current -= 8;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	if (dir & DIR7) {
-		current = pos + 8;
-		if (posTable[current] & b2m3) { // possible
-			current += 8;
-			if (posTable[current] & b2m3) {
-				current += 8;
-				if (posTable[current] & b2m3) {
-					current += 8;
-					if (posTable[current] & b2m3) {
-						current += 8;
-						if (posTable[current] & b2m3) {
-							current += 8;
-							if (posTable[current] & b2m3) {
-								current += 8;
-							}
-						}
-					}
-				}
-			}
-			if (posTable[current] & b1) { //really possible
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 inline void Solver::makeMove(int pos, BitBoard& my, BitBoard& op) {
 	bstack[stackptr] = black;
 	wstack[stackptr] = white;
@@ -1670,7 +1468,7 @@ int Solver::strongEvaluate(BitBoard& my, BitBoard& op) {
 	return alpha;
 }
 
-int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
+inline int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
 	return evaluate_diff(my, op);
 }
 

@@ -401,7 +401,6 @@ private:
 	int endToMid(int value);
 	void makeMove(int pos, BitBoard& my, BitBoard& op);
 	bool checkedMakeMove(int pos, BitBoard& my, BitBoard& op);
-	bool testPutChess(int pos, const BitBoard& my, const BitBoard& op);
 	int evaluate(const BitBoard& my, const BitBoard& op);
 	int evaluate_direct(const BitBoard& my, const BitBoard& op);
 	int evaluate_diff(const BitBoard& my, const BitBoard& op);

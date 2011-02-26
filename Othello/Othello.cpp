@@ -67,7 +67,7 @@
 using namespace Othello;
 
 #define UNINSTALLER "msiexec.exe"
-#define UPGRADE_CODE "{874DC322-366F-4F04-98A2-238FC1C23BCE}" // Won't change forever
+#define UPGRADE_CODE "{874DC322-366F-4F04-98A2-238FC1C23BCE}" // Won't change
 
 using namespace CraftEngine;
 
