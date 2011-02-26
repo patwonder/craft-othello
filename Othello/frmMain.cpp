@@ -1140,7 +1140,7 @@ void frmMain::setLayout() {
 	static int const listOffSet = -15;
 	//infoPanel->SetBounds(this->ClientSize.Width - infoPanel->Width, infoPanel->Top, infoPanel->Width, statusBar->Top - infoPanel->Top);
 	lstSteps->Height = infoPanel->Height - lblCurrentStep->Bottom + listOffSet;
-	picBoard->Size = System::Drawing::Size(infoPanel->Left, 
+	picBoard->Bounds = Rectangle(0, toolBar->Bottom, infoPanel->Left, 
 		(userInfo->ShowPrincipleVariation ? statusBar2 : statusBar)->Top - toolBar->Bottom);
 	int width = picBoard->ClientSize.Width;
 	int height = picBoard->ClientSize.Height;
