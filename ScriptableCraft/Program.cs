@@ -35,8 +35,8 @@ namespace ScriptableCraft {
 		public const int HASH_BITS = 21; // 128MB
 
 		private static void showUsage() {
-			Console.WriteLine("Usage: scrCraft <script file> [-o <output file>] [-h <hash bits[16..23]>]");
-			Console.WriteLine("   or: scrCraft <script file> [--output <output file>] [--hash <hash bits[16..23]>]");
+			Console.WriteLine("Usage: scrCraft <script file> [-o <output file>] [-h <hash bits[16..24]>]");
+			Console.WriteLine("   or: scrCraft <script file> [--output <output file>] [--hash <hash bits[16..24]>]");
 			Console.WriteLine(" <script file>: specify the script file to run");
 			Console.WriteLine(" -o, --output : specify the output file, the default is standard output");
 			Console.WriteLine(" -h, --hash   : specify the hash table bits, default is 21");
@@ -50,6 +50,7 @@ namespace ScriptableCraft {
 			Console.WriteLine("                     21         128 MB");
 			Console.WriteLine("                     22         256 MB");
 			Console.WriteLine("                     23         512 MB");
+			Console.WriteLine("                     24        1024 MB");
 		}
 		private static void runScript(string source, string output) {
 			FileStream infs;
@@ -104,10 +105,10 @@ namespace ScriptableCraft {
 					if (hashbits == 0 && i < args.Length - 1) {
 						try {
 							hashbits = Int32.Parse(args[++i]);
-							if (hashbits > 23 || hashbits < 16) {
+							if (hashbits > 24 || hashbits < 16) {
 								hashbits = 0;
 								successful = false;
-								reason = "hash bits out of range [16..23]";
+								reason = "hash bits out of range [16..24]";
 							}
 						} catch (Exception) {
 							hashbits = 0;
