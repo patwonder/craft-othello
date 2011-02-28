@@ -2590,12 +2590,21 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					}
 					continue;
 				}
+#ifdef USE_STABILITY
+				if (upper > 0 && results[i] >= endToMid(upper)) {
+					unMakeMove();
+					percent = 100;
+					setPV(my, op, iterdepth, pos->pos);
+					return SolverResult(endToMid(upper) - (INFINITE - MAXSTEP), pos->pos);
+				}
+#else
 				if (results[i] >= INFINITE) {
 					unMakeMove();
 					percent = 100;
 					setPV(my, op, iterdepth, pos->pos);
 					return SolverResult(INFINITE - (INFINITE - MAXSTEP), pos->pos);
 				}
+#endif
 				if (results[i] > iteralpha) { // if result == alpha, might be mistakenly cutoff by mpc
 					itermax = iteralpha = results[i];
 					selectedMove = focusedMove;
