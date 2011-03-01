@@ -1493,54 +1493,62 @@ int Solver::evaluate_diff(const BitBoard& my, const BitBoard& op) {
 		int mybyte, opbyte, pCount, pCountM1;
 		for (int i = 0; i < 8; i++) {
 			mybyte = ucmy[i];
-			pCount = pVCount[mybyte][i];
-			pCountM1 = pCount - 1;
-			unsigned char* pPtrMybyte = pPtr[mybyte][i];
-			unsigned short* myPVMybyte = myPV[mybyte][i];
-			for (int j = 0; j < pCountM1; j += 2) {
-				pattern[pPtrMybyte[j]] += myPVMybyte[j];
-				pattern[pPtrMybyte[j + 1]] += myPVMybyte[j + 1];
-			}
-			if (pCount & 1) {
-				pattern[pPtrMybyte[pCountM1]] += myPVMybyte[pCountM1];
+			if (mybyte) {
+				pCount = pVCount[mybyte][i];
+				pCountM1 = pCount - 1;
+				unsigned char* pPtrMybyte = pPtr[mybyte][i];
+				unsigned short* myPVMybyte = myPV[mybyte][i];
+				for (int j = 0; j < pCountM1; j += 2) {
+					pattern[pPtrMybyte[j]] += myPVMybyte[j];
+					pattern[pPtrMybyte[j + 1]] += myPVMybyte[j + 1];
+				}
+				if (pCount & 1) {
+					pattern[pPtrMybyte[pCountM1]] += myPVMybyte[pCountM1];
+				}
 			}
 			opbyte = ucop[i];
-			pCount = pVCount[opbyte][i];
-			pCountM1 = pCount - 1;
-			unsigned char* pPtrOpbyte = pPtr[opbyte][i];
-			unsigned short* opPVOpbyte = myPV[opbyte][i];
-			for (int j = 0; j < pCountM1; j += 2) {
-				pattern[pPtrOpbyte[j]] += (opPVOpbyte[j] << 1);
-				pattern[pPtrOpbyte[j + 1]] += (opPVOpbyte[j + 1] << 1);
-			}
-			if (pCount & 1) {
-				pattern[pPtrOpbyte[pCountM1]] += (opPVOpbyte[pCountM1] << 1);
+			if (opbyte) {
+				pCount = pVCount[opbyte][i];
+				pCountM1 = pCount - 1;
+				unsigned char* pPtrOpbyte = pPtr[opbyte][i];
+				unsigned short* opPVOpbyte = myPV[opbyte][i];
+				for (int j = 0; j < pCountM1; j += 2) {
+					pattern[pPtrOpbyte[j]] += (opPVOpbyte[j] << 1);
+					pattern[pPtrOpbyte[j + 1]] += (opPVOpbyte[j + 1] << 1);
+				}
+				if (pCount & 1) {
+					pattern[pPtrOpbyte[pCountM1]] += (opPVOpbyte[pCountM1] << 1);
+				}
 			}
 
 			// rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
 			mybyte = ucrmy[i];
-			pCount = pVCount[mybyte][i];
-			pCountM1 = pCount - 1;
-			pPtrMybyte = pPtr[mybyte][i];
-			myPVMybyte = myPV[mybyte][i];
-			for (int j = 0; j < pCountM1; j += 2) {
-				pattern[pPtrMybyte[j]] -= myPVMybyte[j];
-				pattern[pPtrMybyte[j + 1]] -= myPVMybyte[j + 1];
-			}
-			if (pCount & 1) {
-				pattern[pPtrMybyte[pCountM1]] -= myPVMybyte[pCountM1];
+			if (mybyte) {
+				pCount = pVCount[mybyte][i];
+				pCountM1 = pCount - 1;
+				unsigned char* pPtrMybyte = pPtr[mybyte][i];
+				unsigned short* myPVMybyte = myPV[mybyte][i];
+				for (int j = 0; j < pCountM1; j += 2) {
+					pattern[pPtrMybyte[j]] -= myPVMybyte[j];
+					pattern[pPtrMybyte[j + 1]] -= myPVMybyte[j + 1];
+				}
+				if (pCount & 1) {
+					pattern[pPtrMybyte[pCountM1]] -= myPVMybyte[pCountM1];
+				}
 			}
 			opbyte = ucrop[i];
-			pCount = pVCount[opbyte][i];
-			pCountM1 = pCount - 1;
-			pPtrOpbyte = pPtr[opbyte][i];
-			opPVOpbyte = myPV[opbyte][i];
-			for (int j = 0; j < pCountM1; j += 2) {
-				pattern[pPtrOpbyte[j]] -= (opPVOpbyte[j] << 1);
-				pattern[pPtrOpbyte[j + 1]] -= (opPVOpbyte[j + 1] << 1);
-			}
-			if (pCount & 1) {
-				pattern[pPtrOpbyte[pCountM1]] -= (opPVOpbyte[pCountM1] << 1);
+			if (opbyte) {
+				pCount = pVCount[opbyte][i];
+				pCountM1 = pCount - 1;
+				unsigned char* pPtrOpbyte = pPtr[opbyte][i];
+				unsigned short* opPVOpbyte = myPV[opbyte][i];
+				for (int j = 0; j < pCountM1; j += 2) {
+					pattern[pPtrOpbyte[j]] -= (opPVOpbyte[j] << 1);
+					pattern[pPtrOpbyte[j + 1]] -= (opPVOpbyte[j + 1] << 1);
+				}
+				if (pCount & 1) {
+					pattern[pPtrOpbyte[pCountM1]] -= (opPVOpbyte[pCountM1] << 1);
+				}
 			}
 		}
 		int sum = 0;
@@ -2449,24 +2457,9 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 				continue;
 			}
 			makeMove(i->pos, my, op);
-
-			int zobKey2 = getZobKey(op, my);
-			TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
-			TPInfo* info = &entry2->deeper;
-			if (info->my == op && info->op == my 
-				&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
-					results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
-			} else {
-				info = &entry2->newer;
-				if (info->my == op && info->op == my 
-					&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
-						results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
-				}
-				else 
-					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
-				if (aborted) {
-					return SolverResult(0, 0);
-				}
+			results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
+			if (aborted) {
+				return SolverResult(0, 0);
 			}
 			unMakeMove();
 			pptr++;
@@ -3544,23 +3537,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				pptr++; continue;
 			}
 			makeMove(moveOrder[i], my, op);
-			int zobKey2 = getZobKey(op, my);
-			TPEntry* entry2 = &tp[zobKey2 & currentTableMask];
-			TPInfo* info = &entry2->deeper;
-			if (info->my == op && info->op == my 
-				&& info->lower == info->upper && info->depth >= SORT_DEPTH) {
-					results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
-			} else {
-				info = &entry2->newer;
-				if (info->my == op && info->op == my 
-					&& info->lower == info->upper && info->depth >= SORT_DEPTH)
-						results[pptr] = (info->depth >= empties) ? (-info->lower * RULER) : (-info->lower);
-				else 
-					results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
-				if (aborted) {
-					return SolverResult(0, 0);
-				}
-			}
+			results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 			if (aborted) {
 				return SolverResult(0, 0);
 			}
