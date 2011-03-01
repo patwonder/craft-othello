@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -25,28 +25,26 @@
 *************************************************************************
 */
 
+#pragma once
 /*
 ********************************************************************************
-								FlashWindow.cpp
-		ä½œè€…ï¼šPatrick
-		æ¦‚è¿°ï¼šåŒ…å« FlashWindowEx å‡½æ•°çš„å®šä¹‰ã€‚
+								SecondInstance.h
+		×÷Õß£ºPatrick
+		¸ÅÊö£º°üº¬Àà SecondInstance µÄÉùÃ÷¡£
+			SecondInstance Àà°üº¬Ò»Ğ©ÊµÓÃº¯Êı£¬ÓÃÓÚÖØ¸´½ø³ÌµÄ´¦Àí¡£
 
 ********************************************************************************
 */
 
-#include "stdafx.h"
-#include "FlashWindow.h"
-#include <Windows.h>
-
 namespace Othello {
-	bool FlashWindowEx(System::IntPtr hwnd, System::UInt32 flags, 
-			System::UInt32 count, System::UInt32 timeout) {
-		FLASHWINFO info;
-		info.cbSize = sizeof(info);
-		info.hwnd = (HWND)hwnd.ToPointer();
-		info.dwFlags = flags;
-		info.dwTimeout = timeout;
-		info.uCount = count;
-		return (bool)(::FlashWindowEx(&info));
-	}
-}
+
+ref class SecondInstance {
+public:
+	static const int CLR_HWND_BROADCAST = 0xffff;
+	static const int WM_SISTART = CLRRegisterWindowMessage("{9F93E3AD-147B-4881-BA59-85BFDF4C8CE5}");
+
+	static bool CLRPostMessage(System::IntPtr hWnd, int msg, System::IntPtr wParam, System::IntPtr lParam);
+	static int CLRRegisterWindowMessage(System::String^ message);
+};
+
+} // namespace Othello

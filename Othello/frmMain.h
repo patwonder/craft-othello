@@ -2369,6 +2369,7 @@ namespace Othello {
 		virtual void wishClosed();
 #endif
 	protected:
+		virtual void WndProc(System::Windows::Forms::Message% m) override;
 		~frmMain();
 };
 

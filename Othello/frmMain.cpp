@@ -39,6 +39,7 @@
 #include "frmMain.h"
 #include "BoardSetup.h"
 #include "frmAbout.h"
+#include "SecondInstance.h"
 
 using namespace System;
 using namespace Othello;
@@ -3645,4 +3646,13 @@ void frmMain::showPVChanged() {
 	if (visible == statusBar2->Visible) return;
 	statusBar2->Visible = visible;
 	setLayout();
+}
+
+void frmMain::WndProc(System::Windows::Forms::Message% m) {
+	if (SecondInstance::WM_SISTART && m.Msg == SecondInstance::WM_SISTART) {
+		if (this->WindowState == FormWindowState::Minimized)
+			this->WindowState = FormWindowState::Normal;
+		notifyUser();
+	}
+	System::Windows::Forms::Form::WndProc(m);
 }

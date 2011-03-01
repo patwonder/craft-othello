@@ -47,6 +47,7 @@
 #include "frmMain.h"
 #include "frmStartUp.h"
 #include "CSingleInstance.h"
+#include "SecondInstance.h"
 #endif
 #endif
 #ifdef LEARN
@@ -138,8 +139,13 @@ int main(array<System::String ^> ^args) {
 		CSingleInstance^ si = gcnew CSingleInstance(/*appPath*/UPGRADE_CODE);
 		try { /* mutex release */
 			if (si->isRunning()) {
-				MessageBox::Show(__APP_NAME__ + " 已经在运行了！", "提示", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
-				return EXIT_FAILURE;
+				if (SecondInstance::WM_SISTART) {
+					SecondInstance::CLRPostMessage((System::IntPtr)SecondInstance::CLR_HWND_BROADCAST,
+						SecondInstance::WM_SISTART, System::IntPtr::Zero, System::IntPtr::Zero);
+				} else {
+					MessageBox::Show(__APP_NAME__ + " 已经在运行了！", "提示", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+				}
+				return EXIT_SUCCESS;
 			}
 			SHOW(Application::CompanyName);
 			SHOW(Application::ProductName);

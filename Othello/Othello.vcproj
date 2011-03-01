@@ -524,6 +524,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SecondInstance.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -808,6 +812,10 @@
 			</File>
 			<File
 				RelativePath=".\SearchRelated.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SecondInstance.h"
 				>
 			</File>
 			<File

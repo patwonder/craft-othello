@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
     Copyright (C) 2008-2010  Patrick
@@ -27,26 +27,26 @@
 
 /*
 ********************************************************************************
-								FlashWindow.cpp
-		ä½œè€…ï¼šPatrick
-		æ¦‚è¿°ï¼šåŒ…å« FlashWindowEx å‡½æ•°çš„å®šä¹‰ã€‚
+								SecondInstance.cpp
+		×÷Õß£ºPatrick
+		¸ÅÊö£º°üº¬Àà SecondInstance µÄ¶¨Òå¡£
+			SecondInstance Àà°üº¬Ò»Ğ©ÊµÓÃº¯Êı£¬ÓÃÓÚÖØ¸´½ø³ÌµÄ´¦Àí¡£
 
 ********************************************************************************
 */
 
 #include "stdafx.h"
-#include "FlashWindow.h"
-#include <Windows.h>
+#include <windows.h>
+#include <vcclr.h>
+#include "SecondInstance.h"
 
-namespace Othello {
-	bool FlashWindowEx(System::IntPtr hwnd, System::UInt32 flags, 
-			System::UInt32 count, System::UInt32 timeout) {
-		FLASHWINFO info;
-		info.cbSize = sizeof(info);
-		info.hwnd = (HWND)hwnd.ToPointer();
-		info.dwFlags = flags;
-		info.dwTimeout = timeout;
-		info.uCount = count;
-		return (bool)(::FlashWindowEx(&info));
-	}
+using namespace Othello;
+
+bool SecondInstance::CLRPostMessage(System::IntPtr hWnd, int msg, System::IntPtr wParam, System::IntPtr lParam) {
+	return (bool)(::PostMessage((HWND)hWnd.ToPointer(), msg, (WPARAM)wParam.ToPointer(), (LPARAM)lParam.ToPointer()));
+}
+
+int SecondInstance::CLRRegisterWindowMessage(System::String^ message) {
+	pin_ptr<const wchar_t> msgptr = PtrToStringChars(message);
+	return ::RegisterWindowMessage(msgptr);
 }
