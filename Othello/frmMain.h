@@ -92,6 +92,7 @@ namespace Othello {
 	{
 	private:
 		static const int END_SOLVE_WARNING_DEPTH = 26;
+		static const int DEFAULT_PROMPT_TIMEOUT = 3000;
 
 		ref class GUIPlayer : public AbstractPlayer {
 		private:
@@ -272,8 +273,8 @@ namespace Othello {
 			"停止搜索: P\n"
 			"分析棋局: Ctrl+A\n"
 			"显示残局信息: Ctrl+K\n"
-			"打开游戏: Ctrl+O\n"
-			"保存游戏: Ctrl+S\n"
+			"打开/保存游戏: Ctrl+O/Ctrl+S\n"
+			"复制/粘贴局面: Ctrl+C/Ctrl+V\n"
 			"显示帮助: F1\n"
 			"退出游戏: Ctrl+X";
 		array<ChessPicBox^, 2>^ board;
@@ -497,6 +498,8 @@ namespace Othello {
 	private: System::Windows::Forms::StatusStrip^  statusBar2;
 	private: System::Windows::Forms::ToolStripStatusLabel^  ssPV;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
+	private: System::Windows::Forms::ToolStripStatusLabel^  ssPrompt;
+	private: System::Windows::Forms::Timer^  tmrPrompt;
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -511,6 +514,7 @@ namespace Othello {
 				 this->picBoard = (gcnew System::Windows::Forms::PictureBox());
 				 this->statusBar = (gcnew System::Windows::Forms::StatusStrip());
 				 this->ssPlayers = (gcnew System::Windows::Forms::ToolStripStatusLabel());
+				 this->ssPrompt = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->ssResult = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->ssSpeed = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->ssNodes = (gcnew System::Windows::Forms::ToolStripStatusLabel());
@@ -674,6 +678,7 @@ namespace Othello {
 				 this->lstSteps = (gcnew System::Windows::Forms::ListBox());
 				 this->statusBar2 = (gcnew System::Windows::Forms::StatusStrip());
 				 this->ssPV = (gcnew System::Windows::Forms::ToolStripStatusLabel());
+				 this->tmrPrompt = (gcnew System::Windows::Forms::Timer(this->components));
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBoard))->BeginInit();
 				 this->statusBar->SuspendLayout();
 				 this->toolBar->SuspendLayout();
@@ -704,8 +709,8 @@ namespace Othello {
 				 // 
 				 // statusBar
 				 // 
-				 this->statusBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {this->ssPlayers, this->ssResult, 
-					 this->ssSpeed, this->ssNodes, this->ssSpace, this->tspb1});
+				 this->statusBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {this->ssPlayers, this->ssPrompt, 
+					 this->ssResult, this->ssSpeed, this->ssNodes, this->ssSpace, this->tspb1});
 				 this->statusBar->Location = System::Drawing::Point(0, 519);
 				 this->statusBar->Name = L"statusBar";
 				 this->statusBar->RenderMode = System::Windows::Forms::ToolStripRenderMode::ManagerRenderMode;
@@ -717,8 +722,18 @@ namespace Othello {
 				 // 
 				 this->ssPlayers->AutoSize = false;
 				 this->ssPlayers->Name = L"ssPlayers";
-				 this->ssPlayers->Size = System::Drawing::Size(240, 18);
+				 this->ssPlayers->Size = System::Drawing::Size(230, 18);
+				 this->ssPlayers->Text = L"LongUsername VS LongUsername";
 				 this->ssPlayers->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+				 // 
+				 // ssPrompt
+				 // 
+				 this->ssPrompt->AutoSize = false;
+				 this->ssPrompt->Name = L"ssPrompt";
+				 this->ssPrompt->Size = System::Drawing::Size(0, 18);
+				 this->ssPrompt->Text = L"Prompt";
+				 this->ssPrompt->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+				 this->ssPrompt->Visible = false;
 				 // 
 				 // ssResult
 				 // 
@@ -726,14 +741,15 @@ namespace Othello {
 				 this->ssResult->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssResult->Name = L"ssResult";
 				 this->ssResult->Size = System::Drawing::Size(108, 18);
-				 this->ssResult->Text = L"空闲";
+				 this->ssResult->Text = L"+128.00 @ 18";
 				 this->ssResult->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
 				 // ssSpeed
 				 // 
 				 this->ssSpeed->AutoSize = false;
 				 this->ssSpeed->Name = L"ssSpeed";
-				 this->ssSpeed->Size = System::Drawing::Size(70, 18);
+				 this->ssSpeed->Size = System::Drawing::Size(80, 18);
+				 this->ssSpeed->Text = L"99999 Kn/s";
 				 this->ssSpeed->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				 // 
 				 // ssNodes
@@ -741,6 +757,8 @@ namespace Othello {
 				 this->ssNodes->AutoSize = false;
 				 this->ssNodes->Name = L"ssNodes";
 				 this->ssNodes->Size = System::Drawing::Size(90, 18);
+				 this->ssNodes->Text = L"9999.999 Gn";
+				 this->ssNodes->TextAlign = System::Drawing::ContentAlignment::MiddleRight;
 				 // 
 				 // ssSpace
 				 // 
@@ -2047,6 +2065,11 @@ namespace Othello {
 				 this->ssPV->Text = L"Principle Variation";
 				 this->ssPV->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
+				 // tmrPrompt
+				 // 
+				 this->tmrPrompt->Interval = 3000;
+				 this->tmrPrompt->Tick += gcnew System::EventHandler(this, &frmMain::tmrPrompt_Tick);
+				 // 
 				 // frmMain
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
@@ -2208,7 +2231,7 @@ namespace Othello {
 	private:System::Void mnuUseBook_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void mnuAutoClean_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void mnuShowPV_Click(System::Object^  sender, System::EventArgs^  e);
-
+	private:System::Void tmrPrompt_Tick(System::Object ^sender, System::EventArgs ^e);
 	private:
 		void setSelection(int x, int y);
 		AbstractPlayer^ createPlayer(PlayerType type, Chess colorReserved);
@@ -2251,7 +2274,9 @@ namespace Othello {
 		void setMnuDelay();
 		void loadConfig();
 		void saveConfig();
+		Board^ getCurrentBoard();
 		void setupBoard();
+		void setupBoard(Board^ board, Chess firstPlayer);
 		bool checkMem(unsigned long long tableSize);
 		void setTableSize(int size);
 		void openGame();
@@ -2307,6 +2332,10 @@ namespace Othello {
 		void autoClear();
 		bool needShowPV();
 		void showPVChanged();
+		void copyBoard();
+		void pasteBoard();
+		void prompt(System::String ^content);
+		void prompt(System::String^ content, int timeout);
 #ifdef CHRISTMAS
 		void showChristmasWish();
 #endif

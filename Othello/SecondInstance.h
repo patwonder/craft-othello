@@ -41,10 +41,13 @@ namespace Othello {
 ref class SecondInstance {
 public:
 	static const int CLR_HWND_BROADCAST = 0xffff;
+	static const int CLR_SW_RESTORE = 9;
 	static const int WM_SISTART = CLRRegisterWindowMessage("{9F93E3AD-147B-4881-BA59-85BFDF4C8CE5}");
 
 	static bool CLRPostMessage(System::IntPtr hWnd, int msg, System::IntPtr wParam, System::IntPtr lParam);
 	static int CLRRegisterWindowMessage(System::String^ message);
+
+	static bool CLRShowWindow(System::IntPtr hWnd, int nCmdShow);
 };
 
 } // namespace Othello

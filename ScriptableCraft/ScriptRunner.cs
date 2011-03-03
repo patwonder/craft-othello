@@ -73,8 +73,10 @@ namespace ScriptableCraft {
 			return parseChess(mover[0]);
 		}
 
-		private static string resultString(SearchResult res, bool wld) {
-			if (wld) {
+		private static string resultString(SearchResult res, bool wld, int mid) {
+			if (mid != 0) {
+				return res.MidEvaluationString + " @ " + mid.ToString();
+			} else if (wld) {
 				if (res.Evaluation > 0) {
 					return "Win";
 				} else if (res.Evaluation < 0) {
@@ -138,14 +140,16 @@ namespace ScriptableCraft {
 			}
 
 			bool wld = false, warmup = false;
+			int mid = 0;
 			for (int i = 2; i < boardParts.Length; i++) {
-				switch (boardParts[i].ToUpper()) {
-				case "WLD":
+				string option = boardParts[i].ToUpper();
+				if (option == "WLD")
 					wld = true;
-					break;
-				case "WARMUP":
+				else if (option == "WARMUP")
 					warmup = true;
-					break;
+				else if (option.StartsWith("MID")) {
+					Int32.TryParse(option.Substring(3), out mid);
+					if (mid < 0) mid = 0;
 				}
 			}
 
@@ -154,14 +158,14 @@ namespace ScriptableCraft {
 			engine.setBoard(board);
 
 			DateTime timeStart = DateTime.Now;
-			SearchResult res = engine.solveExact(mover, wld);
+			SearchResult res = (mid == 0) ? engine.solveExact(mover, wld) : engine.solve(mover, mid, false);
 			TimeSpan timeSpan = DateTime.Now - timeStart;
 
 			SearchStats stats = engine.getSearchStats();
 
 			engine.Dispose();
 
-			output.Write(resultString(res, wld));
+			output.Write(resultString(res, wld, mid));
 			output.Write("\t");
 			output.Write(moveString(res));
 			output.Write("\t");

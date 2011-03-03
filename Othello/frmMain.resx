@@ -844,7 +844,7 @@
 </value>
   </data>
   <data name="menuBar.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>233, 17</value>
+    <value>217, 17</value>
   </data>
   <data name="mnuNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1702,7 +1702,7 @@
 </value>
   </data>
   <data name="tmrLayout.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>338, 17</value>
+    <value>322, 17</value>
   </data>
   <data name="picWhite.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2948,7 +2948,10 @@
 </value>
   </data>
   <data name="statusBar2.TrayLocation" type="System.Drawing.Point, System.Drawing">
-    <value>446, 17</value>
+    <value>434, 17</value>
+  </data>
+  <data name="tmrPrompt.TrayLocation" type="System.Drawing.Point, System.Drawing">
+    <value>552, 18</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

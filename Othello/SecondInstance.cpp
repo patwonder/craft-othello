@@ -50,3 +50,7 @@ int SecondInstance::CLRRegisterWindowMessage(System::String^ message) {
 	pin_ptr<const wchar_t> msgptr = PtrToStringChars(message);
 	return ::RegisterWindowMessage(msgptr);
 }
+
+bool SecondInstance::CLRShowWindow(System::IntPtr hWnd, int nCmdShow) {
+	return ShowWindow((HWND)hWnd.ToPointer(), nCmdShow);
+}

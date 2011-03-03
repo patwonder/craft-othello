@@ -99,6 +99,19 @@ namespace CraftEngineNet {
 			}
 		}
 
+		property System::String^ MidEvaluationString {
+			System::String^ get() {
+				if (evaluation < -CraftEngine::Solver::INFINITE + CraftEngine::Solver::MAXSTEP) {
+					return (evaluation + CraftEngine::Solver::INFINITE - CraftEngine::Solver::MAXSTEP).ToString();
+				} else if (evaluation > CraftEngine::Solver::INFINITE - CraftEngine::Solver::MAXSTEP) {
+					return "+" + (evaluation - CraftEngine::Solver::INFINITE + CraftEngine::Solver::MAXSTEP).ToString();
+				} else {
+					return ((evaluation > 0) ? "+" : "") 
+						+ ((double)evaluation / CraftEngine::RULER).ToString("0.00");
+				}
+			}
+		}
+
 		///结果是否从棋谱直接得到
 		property bool BookMove {
 			bool get() {

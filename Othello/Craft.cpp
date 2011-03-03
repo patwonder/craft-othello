@@ -98,7 +98,7 @@ void Craft::solverStarter() {
 		(*res) = solver->solve(myColor, options.midGameDepth, userInfo->UseBook);
 	} else if (empties >= options.partialExactStep90) {
 		int percentage;
-		(*res) = solver->partialSolveExact(myColor, false, 60, percentage);
+		(*res) = solver->partialSolveExact(myColor, false, 80, percentage);
 		this->percentage = percentage;
 	} else if (empties >= options.partialExactStep99) {
 		int percentage;

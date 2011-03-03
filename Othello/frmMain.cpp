@@ -40,6 +40,7 @@
 #include "BoardSetup.h"
 #include "frmAbout.h"
 #include "SecondInstance.h"
+#include "BoardResolver.h"
 
 using namespace System;
 using namespace Othello;
@@ -1185,6 +1186,7 @@ void frmMain::setLayout() {
 		}
 	if (analyzeMode) ssPlayers->Width = statusBar->Width - 15;
 	else ssPlayers->Width = statusBar->Width - ssPlayersOffset;
+	ssPrompt->Width = ssPlayers->Width;
 	ssPV->Width = statusBar2->Width - ssPVOffset;
 }
 
@@ -2112,6 +2114,12 @@ System::Void frmMain::frmMain_KeyDown(System::Object ^sender, System::Windows::F
 		case Keys::K:
 			reshowEndGameInfo();
 			break;
+		case Keys::C:
+			copyBoard();
+			break;
+		case Keys::V:
+			pasteBoard();
+			break;
 		//case Keys::T:
 		//	changeTheme("xmas");
 		//	break;
@@ -2410,16 +2418,23 @@ System::Void frmMain::mnuLearnImmediately_Click(System::Object^ sender, System::
 	mnuLearnImmediately->Checked = userInfo->AutoLearn;
 }
 
-void frmMain::setupBoard() {
-	if (analyzeMode) return;
+Board^ frmMain::getCurrentBoard() {
 	Board^ board = gcnew Board(WIDTH, HEIGHT);
 	for (int i = 0; i < WIDTH; i++)
 		for (int j = 0; j < HEIGHT; j++)
 			board[i, j] = gcBlack->get(i, j);
-	
+	return board;
+}
+
+void frmMain::setupBoard() {
+	if (analyzeMode) return;
+	setupBoard(getCurrentBoard(), gcBlack->getCurrentPlayer());
+}
+
+void frmMain::setupBoard(Board^ board, Chess firstPlayer) {
 	setPaused(true);
-	BoardSetup^ boardSetupForm = 
-		gcnew BoardSetup(board, gcBlack->getCurrentPlayer(), bdSetupBlack,
+	BoardSetup^ boardSetupForm =
+		gcnew BoardSetup(board, firstPlayer, bdSetupBlack,
 		bdSetupWhite, bdSetupAv);
 	try {
 		Windows::Forms::DialogResult res = boardSetupForm->ShowDialog(this);
@@ -2438,7 +2453,6 @@ void frmMain::setupBoard() {
 		delete boardSetupForm;
 	}
 }
-
 void frmMain::setSelection(int x, int y) {
 	if (x >= WIDTH || x < 0 || y >= HEIGHT || y < 0) {
 		//disable
@@ -3177,6 +3191,7 @@ void frmMain::enterAnalyzeMode() {
 	ssSpeed->Visible = false;
 	ssResult->Visible = false;
 	ssPlayers->Width = statusBar->Width - 15;
+	ssPrompt->Width = ssPlayers->Width;
 	ssPlayers->Text = "分析模式";
 	showPVChanged();
 }
@@ -3202,6 +3217,7 @@ void frmMain::leaveAnalyzeMode() {
 	tsbtnOpenGame->Enabled = true;
 	mnuOpenGame->Enabled = true;
 	ssPlayers->Width = statusBar->Width - ssPlayersOffset;
+	ssPrompt->Width = ssPlayers->Width;
 	ssResult->Visible = true;
 	ssSpeed->Visible = true;
 	ssNodes->Visible = true;
@@ -3651,8 +3667,59 @@ void frmMain::showPVChanged() {
 void frmMain::WndProc(System::Windows::Forms::Message% m) {
 	if (SecondInstance::WM_SISTART && m.Msg == SecondInstance::WM_SISTART) {
 		if (this->WindowState == FormWindowState::Minimized)
-			this->WindowState = FormWindowState::Normal;
+			SecondInstance::CLRShowWindow(this->Handle, SecondInstance::CLR_SW_RESTORE);
 		notifyUser();
 	}
 	System::Windows::Forms::Form::WndProc(m);
+}
+
+void frmMain::copyBoard() {
+	System::String^ str = BoardResolver::getBoardString(getCurrentBoard(), gcBlack->getCurrentPlayer());
+	try {
+		Clipboard::SetText(str);
+		//setPaused(true);
+		//MessageBox::Show(this, "已将当前局面复制到剪贴板。", "复制局面", 
+		//	MessageBoxButtons::OK, MessageBoxIcon::Information);
+		//setPaused(false);
+		prompt("已将当前局面复制到剪贴板。");
+	} catch (...) {
+		prompt("！！复制局面失败！！");
+	}
+}
+
+void frmMain::pasteBoard() {
+	if (analyzeMode) return;
+	System::String^ str;
+	try {
+		str = Clipboard::GetText();
+	} catch (...) {
+		prompt("！！读取剪贴板失败！！");
+	}
+
+	Board^ bd = gcnew Board(WIDTH, HEIGHT);
+	Chess fp = BoardResolver::processBoard(str, bd);
+
+	if (fp != Chess::AVAILABLE)
+		setupBoard(bd, fp);
+	else
+		prompt("！！剪贴板不含有效局面！！");
+}
+
+void frmMain::prompt(System::String ^content) {
+	int lTimeout = DEFAULT_PROMPT_TIMEOUT;
+	prompt(content, lTimeout);
+}
+
+void frmMain::prompt(System::String ^content, int timeout) {
+	ssPrompt->Text = content;
+	ssPlayers->Visible = false;
+	ssPrompt->Visible = true;
+	tmrPrompt->Interval = timeout;
+	tmrPrompt->Enabled = true;
+}
+
+System::Void frmMain::tmrPrompt_Tick(System::Object ^sender, System::EventArgs ^e) {
+	tmrPrompt->Enabled = false;
+	ssPrompt->Visible = false;
+	ssPlayers->Visible = true;
 }
