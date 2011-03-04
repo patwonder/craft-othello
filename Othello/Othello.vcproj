@@ -935,7 +935,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IconError.png"
+				>
+			</File>
+			<File
+				RelativePath=".\IconInfo.png"
+				>
+			</File>
+			<File
 				RelativePath=".\iconRest.png"
+				>
+			</File>
+			<File
+				RelativePath=".\IconWarning.png"
 				>
 			</File>
 			<File

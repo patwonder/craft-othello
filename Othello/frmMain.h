@@ -225,6 +225,7 @@ namespace Othello {
 		Image^ nsbChessOrigin;
 		Image^ nswChessOrigin;
 		Image^ iconBusy, ^iconRest;
+		Image^ iconInfo, ^iconWarning, ^iconError;
 		Image^ bgImage, ^cbImage;
 		Image^ bdSetupBlack, ^bdSetupWhite, ^bdSetupAv;
 		SoundPlayer^ startSound, ^goSound, ^winSound, ^drawSound, ^loseSound;
@@ -500,6 +501,8 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 	private: System::Windows::Forms::ToolStripStatusLabel^  ssPrompt;
 	private: System::Windows::Forms::Timer^  tmrPrompt;
+private: System::Windows::Forms::ToolStripMenuItem^  mnuCopy;
+private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -607,6 +610,8 @@ namespace Othello {
 				 this->mnuExit = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuControl = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuSetupBoard = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->mnuCopy = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->mnuPaste = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->toolStripSeparator8 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->mnuBack = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuForward = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -721,6 +726,7 @@ namespace Othello {
 				 // ssPlayers
 				 // 
 				 this->ssPlayers->AutoSize = false;
+				 this->ssPlayers->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssPlayers->Name = L"ssPlayers";
 				 this->ssPlayers->Size = System::Drawing::Size(230, 18);
 				 this->ssPlayers->Text = L"LongUsername VS LongUsername";
@@ -729,6 +735,7 @@ namespace Othello {
 				 // ssPrompt
 				 // 
 				 this->ssPrompt->AutoSize = false;
+				 this->ssPrompt->ImageAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssPrompt->Name = L"ssPrompt";
 				 this->ssPrompt->Size = System::Drawing::Size(0, 18);
 				 this->ssPrompt->Text = L"Prompt";
@@ -1436,9 +1443,9 @@ namespace Othello {
 				 // 
 				 // mnuControl
 				 // 
-				 this->mnuControl->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(10) {this->mnuSetupBoard, 
-					 this->toolStripSeparator8, this->mnuBack, this->mnuForward, this->mnuTip, this->mnuForceEndSolve, this->mnuStopSearch, this->toolStripMenuItem1, 
-					 this->mnuAnalyze, this->mnuLearn});
+				 this->mnuControl->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(12) {this->mnuSetupBoard, 
+					 this->mnuCopy, this->mnuPaste, this->toolStripSeparator8, this->mnuBack, this->mnuForward, this->mnuTip, this->mnuForceEndSolve, 
+					 this->mnuStopSearch, this->toolStripMenuItem1, this->mnuAnalyze, this->mnuLearn});
 				 this->mnuControl->Name = L"mnuControl";
 				 this->mnuControl->Size = System::Drawing::Size(60, 21);
 				 this->mnuControl->Text = L"控制(&C)";
@@ -1447,20 +1454,34 @@ namespace Othello {
 				 // 
 				 this->mnuSetupBoard->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuSetupBoard.Image")));
 				 this->mnuSetupBoard->Name = L"mnuSetupBoard";
-				 this->mnuSetupBoard->Size = System::Drawing::Size(139, 22);
+				 this->mnuSetupBoard->Size = System::Drawing::Size(140, 22);
 				 this->mnuSetupBoard->Text = L"预设棋局(&S)";
 				 this->mnuSetupBoard->Click += gcnew System::EventHandler(this, &frmMain::mnuSetupBoard_Click);
+				 // 
+				 // mnuCopy
+				 // 
+				 this->mnuCopy->Name = L"mnuCopy";
+				 this->mnuCopy->Size = System::Drawing::Size(140, 22);
+				 this->mnuCopy->Text = L"复制局面(&C)";
+				 this->mnuCopy->Click += gcnew System::EventHandler(this, &frmMain::mnuCopy_Click);
+				 // 
+				 // mnuPaste
+				 // 
+				 this->mnuPaste->Name = L"mnuPaste";
+				 this->mnuPaste->Size = System::Drawing::Size(140, 22);
+				 this->mnuPaste->Text = L"粘贴局面(&V)";
+				 this->mnuPaste->Click += gcnew System::EventHandler(this, &frmMain::mnuPaste_Click);
 				 // 
 				 // toolStripSeparator8
 				 // 
 				 this->toolStripSeparator8->Name = L"toolStripSeparator8";
-				 this->toolStripSeparator8->Size = System::Drawing::Size(136, 6);
+				 this->toolStripSeparator8->Size = System::Drawing::Size(137, 6);
 				 // 
 				 // mnuBack
 				 // 
 				 this->mnuBack->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuBack.Image")));
 				 this->mnuBack->Name = L"mnuBack";
-				 this->mnuBack->Size = System::Drawing::Size(139, 22);
+				 this->mnuBack->Size = System::Drawing::Size(140, 22);
 				 this->mnuBack->Text = L"悔棋(&B)";
 				 this->mnuBack->Click += gcnew System::EventHandler(this, &frmMain::mnuBack_Click);
 				 // 
@@ -1468,7 +1489,7 @@ namespace Othello {
 				 // 
 				 this->mnuForward->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuForward.Image")));
 				 this->mnuForward->Name = L"mnuForward";
-				 this->mnuForward->Size = System::Drawing::Size(139, 22);
+				 this->mnuForward->Size = System::Drawing::Size(140, 22);
 				 this->mnuForward->Text = L"继续(&F)";
 				 this->mnuForward->Click += gcnew System::EventHandler(this, &frmMain::mnuForward_Click);
 				 // 
@@ -1476,7 +1497,7 @@ namespace Othello {
 				 // 
 				 this->mnuTip->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuTip.Image")));
 				 this->mnuTip->Name = L"mnuTip";
-				 this->mnuTip->Size = System::Drawing::Size(139, 22);
+				 this->mnuTip->Size = System::Drawing::Size(140, 22);
 				 this->mnuTip->Text = L"提示(&T)";
 				 this->mnuTip->Click += gcnew System::EventHandler(this, &frmMain::mnuTip_Click);
 				 // 
@@ -1484,7 +1505,7 @@ namespace Othello {
 				 // 
 				 this->mnuForceEndSolve->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuForceEndSolve.Image")));
 				 this->mnuForceEndSolve->Name = L"mnuForceEndSolve";
-				 this->mnuForceEndSolve->Size = System::Drawing::Size(139, 22);
+				 this->mnuForceEndSolve->Size = System::Drawing::Size(140, 22);
 				 this->mnuForceEndSolve->Text = L"终局求解(&E)";
 				 this->mnuForceEndSolve->Click += gcnew System::EventHandler(this, &frmMain::mnuForceEndSolve_Click);
 				 // 
@@ -1492,20 +1513,20 @@ namespace Othello {
 				 // 
 				 this->mnuStopSearch->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuStopSearch.Image")));
 				 this->mnuStopSearch->Name = L"mnuStopSearch";
-				 this->mnuStopSearch->Size = System::Drawing::Size(139, 22);
+				 this->mnuStopSearch->Size = System::Drawing::Size(140, 22);
 				 this->mnuStopSearch->Text = L"停止搜索(&P)";
 				 this->mnuStopSearch->Click += gcnew System::EventHandler(this, &frmMain::mnuStopSearch_Click);
 				 // 
 				 // toolStripMenuItem1
 				 // 
 				 this->toolStripMenuItem1->Name = L"toolStripMenuItem1";
-				 this->toolStripMenuItem1->Size = System::Drawing::Size(136, 6);
+				 this->toolStripMenuItem1->Size = System::Drawing::Size(137, 6);
 				 // 
 				 // mnuAnalyze
 				 // 
 				 this->mnuAnalyze->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuAnalyze.Image")));
 				 this->mnuAnalyze->Name = L"mnuAnalyze";
-				 this->mnuAnalyze->Size = System::Drawing::Size(139, 22);
+				 this->mnuAnalyze->Size = System::Drawing::Size(140, 22);
 				 this->mnuAnalyze->Text = L"分析(&A)";
 				 this->mnuAnalyze->Click += gcnew System::EventHandler(this, &frmMain::mnuAnalyze_Click);
 				 // 
@@ -1513,7 +1534,7 @@ namespace Othello {
 				 // 
 				 this->mnuLearn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuLearn.Image")));
 				 this->mnuLearn->Name = L"mnuLearn";
-				 this->mnuLearn->Size = System::Drawing::Size(139, 22);
+				 this->mnuLearn->Size = System::Drawing::Size(140, 22);
 				 this->mnuLearn->Text = L"学习(&L)";
 				 this->mnuLearn->Click += gcnew System::EventHandler(this, &frmMain::mnuLearn_Click);
 				 // 
@@ -2232,6 +2253,8 @@ namespace Othello {
 	private:System::Void mnuAutoClean_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void mnuShowPV_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void tmrPrompt_Tick(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void mnuCopy_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void mnuPaste_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
 		void setSelection(int x, int y);
 		AbstractPlayer^ createPlayer(PlayerType type, Chess colorReserved);
@@ -2336,6 +2359,9 @@ namespace Othello {
 		void pasteBoard();
 		void prompt(System::String ^content);
 		void prompt(System::String^ content, int timeout);
+		void prompt(System::String^ content, int timeout, System::Drawing::Image^ icon);
+		void prompt(System::String ^content, System::Drawing::Image ^icon);
+
 #ifdef CHRISTMAS
 		void showChristmasWish();
 #endif
@@ -2400,6 +2426,5 @@ namespace Othello {
 	protected:
 		virtual void WndProc(System::Windows::Forms::Message% m) override;
 		~frmMain();
-};
-
+	};
 }

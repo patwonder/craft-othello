@@ -1431,6 +1431,9 @@ void frmMain::loadDefaultTheme() {
 	cbImage = safe_cast<Image^>(resources->GetObject("ChessBoard"));
 	iconBusy = safe_cast<Image^>(resources->GetObject("iconBusy"));
 	iconRest = safe_cast<Image^>(resources->GetObject("iconRest"));
+	iconInfo = safe_cast<Image^>(resources->GetObject("IconInfo"));
+	iconWarning = safe_cast<Image^>(resources->GetObject("IconWarning"));
+	iconError = safe_cast<Image^>(resources->GetObject("IconError"));
 	bdSetupBlack = safe_cast<Image^>(resources->GetObject("BoardSetupBlack"));
 	bdSetupWhite = safe_cast<Image^>(resources->GetObject("BoardSetupWhite"));
 	bdSetupAv = safe_cast<Image^>(resources->GetObject("BoardSetupAv"));
@@ -1601,6 +1604,9 @@ void frmMain::loadTheme(System::String^ theme) {
 		cbImage = loadImage(themeDir + catagory->getAttribute("ChessBoard", nullptr), "ChessBoard");
 		iconBusy = loadImage(themeDir + catagory->getAttribute("IconBusy", nullptr), "iconBusy");
 		iconRest = loadImage(themeDir + catagory->getAttribute("IconRest", nullptr), "iconRest");
+		iconInfo = loadImage(themeDir + catagory->getAttribute("IconInfo", nullptr), "IconInfo");
+		iconWarning = loadImage(themeDir + catagory->getAttribute("IconWarning", nullptr), "IconWarning");
+		iconError = loadImage(themeDir + catagory->getAttribute("IconError", nullptr), "IconError");
 		ChessPicBox::setBlackChess(bChessOrigin);
 		ChessPicBox::setWhiteChess(wChessOrigin);
 		ChessPicBox::setAvBlackChess(abChessOrigin);
@@ -1690,11 +1696,13 @@ void frmMain::changeTheme(String^ newTheme) {
 
 frmMain::frmMain() {
 	InitializeComponent();
+
 #ifndef MACHINE_X64
 	mnu2GB->Enabled = false;
 	mnu2GB->Text += " (仅64位)";
 	mnu2GB->ToolTipText = "仅在64位版本中可用";
 #endif
+
 	initThemeList();
 	loadConfig();
 	resources = (gcnew System::ComponentModel::ComponentResourceManager(frmMain::typeid));
@@ -3185,6 +3193,7 @@ void frmMain::enterAnalyzeMode() {
 	mnuNewEndGame->Enabled = false;
 	tsbtnOpenGame->Enabled = false;
 	mnuOpenGame->Enabled = false;
+	mnuPaste->Enabled = false;
 	tspb1->Visible = false;
 	ssSpace->Visible = false;
 	ssNodes->Visible = false;
@@ -3216,6 +3225,7 @@ void frmMain::leaveAnalyzeMode() {
 	mnuNewEndGame->Enabled = tsmnuNewEndGame->Enabled;
 	tsbtnOpenGame->Enabled = true;
 	mnuOpenGame->Enabled = true;
+	mnuPaste->Enabled = true;
 	ssPlayers->Width = statusBar->Width - ssPlayersOffset;
 	ssPrompt->Width = ssPlayers->Width;
 	ssResult->Visible = true;
@@ -3683,7 +3693,7 @@ void frmMain::copyBoard() {
 		//setPaused(false);
 		prompt("已将当前局面复制到剪贴板。");
 	} catch (...) {
-		prompt("！！复制局面失败！！");
+		prompt("复制局面失败！！", iconError);
 	}
 }
 
@@ -3693,7 +3703,7 @@ void frmMain::pasteBoard() {
 	try {
 		str = Clipboard::GetText();
 	} catch (...) {
-		prompt("！！读取剪贴板失败！！");
+		prompt("读取剪贴板失败！！", iconError);
 	}
 
 	Board^ bd = gcnew Board(WIDTH, HEIGHT);
@@ -3702,7 +3712,7 @@ void frmMain::pasteBoard() {
 	if (fp != Chess::AVAILABLE)
 		setupBoard(bd, fp);
 	else
-		prompt("！！剪贴板不含有效局面！！");
+		prompt("剪贴板不含有效局面！！", iconError);
 }
 
 void frmMain::prompt(System::String ^content) {
@@ -3711,10 +3721,23 @@ void frmMain::prompt(System::String ^content) {
 }
 
 void frmMain::prompt(System::String ^content, int timeout) {
+	System::Drawing::Image^ lIcon = iconInfo;
+	prompt(content, timeout, lIcon);
+}
+
+void frmMain::prompt(System::String ^content, System::Drawing::Image ^icon) {
+	int lTimeout = DEFAULT_PROMPT_TIMEOUT;
+	prompt(content, lTimeout, icon);
+}
+
+void frmMain::prompt(System::String ^content, int timeout, System::Drawing::Image ^icon) {
+	ssPrompt->TextImageRelation = TextImageRelation::ImageBeforeText;
 	ssPrompt->Text = content;
+	ssPrompt->Image = icon;
 	ssPlayers->Visible = false;
 	ssPrompt->Visible = true;
 	tmrPrompt->Interval = timeout;
+	tmrPrompt->Enabled = false;
 	tmrPrompt->Enabled = true;
 }
 
@@ -3722,4 +3745,12 @@ System::Void frmMain::tmrPrompt_Tick(System::Object ^sender, System::EventArgs ^
 	tmrPrompt->Enabled = false;
 	ssPrompt->Visible = false;
 	ssPlayers->Visible = true;
+}
+
+System::Void frmMain::mnuCopy_Click(System::Object ^sender, System::EventArgs ^e) {
+	copyBoard();
+}
+
+System::Void frmMain::mnuPaste_Click(System::Object ^sender, System::EventArgs ^e) {
+	pasteBoard();
 }

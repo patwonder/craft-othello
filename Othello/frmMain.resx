@@ -3714,8 +3714,17 @@
   <data name="iconBusy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>iconBusy.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IconError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>IconError.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconInfo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>IconInfo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="iconRest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>iconRest.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>IconWarning.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NextAvBlack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>NextAvBlack.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
