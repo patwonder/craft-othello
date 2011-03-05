@@ -1,5 +1,5 @@
 Craft 是一款具有较高AI的黑白棋程序。
-版权所有 (C) 2008-2010  Patrick
+版权所有 (C) 2008-2011  Patrick
 
 Craft 为自由软件；您可依据自由软件基金会所发表的GNU通用公共授权
 条款，对本程序再次发布和/或修改；无论您依据的是本授权的第三版，
@@ -12,7 +12,7 @@ Craft 为自由软件；您可依据自由软件基金会所发表的GNU通用公共授权
 <http://www.gnu.org/licenses/>.
 
 Craft is an othello program with relatively high AI.
-Copyright (C) 2008-2010  Patrick
+Copyright (C) 2008-2011  Patrick
 
 Craft is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

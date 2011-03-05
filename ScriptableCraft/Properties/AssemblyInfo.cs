@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Patrick")]
 [assembly: AssemblyProduct("ScriptableCraft")]
-[assembly: AssemblyCopyright("Copyright © 2010  Patrick")]
+[assembly: AssemblyCopyright("Copyright © 2010-2011  Patrick")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 可以指定所有这些值，也可以使用“内部版本号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.3610")]
-[assembly: AssemblyFileVersion("1.0.0.3610")]
+[assembly: AssemblyVersion("1.1.0.3716")]
+[assembly: AssemblyFileVersion("1.1.0.3716")]

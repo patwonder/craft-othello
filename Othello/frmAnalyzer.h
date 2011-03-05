@@ -1,7 +1,7 @@
 ﻿/*
 *************************************************************************
     Craft is an othello program with relatively high AI.
-    Copyright (C) 2008-2010  Patrick
+    Copyright (C) 2008-2011  Patrick
 
     This file is part of Craft.
 

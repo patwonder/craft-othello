@@ -147,6 +147,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_347C65658A514A32BB9A4913288A3710"
+        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_347C65658A514A32BB9A4913288A3710"
+        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3782CCA8CD3C44899BBDFF96B076723F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -375,12 +387,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_9ECF1FE46B94453482675973C7B94ED6"
-        "OwnerKey" = "8:_AA57B5A48C9E45279B078F677A07334C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_A06787EFA88B494F8C14E5A26E4BD415"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -407,18 +413,6 @@
         {
         "MsmKey" = "8:_A8F6EEBBA1784281AAC7A74579328503"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AA57B5A48C9E45279B078F677A07334C"
-        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AA57B5A48C9E45279B078F677A07334C"
-        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -503,6 +497,12 @@
         {
         "MsmKey" = "8:_C9D25D999D774C8C9DCDA841098AEBEB"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CF605C5DE86944588043ACD1D41EB14A"
+        "OwnerKey" = "8:_347C65658A514A32BB9A4913288A3710"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2764,23 +2764,23 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Craft 1.3.0"
-        "ProductCode" = "8:{7BC27173-AE8F-48D0-891D-DC688DBA89F4}"
-        "PackageCode" = "8:{D29F23DD-2169-478F-B382-AEDF8EC1F3C4}"
+        "ProductName" = "8:Craft 1.4.0"
+        "ProductCode" = "8:{2AFBFEC6-4F96-4808-AB46-A900C65B49D8}"
+        "PackageCode" = "8:{5D88B64D-33C3-4803-8C9F-E9AFB1F7F42A}"
         "UpgradeCode" = "8:{874DC322-366F-4F04-98A2-238FC1C23BCE}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.3.0"
+        "ProductVersion" = "8:1.4.0"
         "Manufacturer" = "8:Patrick"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Craft 1.3.0"
+        "Title" = "8:Craft 1.4.0"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Patrick"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Craft 1.3.0 - Patrick 的黑白棋程序"
+        "ARPCOMMENTS" = "8:Craft 1.4.0 - Patrick 的黑白棋程序"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "ARPIconIndex" = "3:117"
@@ -3640,11 +3640,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9ECF1FE46B94453482675973C7B94ED6"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_347C65658A514A32BB9A4913288A3710"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_crt_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
                 "Properties"
                 {
                 }
@@ -3654,11 +3654,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_AA57B5A48C9E45279B078F677A07334C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_CF605C5DE86944588043ACD1D41EB14A"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_CRT_x86.msm"
+            "SourcePath" = "8:microsoft_vc90_crt_x86_x64.msm"
                 "Properties"
                 {
                 }
