@@ -43,12 +43,12 @@
 using namespace Othello;
 
 BoardSetup::BoardSetup(Board^ board, Chess color,
-					   Image^ black, Image^ white, Image^ av)
-{
+					   Image^ black, Image^ white, Image^ av) {
 	InitializeComponent();
 	//
 	//TODO: Add the constructor code here
 	//
+	lastClicked = nullptr;
 	automatic = false;
 	bChess = black;
 	wChess = white;
@@ -59,8 +59,7 @@ BoardSetup::BoardSetup(Board^ board, Chess color,
 	const int panelHeight = boardPanel->Height;
 	picBoard = gcnew array<ChessPicBox^, 2>(WIDTH, HEIGHT);
 	for (int i = 0; i < WIDTH; i++)
-		for (int j = 0; j < HEIGHT; j++)
-		{
+		for (int j = 0; j < HEIGHT; j++) {
 			picBoard[i, j] = gcnew ChessPicBox(i, j);
 			boardPanel->Controls->Add(picBoard[i, j]);
 			picBoard[i, j]->Location = System::Drawing::Point(panelWidth * i / WIDTH, panelHeight * j / HEIGHT);
@@ -78,24 +77,32 @@ BoardSetup::BoardSetup(Board^ board, Chess color,
 	DialogResult = Windows::Forms::DialogResult::Cancel;
 }
 
+void BoardSetup::changeColor() {
+	switch (currentColor) {
+	case Chess::BLACK :
+		currentColor = Chess::WHITE;
+		rbColorWhite->Checked = true;
+		break;
+	case Chess::WHITE :
+		currentColor = Chess::AVAILABLE;
+		rbColorAvailable->Checked = true;
+		break;
+	default:
+		currentColor = Chess::BLACK;
+		rbColorBlack->Checked = true;
+	}
+	lastClicked = nullptr;
+}
+
 System::Void BoardSetup::picBoard_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
 	if (e->Button == System::Windows::Forms::MouseButtons::Right) {
-		switch (currentColor) {
-		case Chess::BLACK :
-			currentColor = Chess::WHITE;
-			rbColorWhite->Checked = true;
-			break;
-		case Chess::WHITE :
-			currentColor = Chess::AVAILABLE;
-			rbColorAvailable->Checked = true;
-			break;
-		default:
-			currentColor = Chess::BLACK;
-			rbColorBlack->Checked = true;
-		}
+		changeColor();
 		//setFFOFromBoard();
 	} else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
 		ChessPicBox^ picSender = safe_cast<ChessPicBox^>(sender);
+		if (picSender == lastClicked) {
+			changeColor();
+		}
 		int x = picSender->getXIndex(), y = picSender->getYIndex();
 		board[x, y] = currentColor;
 		switch (currentColor) {
@@ -109,6 +116,7 @@ System::Void BoardSetup::picBoard_MouseDown(System::Object^ sender, System::Wind
 			picSender->Image = avChess;
 		}
 		setFFOFromBoard();
+		lastClicked = picSender;
 	}
 }
 
@@ -140,43 +148,52 @@ void BoardSetup::setBoard() {
 		}
 }
 
-System::Void Othello::BoardSetup::rbColorBlack_CheckedChanged(System::Object ^sender, System::EventArgs ^e)
-{
-	if (rbColorBlack->Checked) currentColor = Chess::BLACK;
+System::Void Othello::BoardSetup::rbColorBlack_CheckedChanged(System::Object ^sender, System::EventArgs ^e) {
+	if (rbColorBlack->Checked) {
+		currentColor = Chess::BLACK;
+		lastClicked = nullptr;
+	}
 }
 
-System::Void Othello::BoardSetup::rbColorWhite_CheckedChanged(System::Object ^sender, System::EventArgs ^e)
-{
-	if (rbColorWhite->Checked) currentColor = Chess::WHITE;
+System::Void Othello::BoardSetup::rbColorWhite_CheckedChanged(System::Object ^sender, System::EventArgs ^e) {
+	if (rbColorWhite->Checked) {
+		currentColor = Chess::WHITE;
+		lastClicked = nullptr;
+	}
 }
-System::Void Othello::BoardSetup::rbColorAvailable_CheckedChanged(System::Object ^sender, System::EventArgs ^e)
-{
-	if (rbColorAvailable->Checked) currentColor = Chess::AVAILABLE;
+
+System::Void Othello::BoardSetup::rbColorAvailable_CheckedChanged(System::Object ^sender, System::EventArgs ^e) {
+	if (rbColorAvailable->Checked) {
+		currentColor = Chess::AVAILABLE;
+		lastClicked = nullptr;
+	}
 }
-System::Void Othello::BoardSetup::rbFirstBlack_CheckedChanged(System::Object ^sender, System::EventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::rbFirstBlack_CheckedChanged(System::Object ^sender, System::EventArgs ^e) {
 	if (rbFirstBlack->Checked) firstPlayer = Chess::BLACK;
 	setFFOFromBoard();
+	lastClicked = nullptr;
 }
-System::Void Othello::BoardSetup::rbFirstWhite_CheckedChanged(System::Object ^sender, System::EventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::rbFirstWhite_CheckedChanged(System::Object ^sender, System::EventArgs ^e) {
 	if (rbFirstWhite->Checked) firstPlayer = Chess::WHITE;
 	setFFOFromBoard();
+	lastClicked = nullptr;
 }
-System::Void Othello::BoardSetup::btnOK_Click(System::Object ^sender, System::EventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::btnOK_Click(System::Object ^sender, System::EventArgs ^e) {
 	//this->Close();
 }
-System::Void Othello::BoardSetup::btnCancel_Click(System::Object ^sender, System::EventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::btnCancel_Click(System::Object ^sender, System::EventArgs ^e) {
 	//this->Close();
 }
-System::Void Othello::BoardSetup::BoardSetup_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::BoardSetup_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e) {
 	//mainForm->Enabled = true;
 }
-System::Void Othello::BoardSetup::btnReset_Click(System::Object ^sender, System::EventArgs ^e)
-{
+
+System::Void Othello::BoardSetup::btnReset_Click(System::Object ^sender, System::EventArgs ^e) {
 	board = ChessBoard::getDefaultBoard(1);
 	firstPlayer = Chess::BLACK;
 	setBoard();
@@ -195,6 +212,7 @@ void BoardSetup::setBoardFromFFO() {
 	setBoard();
 
 	setFFOFromBoard();
+	lastClicked = nullptr;
 }
 
 void BoardSetup::setFFOFromBoard() {

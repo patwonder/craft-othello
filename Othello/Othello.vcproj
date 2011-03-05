@@ -853,6 +853,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\startup.png"
+				>
+			</File>
+			<File
 				RelativePath=".\Uninst48.ico"
 				>
 				<FileConfiguration

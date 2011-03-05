@@ -709,7 +709,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 this->picBoard->TabStop = false;
 				 this->picBoard->Visible = false;
 				 this->picBoard->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMain::backBoard_MouseMove);
-				 this->picBoard->Click += gcnew System::EventHandler(this, &frmMain::backBoard_Click);
+				 this->picBoard->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &frmMain::backBoard_MouseClick);
 				 this->picBoard->MouseHover += gcnew System::EventHandler(this, &frmMain::backBoard_MouseHover);
 				 // 
 				 // statusBar
@@ -1460,6 +1460,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 // 
 				 // mnuCopy
 				 // 
+				 this->mnuCopy->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuCopy.Image")));
 				 this->mnuCopy->Name = L"mnuCopy";
 				 this->mnuCopy->Size = System::Drawing::Size(140, 22);
 				 this->mnuCopy->Text = L"复制局面(&C)";
@@ -1467,6 +1468,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 // 
 				 // mnuPaste
 				 // 
+				 this->mnuPaste->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuPaste.Image")));
 				 this->mnuPaste->Name = L"mnuPaste";
 				 this->mnuPaste->Size = System::Drawing::Size(140, 22);
 				 this->mnuPaste->Text = L"粘贴局面(&V)";
@@ -2146,7 +2148,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private:System::Void picBoard_MouseDown(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e);
 	private:System::Void frmMain_SizeChanged(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tmrLayout_Tick(System::Object ^sender, System::EventArgs ^e);
-	private:System::Void backBoard_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void backBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e);
 	private:System::Void mnuExit_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tsbtnExit_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void frmMain_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);

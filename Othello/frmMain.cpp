@@ -392,7 +392,7 @@ void frmMain::setTableSize(int size) {
 	if (userInfo->TableSize != size) {
 		try {
 			Solver::setCacheSize(size);
-			userInfo->TableSize = Solver::getCacheSize();
+			userInfo->TableSize = (int)Solver::getCacheSize();
 			setMnuTableSize();
 		} catch (...) {
 			if (size != 0x10000) {
@@ -461,6 +461,9 @@ void frmMain::goForward() {
 		if (fairGame) {
 			goBackChance++;
 			tsbtnBack->ToolTipText = tsbtnBack->Text + "(剩余 " + goBackChance + " 次)";
+			if (goBackChance <= 3) {
+				prompt("您还剩下 " + goBackChance + " 次悔棋机会！", iconWarning);
+			}
 		}
 	}
 }
@@ -516,10 +519,11 @@ void frmMain::goBack() {
 			goBackChance--;
 			tsbtnBack->ToolTipText = tsbtnBack->Text + "(剩余 " + goBackChance + " 次)";
 			if (goBackChance <= 3) {
-				setPaused(true);
-				MessageBox::Show(this, "您还剩下 " + goBackChance + " 次悔棋机会！", "悔棋", MessageBoxButtons::OK,
-					MessageBoxIcon::Information);
-				setPaused(false);
+				//setPaused(true);
+				//MessageBox::Show(this, "您还剩下 " + goBackChance + " 次悔棋机会！", "悔棋", MessageBoxButtons::OK,
+				//	MessageBoxIcon::Information);
+				//setPaused(false);
+				prompt("您还剩下 " + goBackChance + " 次悔棋机会！", iconWarning);
 			}
 		}
 	}
@@ -1104,8 +1108,14 @@ void frmMain::setBoard() {
 	}
 }
 
-System::Void frmMain::backBoard_Click(System::Object ^sender, System::EventArgs ^e) {
-
+System::Void frmMain::backBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
+	// check the situation when new users don't click "Start" button before making the first move
+	if (btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
+	}
+	// In case people make an illegal move
+	if (GUIPlay && e->Button == System::Windows::Forms::MouseButtons::Left)
+		prompt("根据规则，请在\"*\"标示处落子。", iconInfo);
 }
 
 System::Void frmMain::backBoard_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
@@ -1328,6 +1338,15 @@ System::Void frmMain::picBoard_MouseUp(System::Object ^sender, System::Windows::
 }
 
 System::Void frmMain::picBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
+	// check the situation when new users don't click "Start" button before making the first move
+	if (btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
+	}
+	// In case people make an illegal move
+	if (GUIPlay && e->Button == System::Windows::Forms::MouseButtons::Left
+		&& !safe_cast<ChessPicBox^>(sender)->isAvailable()) {
+		prompt("根据规则，请在\"*\"标示处落子。", iconInfo);
+	}
 	if (!GUIPlay || peekMode)
 		return;
 	if (e->Button == System::Windows::Forms::MouseButtons::Left) {
@@ -2984,6 +3003,7 @@ void frmMain::getGUITip() {
 	if (fairGame) {
 		tipChance--;
 		tsbtnTip->ToolTipText = tsbtnTip->Text + "(剩余 " + tipChance + " 次)";
+		prompt("您还剩下 " + tipChance + " 次提示机会！", iconWarning);
 	}
 
 	setGUIPlay(false);

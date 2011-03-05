@@ -101,6 +101,7 @@ namespace Othello {
 		Chess firstPlayer;
 		array<ChessPicBox^, 2>^ picBoard;
 		Image^ bChess, ^wChess, ^avChess;
+		ChessPicBox^ lastClicked;
 		bool automatic;
 		static const int MAX_POS_LENGTH = WIDTH * HEIGHT + 2;
 	private: System::Windows::Forms::Button^  btnReset;
@@ -376,6 +377,7 @@ namespace Othello {
 		private: void initialize();
 				 void setBoardFromFFO();
 				 void setFFOFromBoard();
+				 void changeColor();
 				 static System::String^ getFFOString(Board^ board, Chess mover);
 				 static Chess getBoard(System::String^ ffopos, Board^ board);
 
