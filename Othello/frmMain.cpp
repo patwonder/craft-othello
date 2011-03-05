@@ -1110,7 +1110,7 @@ void frmMain::setBoard() {
 
 System::Void frmMain::backBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
 	// check the situation when new users don't click "Start" button before making the first move
-	if (btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+	if (!analyzeMode && btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
 		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
 	}
 	// In case people make an illegal move
@@ -1339,7 +1339,7 @@ System::Void frmMain::picBoard_MouseUp(System::Object ^sender, System::Windows::
 
 System::Void frmMain::picBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
 	// check the situation when new users don't click "Start" button before making the first move
-	if (btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+	if (!analyzeMode && btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
 		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
 	}
 	// In case people make an illegal move
