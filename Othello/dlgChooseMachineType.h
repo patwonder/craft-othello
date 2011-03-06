@@ -191,7 +191,7 @@ namespace Othello {
 			this->optEarth->Size = System::Drawing::Size(95, 17);
 			this->optEarth->TabIndex = 5;
 			this->optEarth->TabStop = true;
-			this->optEarth->Text = L"地球(Earth)";
+			this->optEarth->Text = L"地球(&Earth)";
 			this->optEarth->UseVisualStyleBackColor = true;
 			this->optEarth->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optEarth_CheckedChanged);
 			// 
@@ -204,7 +204,7 @@ namespace Othello {
 			this->optBigEat->Size = System::Drawing::Size(107, 17);
 			this->optBigEat->TabIndex = 4;
 			this->optBigEat->TabStop = true;
-			this->optBigEat->Text = L"大食(Big Eat)";
+			this->optBigEat->Text = L"大食(&Big Eat)";
 			this->optBigEat->UseVisualStyleBackColor = true;
 			this->optBigEat->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optBigEat_CheckedChanged);
 			// 
@@ -217,7 +217,7 @@ namespace Othello {
 			this->optRandom->Size = System::Drawing::Size(101, 17);
 			this->optRandom->TabIndex = 3;
 			this->optRandom->TabStop = true;
-			this->optRandom->Text = L"随机(Random)";
+			this->optRandom->Text = L"随机(&Random)";
 			this->optRandom->UseVisualStyleBackColor = true;
 			this->optRandom->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optRandom_CheckedChanged);
 			// 
@@ -230,7 +230,7 @@ namespace Othello {
 			this->optClouds->Size = System::Drawing::Size(101, 17);
 			this->optClouds->TabIndex = 6;
 			this->optClouds->TabStop = true;
-			this->optClouds->Text = L"云朵(Clouds)";
+			this->optClouds->Text = L"云朵(&Clouds)";
 			this->optClouds->UseVisualStyleBackColor = true;
 			this->optClouds->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optClouds_CheckedChanged);
 			// 
@@ -243,7 +243,7 @@ namespace Othello {
 			this->optOrbit->Size = System::Drawing::Size(95, 17);
 			this->optOrbit->TabIndex = 7;
 			this->optOrbit->TabStop = true;
-			this->optOrbit->Text = L"轨道(Orbit)";
+			this->optOrbit->Text = L"轨道(&Orbit)";
 			this->optOrbit->UseVisualStyleBackColor = true;
 			this->optOrbit->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optOrbit_CheckedChanged);
 			// 
@@ -256,7 +256,7 @@ namespace Othello {
 			this->optMoon->Size = System::Drawing::Size(89, 17);
 			this->optMoon->TabIndex = 8;
 			this->optMoon->TabStop = true;
-			this->optMoon->Text = L"月亮(Moon)";
+			this->optMoon->Text = L"月亮(&Moon)";
 			this->optMoon->UseVisualStyleBackColor = true;
 			this->optMoon->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optMoon_CheckedChanged);
 			// 
@@ -269,7 +269,7 @@ namespace Othello {
 			this->optStar->Size = System::Drawing::Size(89, 17);
 			this->optStar->TabIndex = 9;
 			this->optStar->TabStop = true;
-			this->optStar->Text = L"星星(Star)";
+			this->optStar->Text = L"星星(&Star)";
 			this->optStar->UseVisualStyleBackColor = true;
 			this->optStar->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optStar_CheckedChanged);
 			// 
@@ -282,7 +282,7 @@ namespace Othello {
 			this->optGalaxy->Size = System::Drawing::Size(101, 17);
 			this->optGalaxy->TabIndex = 10;
 			this->optGalaxy->TabStop = true;
-			this->optGalaxy->Text = L"星系(Galaxy)";
+			this->optGalaxy->Text = L"星系(&Galaxy)";
 			this->optGalaxy->UseVisualStyleBackColor = true;
 			this->optGalaxy->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optGalaxy_CheckedChanged);
 			// 
@@ -295,13 +295,12 @@ namespace Othello {
 			this->optUniverse->Size = System::Drawing::Size(113, 17);
 			this->optUniverse->TabIndex = 11;
 			this->optUniverse->TabStop = true;
-			this->optUniverse->Text = L"宇宙(Universe)";
+			this->optUniverse->Text = L"宇宙(&Universe)";
 			this->optUniverse->UseVisualStyleBackColor = true;
 			this->optUniverse->CheckedChanged += gcnew System::EventHandler(this, &dlgChooseMachineType::optUniverse_CheckedChanged);
 			// 
 			// label1
 			// 
-			this->label1->AutoSize = true;
 			this->label1->Location = System::Drawing::Point(12, 13);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(317, 12);
@@ -310,7 +309,6 @@ namespace Othello {
 			// 
 			// label2
 			// 
-			this->label2->AutoSize = true;
 			this->label2->Location = System::Drawing::Point(12, 73);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(317, 12);
@@ -319,7 +317,6 @@ namespace Othello {
 			// 
 			// label3
 			// 
-			this->label3->AutoSize = true;
 			this->label3->Location = System::Drawing::Point(12, 133);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(317, 12);

@@ -92,6 +92,16 @@ namespace Players {
 	返回值：type类AI玩家的搜索选项
 	*/
 	SearchOptions getAISearchOptions(PlayerType type);
+
+	/*
+	概述：获取指定类别玩家的ToolTip说明
+
+	参数：
+	type：指定的玩家类别
+
+	返回值：type类玩家的ToolTip说明
+	*/
+	System::String^ getPlayerTooltip(PlayerType type);
 }
 
 } // namespace Othello

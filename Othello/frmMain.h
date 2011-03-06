@@ -2258,6 +2258,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private:System::Void mnuCopy_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void mnuPaste_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
+		void initPlayerTooltips();
+		void setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type);
 		void setSelection(int x, int y);
 		AbstractPlayer^ createPlayer(PlayerType type, Chess colorReserved);
 		void createGame(GameOption option);

@@ -1715,6 +1715,7 @@ void frmMain::changeTheme(String^ newTheme) {
 
 frmMain::frmMain() {
 	InitializeComponent();
+	initPlayerTooltips();
 
 #ifndef MACHINE_X64
 	mnu2GB->Enabled = false;
@@ -3773,4 +3774,39 @@ System::Void frmMain::mnuCopy_Click(System::Object ^sender, System::EventArgs ^e
 
 System::Void frmMain::mnuPaste_Click(System::Object ^sender, System::EventArgs ^e) {
 	pasteBoard();
+}
+
+void frmMain::initPlayerTooltips() {
+	setMenuPlayerTooltip(tsmnuBlackEarth, PlayerType::EARTH);
+	setMenuPlayerTooltip(tsmnuWhiteEarth, PlayerType::EARTH);
+	setMenuPlayerTooltip(tsmnuBlackClouds, PlayerType::CLOUDS);
+	setMenuPlayerTooltip(tsmnuWhiteClouds, PlayerType::CLOUDS);
+	setMenuPlayerTooltip(tsmnuBlackOrbit, PlayerType::ORBIT);
+	setMenuPlayerTooltip(tsmnuWhiteOrbit, PlayerType::ORBIT);
+	setMenuPlayerTooltip(tsmnuBlackMoon, PlayerType::MOON);
+	setMenuPlayerTooltip(tsmnuWhiteMoon, PlayerType::MOON);
+	setMenuPlayerTooltip(tsmnuBlackStar, PlayerType::STAR);
+	setMenuPlayerTooltip(tsmnuWhiteStar, PlayerType::STAR);
+	setMenuPlayerTooltip(tsmnuBlackGalaxy, PlayerType::GALAXY);
+	setMenuPlayerTooltip(tsmnuWhiteGalaxy, PlayerType::GALAXY);
+	setMenuPlayerTooltip(tsmnuBlackUniverse, PlayerType::UNIVERSE);
+	setMenuPlayerTooltip(tsmnuWhiteUniverse, PlayerType::UNIVERSE);
+
+	/* No racial discrimination here ^_^ just not so-good variable names*/
+	String^ mantooltip = Players::getPlayerTooltip(PlayerType::GUI);
+	tsmnuBlackMan->ToolTipText = mantooltip;
+	tsmnuWhiteMan->ToolTipText = mantooltip;
+
+	/* Anyway, .NET's "Property" feature sucks as it does not support continuous assignments */
+	String^ randomtooltip = Players::getPlayerTooltip(PlayerType::RANDOM);
+	tsmnuBlackRandom->ToolTipText = randomtooltip;
+	tsmnuWhiteRandom->ToolTipText = randomtooltip;
+	
+	String^ bigeattooltip = Players::getPlayerTooltip(PlayerType::BIG_EAT);
+	tsmnuBlackBigEat->ToolTipText = bigeattooltip;
+	tsmnuWhiteBigEat->ToolTipText = bigeattooltip;
+}
+
+void frmMain::setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type) {
+	mnu->ToolTipText = Players::getPlayerTooltip(type);
 }

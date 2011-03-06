@@ -66,16 +66,30 @@ frmAnalyzer::frmAnalyzer(AnalyzeController^ controller, GameContext^ gc,
 	setLayout();
 }
 
+String^ frmAnalyzer::getTwoCharRep(int value) {
+	return (value < 10) ? " " + value : value.ToString();
+}
+
+String^ frmAnalyzer::getAnalyzerString(PlayerType type) {
+	SearchOptions opt = Players::getAISearchOptions(type);
+	String^ str = Players::getAIPlayerName(type) 
+		+ ":" + getTwoCharRep(opt.midGameDepth) + "步/" + getTwoCharRep(opt.exactGameStep) + "终局";
+	if (opt.winLossStep > opt.exactGameStep) {
+		str += "/" + getTwoCharRep(opt.winLossStep) + "胜负";
+	}
+	return str;
+}
+
 void frmAnalyzer::addAnalyzers() {
 	ComboBox::ObjectCollection^ items = cbAnalyzer->Items;
 	items->Clear();
-	items->Add(Players::getAIPlayerName(PlayerType::EARTH));
-	items->Add(Players::getAIPlayerName(PlayerType::CLOUDS));
-	items->Add(Players::getAIPlayerName(PlayerType::ORBIT));
-	items->Add(Players::getAIPlayerName(PlayerType::MOON));
-	items->Add(Players::getAIPlayerName(PlayerType::STAR));
-	items->Add(Players::getAIPlayerName(PlayerType::GALAXY));
-	items->Add(Players::getAIPlayerName(PlayerType::UNIVERSE));
+	items->Add(getAnalyzerString(PlayerType::EARTH));
+	items->Add(getAnalyzerString(PlayerType::CLOUDS));
+	items->Add(getAnalyzerString(PlayerType::ORBIT));
+	items->Add(getAnalyzerString(PlayerType::MOON));
+	items->Add(getAnalyzerString(PlayerType::STAR));
+	items->Add(getAnalyzerString(PlayerType::GALAXY));
+	items->Add(getAnalyzerString(PlayerType::UNIVERSE));
 	switch (currentPlayerType) {
 	case PlayerType::EARTH:
 		cbAnalyzer->SelectedIndex = 0;

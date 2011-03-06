@@ -164,7 +164,7 @@ namespace Othello {
 			this->cbAnalyzer->FormattingEnabled = true;
 			this->cbAnalyzer->Location = System::Drawing::Point(12, 24);
 			this->cbAnalyzer->Name = L"cbAnalyzer";
-			this->cbAnalyzer->Size = System::Drawing::Size(112, 20);
+			this->cbAnalyzer->Size = System::Drawing::Size(162, 20);
 			this->cbAnalyzer->TabIndex = 0;
 			this->cbAnalyzer->SelectedIndexChanged += gcnew System::EventHandler(this, &frmAnalyzer::cbAnalyzer_SelectedIndexChanged);
 			// 
@@ -179,17 +179,17 @@ namespace Othello {
 			// 
 			// pbAnalyze
 			// 
-			this->pbAnalyze->Location = System::Drawing::Point(144, 24);
+			this->pbAnalyze->Location = System::Drawing::Point(180, 24);
 			this->pbAnalyze->MarqueeAnimationSpeed = 50;
 			this->pbAnalyze->Name = L"pbAnalyze";
-			this->pbAnalyze->Size = System::Drawing::Size(269, 20);
+			this->pbAnalyze->Size = System::Drawing::Size(233, 20);
 			this->pbAnalyze->Style = System::Windows::Forms::ProgressBarStyle::Continuous;
 			this->pbAnalyze->TabIndex = 2;
 			// 
 			// lblState
 			// 
 			this->lblState->AutoSize = true;
-			this->lblState->Location = System::Drawing::Point(142, 9);
+			this->lblState->Location = System::Drawing::Point(180, 9);
 			this->lblState->Name = L"lblState";
 			this->lblState->Size = System::Drawing::Size(0, 12);
 			this->lblState->TabIndex = 3;
@@ -300,6 +300,8 @@ namespace Othello {
 #pragma endregion
 	private:
 		void addAnalyzers();
+		String^ getAnalyzerString(PlayerType type);
+		String^ getTwoCharRep(int value);
 		void solverStarter();
 		void parseGame();
 		void setLayout();

@@ -86,8 +86,10 @@ namespace Othello {
 	private: System::Windows::Forms::PictureBox^  pic;
 	private: System::Windows::Forms::Label^  lblTitle;
 	private: System::Windows::Forms::LinkLabel^  lblPage;
+	private: System::Windows::Forms::LinkLabel^  lblCopyleft;
 
-	private: System::Windows::Forms::Label^  label1;
+
+
 	private: System::Windows::Forms::Button^  btnThanks;
 	private: System::Windows::Forms::PictureBox^  picGPL;
 	protected: 
@@ -112,7 +114,7 @@ namespace Othello {
 			this->pic = (gcnew System::Windows::Forms::PictureBox());
 			this->lblTitle = (gcnew System::Windows::Forms::Label());
 			this->lblPage = (gcnew System::Windows::Forms::LinkLabel());
-			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->lblCopyleft = (gcnew System::Windows::Forms::LinkLabel());
 			this->btnThanks = (gcnew System::Windows::Forms::Button());
 			this->picGPL = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pic))->BeginInit();
@@ -180,16 +182,20 @@ namespace Othello {
 			this->lblPage->UseCompatibleTextRendering = true;
 			this->lblPage->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &frmAbout::lblPage_LinkClicked);
 			// 
-			// label1
+			// lblCopyleft
 			// 
-			this->label1->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->lblCopyleft->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(134)));
-			this->label1->Location = System::Drawing::Point(36, 217);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(273, 60);
-			this->label1->TabIndex = 1;
-			this->label1->Text = L"Copyright © 2008-2010  Patrick\r\n本程序遵循GNU GPL协议, 详情请见:\r\nhttp://www.gnu.org/license" 
+			this->lblCopyleft->LinkArea = System::Windows::Forms::LinkArea(55, 28);
+			this->lblCopyleft->Location = System::Drawing::Point(36, 217);
+			this->lblCopyleft->Name = L"lblCopyleft";
+			this->lblCopyleft->Size = System::Drawing::Size(273, 60);
+			this->lblCopyleft->TabIndex = 1;
+			this->lblCopyleft->TabStop = true;
+			this->lblCopyleft->Text = L"Copyright © 2008-2011  Patrick\r\n本程序遵循GNU GPL协议, 详情请见:\r\nhttp://www.gnu.org/license" 
 				L"s/";
+			this->lblCopyleft->UseCompatibleTextRendering = true;
+			this->lblCopyleft->LinkClicked += gcnew System::Windows::Forms::LinkLabelLinkClickedEventHandler(this, &frmAbout::lblCopyleft_LinkClicked);
 			// 
 			// btnThanks
 			// 
@@ -226,7 +232,7 @@ namespace Othello {
 			this->Controls->Add(this->lblTitle);
 			this->Controls->Add(this->picGPL);
 			this->Controls->Add(this->pic);
-			this->Controls->Add(this->label1);
+			this->Controls->Add(this->lblCopyleft);
 			this->Controls->Add(this->lblInfo);
 			this->Controls->Add(this->btnThanks);
 			this->Controls->Add(this->btnOK);
@@ -254,7 +260,6 @@ namespace Othello {
 			 }
 	private: System::Void lblPage_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e);
 	private: System::Void btnThanks_Click(System::Object^  sender, System::EventArgs^  e);
-
-
-};
+	private: System::Void lblCopyleft_LinkClicked(System::Object ^sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs ^e);
+	};
 }

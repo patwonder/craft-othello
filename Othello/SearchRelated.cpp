@@ -39,6 +39,25 @@
 
 using namespace Othello;
 
+System::String^ Players::getPlayerTooltip(PlayerType type) {
+	if (type == PlayerType::GUI) {
+		return "人类玩家: 使用鼠标/键盘进行游戏的玩家"; // Not essentially played by humans, though = =|
+	}
+	if (type == PlayerType::RANDOM) {
+		return "随机: 根据规则随机选择棋步的玩家";
+	}
+	if (type == PlayerType::BIG_EAT) {
+		return "大食: 试图使中局子数最大化(大食策略)的玩家";
+	}
+	SearchOptions opt = getAISearchOptions(type);
+	System::String^ tooltip = getAIPlayerName(type) + ": "
+		+ opt.midGameDepth + "步 + " + opt.exactGameStep + "步完美终局";
+	if (opt.partialExactStep50 > opt.exactGameStep) {
+		tooltip += "\n于" + opt.partialExactStep50 + "空格时展开终局选择性搜索";
+	}
+	return tooltip;
+}
+
 System::String^ Players::getAIPlayerName(PlayerType type) {
 	switch (type) {
 	case PlayerType::RANDOM:

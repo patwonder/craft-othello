@@ -44,8 +44,9 @@ using namespace Othello;
 System::Void frmAbout::lblPage_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e) {
 	if (e->Button != Windows::Forms::MouseButtons::Left) return;
 	try {
-		System::Diagnostics::Process::Start("http://code.google.com/p/craft-othello/");
-		lblPage->LinkVisited = true;
+		LinkLabel::Link^ lnk = e->Link;
+		System::Diagnostics::Process::Start(lblPage->Text->Substring(lnk->Start, lnk->Length));
+		lnk->Visited = true;
 	} catch (Exception^) {
 
 	}
@@ -55,4 +56,15 @@ System::Void frmAbout::btnThanks_Click(System::Object^  sender, System::EventArg
 	frmThanks^ thanksForm = gcnew frmThanks();
 	thanksForm->ShowDialog(this);
 	delete thanksForm;
+}
+
+System::Void frmAbout::lblCopyleft_LinkClicked(System::Object ^sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs ^e) {
+	if (e->Button != Windows::Forms::MouseButtons::Left) return;
+	try {
+		LinkLabel::Link^ lnk = e->Link;
+		System::Diagnostics::Process::Start(lblCopyleft->Text->Substring(lnk->Start, lnk->Length));
+		lnk->Visited = true;
+	} catch (Exception^) {
+
+	}
 }
