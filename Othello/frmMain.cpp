@@ -3755,6 +3755,13 @@ void frmMain::prompt(System::String ^content, int timeout, System::Drawing::Imag
 	ssPrompt->TextImageRelation = TextImageRelation::ImageBeforeText;
 	ssPrompt->Text = content;
 	ssPrompt->Image = icon;
+	if (icon == iconWarning || icon == iconError) {
+		ssPrompt->Font = gcnew System::Drawing::Font(ssPrompt->Font, FontStyle::Bold);
+		ssPrompt->ForeColor = (icon == iconWarning) ? Color::Blue : Color::Red;
+	} else {
+		ssPrompt->Font = gcnew System::Drawing::Font(ssPrompt->Font, FontStyle::Regular);
+		ssPrompt->ForeColor = SystemColors::ControlText;
+	}
 	ssPlayers->Visible = false;
 	ssPrompt->Visible = true;
 	tmrPrompt->Interval = timeout;
