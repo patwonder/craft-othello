@@ -33,8 +33,8 @@ namespace Othello {
 public ref class BoardResolver {
 public:
 	static array<System::Char>^ DELIMERS = { L'\t', L' ' };
-	static array<System::Char>^ BLACK = { L'X', L'B' };
-	static array<System::Char>^ WHITE = { L'O', L'W' };
+	static array<System::Char>^ BLACK = { L'X', L'B', L'*' };
+	static array<System::Char>^ WHITE = { L'O', L'W', L'0' };
 	static const System::Char EMPTY = L'-';
 
 private:

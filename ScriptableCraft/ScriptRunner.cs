@@ -40,8 +40,8 @@ namespace ScriptableCraft {
 	class ScriptRunner {
 		public static char[] COMMENT_LEADERS = { '#', '%' };
 		public static char[] DELIMERS = { '\t', ' ' };
-		public static char[] BLACK = { 'B', 'X' };
-		public static char[] WHITE = { 'W', 'O' };
+		public static char[] BLACK = { 'B', 'X', '*' };
+		public static char[] WHITE = { 'W', 'O', '0' };
 		public const string END = "% End of the endgame script"; // compatibility with zebra scripts
 
 		private static Chess parseChess(char ch) {
