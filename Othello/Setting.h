@@ -146,7 +146,7 @@ public:
 		playerTypes = gcnew array<PlayerType>(MAX_PLAYERTYPES);
 		statistics = gcnew array<Statistics^>(MAX_PLAYERTYPES);
 		UserName = System::Environment::UserName;
-		PlaySound = true;
+		PlaySound = false;
 		StepDelay = 1000;
 		TableSize = 0x100000; // 64MB
 		AutoLearn = true;
