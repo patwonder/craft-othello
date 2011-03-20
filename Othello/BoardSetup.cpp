@@ -101,7 +101,8 @@ System::Void BoardSetup::picBoard_MouseDown(System::Object^ sender, System::Wind
 	} else if (e->Button == System::Windows::Forms::MouseButtons::Left) {
 		ChessPicBox^ picSender = safe_cast<ChessPicBox^>(sender);
 		if (picSender == lastClicked) {
-			changeColor();
+			// no sufficient indications about last clicked square - disabled
+			//changeColor();
 		}
 		int x = picSender->getXIndex(), y = picSender->getYIndex();
 		board[x, y] = currentColor;
