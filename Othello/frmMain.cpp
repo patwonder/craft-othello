@@ -301,9 +301,24 @@ void frmMain::playerOverTimed(Chess overTimer,
 	restoreState();
 }
 
+PlayerType frmMain::getCurrentPlayerType() {
+	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? blackType : whiteType);
+}
+
+PlayerType frmMain::getOpponentPlayerType() {
+	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? whiteType : blackType);
+}
+
+AbstractPlayer^ frmMain::getCurrentPlayer() {
+	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? blackPlayer : whitePlayer);
+}
+
+AbstractPlayer^ frmMain::getOpponentPlayer() {
+	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? whitePlayer : blackPlayer);
+}
+
 void frmMain::startGameForGUIPlayer() {
-	if (((gcBlack->getCurrentPlayer() == Chess::BLACK) ? blackType : whiteType)
-		== PlayerType::GUI && !analyzeMode) {
+	if (getCurrentPlayerType() == PlayerType::GUI && !analyzeMode) {
 			startGame();
 	}
 }
@@ -3113,6 +3128,13 @@ void frmMain::setProgress(int percent) {
 		}
 	//}
 }
+void frmMain::setProgressState(bool failed) {
+	if (failed) {
+		setProgressBarState(ProgressBarState::Error);
+	} else {
+		setProgressBarState(ProgressBarState::Normal);
+	}
+}
 void frmMain::setFocusedMove(int x, int y) {
 	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
 		if (x != focusedMove.X || y != focusedMove.Y) {
@@ -3151,6 +3173,11 @@ void frmMain::showPrincipleVariation(System::String^ pv) {
 		ssPV->Text = "最优着法序列: " + pv;
 }
 
+void frmMain::setProgressBarState(ProgressBarState state) {
+	ProgressBarStateRelated::setState(tspb1->ProgressBar, state);
+	tspb1->Invalidate();
+}
+
 void frmMain::resetComponents() {
 	picBoard->Cursor = ::Cursors::Default;
 	ssResult->Image = iconRest;
@@ -3160,6 +3187,7 @@ void frmMain::resetComponents() {
 	ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 	tspb1->Value = 0;
 	tspb1->Style = ProgressBarStyle::Continuous;
+	setProgressBarState(ProgressBarState::Normal);
 	setSelectedMove(-1, -1);
 	setFocusedMove(-1, -1);
 	setTipPos(-1, -1);
@@ -3639,7 +3667,12 @@ void frmMain::stopSearch() {
 		if (!ifbreak) return;
 	}
 
-	game->goBack(0);
+	if (getOpponentPlayerType() == PlayerType::GUI && Players::isAIPlayer(getCurrentPlayerType())) {
+		// man vs machine, clicking on "stop search" forces machine to move
+		Craft^ craft = safe_cast<Craft^>(getCurrentPlayer());
+		craft->forceMove();
+	} else
+		game->goBack(0);
 }
 
 System::Void frmMain::tsbtnStopSearch_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -3816,4 +3849,11 @@ void frmMain::initPlayerTooltips() {
 
 void frmMain::setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type) {
 	mnu->ToolTipText = Players::getPlayerTooltip(type);
+}
+
+System::Void frmMain::ssPrompt_Click(System::Object ^sender, System::EventArgs ^e) {
+	// click instantly disables prompt
+	tmrPrompt->Enabled = false;
+	ssPrompt->Visible = false;
+	ssPlayers->Visible = true;
 }

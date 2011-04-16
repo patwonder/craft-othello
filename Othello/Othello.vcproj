@@ -520,6 +520,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ProgressBarState.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SearchRelated.cpp"
 				>
 			</File>
@@ -801,6 +805,10 @@
 					SubType="Designer"
 					>
 				</File>
+			</File>
+			<File
+				RelativePath=".\ProgressBarState.h"
+				>
 			</File>
 			<File
 				RelativePath=".\RandomPlayer.h"

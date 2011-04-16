@@ -56,6 +56,7 @@ private:
 	SearchDisplayer^ displayer;
 	CraftEngine::Solver* solver;
 	volatile bool isDone;
+	bool forced;
 	bool terminated;
 	bool endSolve;
 	CraftEngine::SolverResult* res;
@@ -85,6 +86,7 @@ public:
 		return userInfo->StepDelay;
 	}
 	virtual void setStepDelay(int delay) {}
+	void forceMove();
 	int getTip(GameContext^ gc, Move lastMove, bool endSolve);
 	SearchOptions getSearchOptions() { return options; }
 	~Craft();

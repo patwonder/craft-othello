@@ -57,6 +57,7 @@ Craft::Craft(SearchDisplayer^ display, SearchOptions opts,
 	res = new SolverResult(0, -1);
 	isDone = false;
 	endSolve = false;
+	forced = false;
 	//if (options.winLossStep < options.exactGameStep)
 	//	options.winLossStep = options.exactGameStep;
 }
@@ -93,10 +94,10 @@ void Craft::init(GameContext^ gc, Chess color) {
 }
 
 void Craft::solverStarter() {
-	if (empties >= options.partialExactStep50) {
+	if (empties >= options.partialExactStep80) {
 		percentage = 0;
 		(*res) = solver->solve(myColor, options.midGameDepth, userInfo->UseBook);
-	} else if (empties >= options.partialExactStep90) {
+	} else if (empties >= options.partialExactStep95) {
 		int percentage;
 		(*res) = solver->partialSolveExact(myColor, false, 80, percentage);
 		this->percentage = percentage;
@@ -141,7 +142,8 @@ System::String^ Craft::getTotalNumDescription(unsigned long long totalNum) {
 }
 
 int Craft::myTurn(GameContext^ gc, Move lastMove) {
-	terminated = false;
+	resetComponents();
+	terminated = false; forced = false;
 	if (lastMove.getColor() != Chess::AVAILABLE) {
 		solver->makeMove(lastMove.getX() * HEIGHT + lastMove.getY(), opColor);
 		empties--;
@@ -214,16 +216,24 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 	elapsedMilliseconds = (System::DateTime::UtcNow - timeStart).TotalMilliseconds;
 	if (elapsedMilliseconds > 100.0)
 		speed = (int)(totalNum / (unsigned long long)elapsedMilliseconds);
-	displayer->setResult(getResultDescription());
+	displayer->setResult(forced ? getPartialResultDescription(solver->getPartialResult(), solver->getPartialDepth(),
+								  solver->getEpcPercentage()) 
+								: getResultDescription());
 	displayer->setSpeed(getSpeedDescription(speed));
 	displayer->setTotalNum(getTotalNumDescription(totalNum));
 	if (userInfo->ShowPrincipleVariation) {
 		int len = solver->getPV(pv, PV_LENGTH);
 		displayer->showPrincipleVariation(pvToString(pv, len));
 	}
-	displayer->setProgress(100);
+	displayer->setProgress(forced ? solver->getPercent() : 100);
+	if (forced) {
+		displayer->setProgressState(true);
+	}
 	displayer->setSearchState(false);
 	displayer->searchEnded();
+
+	forced = false;
+
 	int move = res->getBestMove();
 	if (move < 0) move = -move - 1;
 	setSelectedMove(move);
@@ -294,7 +304,7 @@ System::String^ Craft::getResultDescription() {
 	if (!userInfo->ShowEvaluation) return "空闲";
 	System::String^ result;
 	int r = res->getResult();
-	if (empties >= options.partialExactStep50) {
+	if (empties >= options.partialExactStep80) {
 		int bm = res->getBestMove();
 		if (r > Solver::INFINITE - Solver::MAXSTEP) { // early win
 			result = ((bm < 0) ? "棋谱: " : (r == Solver::INFINITE ? "" : "≥")) 
@@ -341,18 +351,18 @@ int Craft::getTip(GameContext^ gc, Move lastMove, bool endSolve) {
 	int pExactStep50, pExactStep90, pExactStep99, exactGameStep;
 	if (endSolve) {
 		this->endSolve = true;
-		pExactStep50 = options.partialExactStep50;
-		pExactStep90 = options.partialExactStep90;
+		pExactStep50 = options.partialExactStep80;
+		pExactStep90 = options.partialExactStep95;
 		pExactStep99 = options.partialExactStep99;
 		exactGameStep = options.exactGameStep;
-		options.partialExactStep50 = options.partialExactStep90 = 
+		options.partialExactStep80 = options.partialExactStep95 = 
 			options.partialExactStep99 = options.exactGameStep = empties;
 	}
 	int result = myTurn(gc, lastMove);
 	if (endSolve) {
 		this->endSolve = false;
-		options.partialExactStep50 = pExactStep50;
-		options.partialExactStep90 = pExactStep90;
+		options.partialExactStep80 = pExactStep50;
+		options.partialExactStep95 = pExactStep90;
 		options.partialExactStep99 = pExactStep99;
 		options.exactGameStep = exactGameStep;
 	}
@@ -364,10 +374,22 @@ int Craft::getTip(GameContext^ gc, Move lastMove, bool endSolve) {
 }
 
 System::String^ Craft::pvToString(int pv[], int len) {
+	if (len == 0)
+		return "不完全搜索";
 	System::String^ str;
 	str += Conversions::intToString(pv[0]);
 	for (int i = 1; i < len; i++) {
 		str += " " + Conversions::intToString(pv[i]);
 	}
 	return str;
+}
+
+void Craft::forceMove() {
+	if (solverThread)
+		if (solverThread->IsAlive) {
+			solver->abortSearch();
+			solverThread->Join();
+			solver->abortSearchComplete();
+			forced = true;
+		}
 }

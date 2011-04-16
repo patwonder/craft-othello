@@ -180,7 +180,17 @@ const int Solver::patternPtr[ACTUAL_PATTERNS] = {
 	10,10,10,10      // 3*3 square
 };
 
-const int Solver::antiPattern[SYMMETRICS] = {0, 3, 2, 1, 4, 5, 6, 7};
+/*
+0 - 0
+fh - fh
+fd1 - fd1
+fd2 - fd2
+fv - fv
+fv fh - fv fh
+fv fd1 - fv fd2
+fv fd2 - fv fd1
+*/
+const int Solver::antiPattern[SYMMETRICS] = {0, 1, 2, 3, 4, 5, 7, 6};
 
 const Solver::FlipFunction Solver::flipFunction[MAXSTEP] = {
 	// A
@@ -2344,6 +2354,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	partialDepth = 0;
 	selectedMove = -1;
 	focusedMove = -1;
+	initPV();
 	const int SORT_DEPTH = 4;
 	const int MIN_ITER_START = 6;
 	int tabledepth = empties + epcStage;
@@ -2445,6 +2456,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	setEmpties(); sortStackPtr = 0;
 	EmptyNode* positions[MAXSTEP];
 
+	int pre_stackptr = stackptr;
+
 	//sort the moves
 	if (bestMove != -1) {
 		positions[pptr++] = emptyPtr[bestMove];
@@ -2459,7 +2472,10 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			makeMove(i->pos, my, op);
 			results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 			if (aborted) {
-				return SolverResult(0, 0);
+				restoreStack(pre_stackptr);
+				if (maxptr != -1)
+					return SolverResult(maxresult, maxptr);
+				else return SolverResult(0, positions[0]->pos);
 			}
 			unMakeMove();
 			pptr++;
@@ -2562,7 +2578,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					results[i] = -search(op, my, iterdepth - 1, -iteralpha - 1, -iteralpha, true);
 				}
 				if (aborted) {
-					return SolverResult(0, 0);
+					restoreStack(pre_stackptr);
+					return SolverResult(partialResult, selectedMove);
 				}
 				if (results[i] < iteralpha
 					|| (iterdepth <= MPC_DEPTH_THRESHOLD && results[i] == iteralpha)) { 
@@ -2611,7 +2628,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					:-search(op, my, iterdepth - 1, -iterbeta, -iteralpha, true);
 
 				if (aborted) {
-					return SolverResult(0, 0);
+					restoreStack(pre_stackptr);
+					return SolverResult(partialResult, selectedMove);
 				}
 			}
 
@@ -2683,7 +2701,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					//try a 0-window search
 					results[i] = -searchExact_epc(op, my, -iteralpha - 2, -iteralpha, true);
 					if (aborted) {
-						return SolverResult(0, 0);
+						restoreStack(pre_stackptr);
+						return SolverResult(partialResult, selectedMove);
 					}
 					if (results[i] <= iteralpha) { // no better evaluations, throw away the step
 						unMakeMoveAndSetEmpties();
@@ -2717,7 +2736,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 					results[i] = -searchExact_epc(op, my, -iterbeta, -results[i], true);
 #endif
 					if (aborted) {
-						return SolverResult(0, 0);
+						restoreStack(pre_stackptr);
+						return SolverResult(partialResult, selectedMove);
 					}
 				}
 
@@ -2784,7 +2804,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			// try a 0-window search
 			results[i] = -(this->*searchFunction)(op, my, -alpha - 2, -alpha, true);
 			if (aborted) {
-				return SolverResult(0, 0);
+				restoreStack(pre_stackptr);
+				return SolverResult(partialResult, selectedMove);
 			}
 			if (results[i] <= alpha) { // no better evaluations, throw away the step
 				unMakeMoveAndSetEmpties();
@@ -2816,7 +2837,8 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		results[i] = -(this->*searchFunction)(op, my, -beta, -results[i], true);
 #endif
 		if (aborted) {
-			return SolverResult(0, 0);
+			restoreStack(pre_stackptr);
+			return SolverResult(partialResult, selectedMove);
 		}
 		unMakeMoveAndSetEmpties();
 		if (results[i] > maxresult) {
@@ -3284,16 +3306,28 @@ void Solver::flipSingle(int dir, BitBoard& bb) {
 void Solver::transformSingle(int pattern, BitBoard& bb) {
 	switch (pattern) {
 	case 1:
+		flipVertical(bb);
+		break;
 	case 2:
+		flipDiagA1H8(bb);
+		break;
 	case 3:
-		flipSingle(pattern, bb);
+		flipDiagA8H1(bb);
+		break;
+	case 4:
+		flipHorizonal(bb);
 		break;
 	case 5:
+		flipHorizonal(bb);
+		flipVertical(bb);
+		break;
 	case 6:
+		flipHorizonal(bb);
+		flipDiagA1H8(bb);
+		break;
 	case 7:
-		flipSingle(pattern - 4, bb);
-	case 4:
-		reverseSingle(bb);
+		flipHorizonal(bb);
+		flipDiagA8H1(bb);
 		break;
 	default:
 		break;
@@ -3303,16 +3337,28 @@ void Solver::transformSingle(int pattern, BitBoard& bb) {
 void Solver::transformPos(int pattern, int& pos) {
 	switch (pattern) {
 	case 1:
+		posFlipVertical(pos);
+		break;
 	case 2:
+		posFlipDiagA1H8(pos);
+		break;
 	case 3:
-		flipPos(pattern, pos);
+		posFlipDiagA8H1(pos);
+		break;
+	case 4:
+		posFlipHorizonal(pos);
 		break;
 	case 5:
+		posFlipHorizonal(pos);
+		posFlipVertical(pos);
+		break;
 	case 6:
+		posFlipHorizonal(pos);
+		posFlipDiagA1H8(pos);
+		break;
 	case 7:
-		flipPos(pattern - 4, pos);
-	case 4:
-		reversePos(pos);
+		posFlipHorizonal(pos);
+		posFlipDiagA8H1(pos);
 		break;
 	default:
 		break;
@@ -3526,6 +3572,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		}
 	int pptr = 0;
 	int opColor = BLACK + WHITE - color;
+	int pre_stackptr = stackptr;
 
 	// sort the moves
 	if (bestMove != -1)
@@ -3539,7 +3586,11 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			makeMove(moveOrder[i], my, op);
 			results[pptr] = -search(op, my, SORT_DEPTH - 1, -INFINITE, INFINITE, true);
 			if (aborted) {
-				return SolverResult(0, 0);
+				restoreStack(pre_stackptr);
+				if (maxptr != -1)
+					return SolverResult(maxresult, maxptr);
+				else
+					return SolverResult(0, positions[0]);
 			}
 			unMakeMove();
 			pptr++;
@@ -3647,7 +3698,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					results[i] = -search(op, my, iterdepth - 1, -iteralpha - 1, -iteralpha, true);
 				}
 				if (aborted) {
-					return SolverResult(0, 0);
+					restoreStack(pre_stackptr);
+					return SolverResult(partialResult, selectedMove);
 				}
 				if (results[i] < iteralpha
 					|| (iterdepth <= MPC_DEPTH_THRESHOLD && results[i] == iteralpha)) { 
@@ -3685,7 +3737,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					? -search_mpc(op, my, iterdepth - 1, -iterbeta, -iteralpha, true)
 					: -search(op, my, iterdepth - 1, -iterbeta, -iteralpha, true);
 				if (aborted) {
-					return SolverResult(0, 0);
+					restoreStack(pre_stackptr);
+					return SolverResult(partialResult, selectedMove);
 				}
 			}
 
@@ -3759,7 +3812,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					results[i] = -search(op, my, depth - 1, -alpha - 1, -alpha, true);
 				}
 				if (aborted) {
-					return SolverResult(0, 0);
+					restoreStack(pre_stackptr);
+					return SolverResult(partialResult, selectedMove);
 				}
 				if (results[i] < alpha
 					|| (depth <= MPC_DEPTH_THRESHOLD && results[i] == alpha)) { 
@@ -3792,7 +3846,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				: -search(op, my, depth - 1, -beta, -results[i], true);
 		}
 		if (aborted) {
-			return SolverResult(0, 0);
+			restoreStack(pre_stackptr);
+			return SolverResult(partialResult, selectedMove);
 		}
 		unMakeMove();
 		// maxresult will always be increased at least once
@@ -4393,33 +4448,50 @@ void Solver::expandNode(BookNode& node) {
 	int* result = new int[mobCount];
 	int* moves = new int[mobCount];
 	int pptr = 0;
+	int localmax = -INFINITE;
 	black = node.getMy();
 	white = node.getOp();
 	stackptr = 0;
 	sortStackPtr = 0;
 	empties = MAXSTEP - bits(black) - bits(white);
 	if (empties > bookEndDepth) {
-		int middepth = bookDepth + (empties & 1); // Make book evals look more stable
+		int middepth = bookDepth - (empties & 1); // Make book evals look more stable
 		for (int i = 0; i < MAXSTEP; i++)
 			if (posTable[i] & mob) {
 				makeMove(i, black, white);
 				int eval;
 				BookNode child = book->get(white, black);
+				int value = (localmax > 0) ? localmax - EVAL_RANGE : -EVAL_RANGE;
 				if (child) {
 					if (child.getMoveCount())
 						result[pptr] = eval = -child.getEval(0);
 					else
 						result[pptr] = eval = -search(white, black, middepth - 1, -INFINITE, 
-							EVAL_RANGE, true);
+							-value, true);
 				}
 				else
 					result[pptr] = eval = -search(white, black, middepth - 1, -INFINITE, 
-						EVAL_RANGE, true);
+						-value, true);
 				unMakeMove();
 				moves[pptr] = i;
-				if (eval > -EVAL_RANGE) pptr++;
+				if (eval > value) pptr++;
+				if (eval > localmax) {
+					localmax = eval;
+					if (localmax > 0) {
+						int old_pptr = pptr;
+						pptr = 0;
+						// reserve those nodes with evals > localmax - eval_range
+						for (int i = 0; i < old_pptr; i++) {
+							if (result[i] > localmax - EVAL_RANGE) {
+								result[pptr] = result[i];
+								moves[pptr] = moves[i];
+								pptr++;
+							}
+						}
+					}
+				}
 			}
-	} else { //end game stuff
+	} else if (empties >= BOOK_ENDGAME_THRESHOLD) { //end game stuff
 		setEmpties();
 		int alpha = -MAXSTEP;
 		result[0] = alpha;
@@ -4508,23 +4580,27 @@ void Solver::addFather(const BookNode& node) {
 		moves[i] = node.getMove(i);
 		evals[i] = node.getEval(i);
 	}
+	BitBoard nodeMy = node.getMy();
+	BitBoard nodeOp = node.getOp();
 	for (int i = 0; i < min(node.getMoveCount(), MAXSTEP); i++) {
-		BitBoard my = node.getMy();
-		BitBoard op = node.getOp();
+		BitBoard my = nodeMy;
+		BitBoard op = nodeOp;
 		putChess(moves[i], my, op);
 		BookNode nextNode = book->get(op, my);
 		if (nextNode) {
 			int oldFatherCount = nextNode.getFatherCount();
 			bool exist = false;
 			for (int j = 0; j < oldFatherCount; j++)
-				if (nextNode.getFatherMy(j) == node.getMy() 
-				&& nextNode.getFatherOp(j) == node.getOp())
+				if (nextNode.getFatherMy(j) == nodeMy 
+					&& nextNode.getFatherOp(j) == nodeOp) {
 					exist = true;
+					break;
+				}
 			if (exist) continue;
 			int newFatherCount = oldFatherCount + 1;
 			nextNode.setFatherCount(newFatherCount);
-			nextNode.setFatherMy(oldFatherCount, node.getMy());
-			nextNode.setFatherOp(oldFatherCount, node.getOp());
+			nextNode.setFatherMy(oldFatherCount, nodeMy);
+			nextNode.setFatherOp(oldFatherCount, nodeOp);
 			nextNode.setFatherMove(oldFatherCount, moves[i]);
 			if (nextNode.getMoveCount() && evals[i] != -nextNode.getEval(0)) {
 				propagateEval(nextNode);
@@ -6292,4 +6368,75 @@ void Solver::saveTp(int zobPos, const BitBoard& my, const BitBoard& op,
 	info->op = op;
 }
 
-} // namespace Othello
+void Solver::restoreStack(int pre_stackptr) {
+	while (stackptr != pre_stackptr) {
+		unMakeMove();
+	}
+}
+
+void Solver::flipVertical(BitBoard& bb) {
+	const BitBoard k1 = 0x5555555555555555ull;
+	const BitBoard k2 = 0x3333333333333333ull;
+	const BitBoard k4 = 0x0f0f0f0f0f0f0f0full;
+	/* taking advantage of x86 LEA instruction */
+	bb = ((bb >> 1) & k1) +  2 * (bb & k1);
+	bb = ((bb >> 2) & k2) +  4 * (bb & k2);
+	bb = ((bb >> 4) & k4) + 16 * (bb & k4);
+}
+
+void Solver::flipHorizonal(BitBoard& bb) {
+#ifdef MACHINE_X64
+	bb = _byteswap_uint64(bb);
+#else
+	const BitBoard k1 = 0x00FF00FF00FF00FFull;
+	const BitBoard k2 = 0x0000FFFF0000FFFFull;
+	bb = ((bb >>  8) & k1) | ((bb & k1) <<  8);
+	bb = ((bb >> 16) & k2) | ((bb & k2) << 16);
+	bb = ( bb >> 32)       | ( bb       << 32);
+#endif
+}
+
+void Solver::flipDiagA1H8(BitBoard& bb) {
+   BitBoard t;
+   const BitBoard k1 = 0x5500550055005500ull;
+   const BitBoard k2 = 0x3333000033330000ull;
+   const BitBoard k4 = 0x0f0f0f0f00000000ull;
+   t   = k4 & (bb ^ (bb << 28));
+   bb ^=       t ^ (t >> 28) ;
+   t   = k2 & (bb ^ (bb << 14));
+   bb ^=       t ^ (t >> 14) ;
+   t   = k1 & (bb ^ (bb <<  7));
+   bb ^=       t ^ (t >>  7) ;
+}
+
+void Solver::flipDiagA8H1(BitBoard& bb) {
+   BitBoard t;
+   const BitBoard k1 = 0xaa00aa00aa00aa00ull;
+   const BitBoard k2 = 0xcccc0000cccc0000ull;
+   const BitBoard k4 = 0xf0f0f0f00f0f0f0full;
+   t   =       bb ^ (bb << 36) ;
+   bb ^= k4 & (t ^ (bb >> 36));
+   t   = k2 & (bb ^ (bb << 18));
+   bb ^=       t ^ (t >> 18) ;
+   t   = k1 & (bb ^ (bb <<  9));
+   bb ^=       t ^ (t >>  9) ;
+}
+
+void Solver::posFlipVertical(int& pos) {
+	pos = pos ^ 7;
+}
+
+void Solver::posFlipHorizonal(int& pos) {
+	pos = pos ^ 56;
+}
+
+void Solver::posFlipDiagA1H8(int& pos) {
+	pos = ((pos >> 3) | (pos << 3)) & 63;
+}
+
+void Solver::posFlipDiagA8H1(int& pos) {
+	pos = (((pos >> 3) | (pos << 3)) & 63) ^ 63;
+}
+
+
+} // namespace CraftEngine

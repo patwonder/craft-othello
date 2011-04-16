@@ -56,6 +56,7 @@
 #include "frmSetCustomEmpties.h"
 #include "ConfigReader.h"
 #include "FlashWindow.h"
+#include "ProgressBarState.h"
 
 #define CONFIG_FILE_EXTENSION ".CraftCfg"
 
@@ -741,6 +742,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 this->ssPrompt->Text = L"Prompt";
 				 this->ssPrompt->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 this->ssPrompt->Visible = false;
+				 this->ssPrompt->Click += gcnew System::EventHandler(this, &frmMain::ssPrompt_Click);
 				 // 
 				 // ssResult
 				 // 
@@ -2257,6 +2259,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private:System::Void tmrPrompt_Tick(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void mnuCopy_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void mnuPaste_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void ssPrompt_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
 		void initPlayerTooltips();
 		void setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type);
@@ -2336,6 +2339,10 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 		void enterAnalyzeMode();
 		void leaveAnalyzeMode();
 		void startGameForGUIPlayer();
+		PlayerType getCurrentPlayerType();
+		PlayerType getOpponentPlayerType();
+		AbstractPlayer^ getCurrentPlayer();
+		AbstractPlayer^ getOpponentPlayer();
 		void setQuestionLevel(QuestionLevel ql);
 		void initEndGameMode();
 		void startNewEndGame(EndGameDifficulty difficulty);
@@ -2365,6 +2372,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 		void prompt(System::String^ content, int timeout);
 		void prompt(System::String^ content, int timeout, System::Drawing::Image^ icon);
 		void prompt(System::String ^content, System::Drawing::Image ^icon);
+		void setProgressBarState(ProgressBarState state);
 
 #ifdef CHRISTMAS
 		void showChristmasWish();
@@ -2401,6 +2409,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 		virtual void setSpeed(System::String^ speed);
 		virtual void setTotalNum(System::String^ totalNum);
 		virtual void setProgress(int percent);
+		virtual void setProgressState(bool failed);
 		virtual void setFocusedMove(int x, int y);
 		virtual void setSelectedMove(int x, int y);
 		virtual void showPrincipleVariation(System::String^ pv);

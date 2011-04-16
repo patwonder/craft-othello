@@ -416,6 +416,7 @@ private:
 	static int getEndSortSearchLowerBound1(int alpha);
 	static int getEndSortSearchLowerBound(int alpha);
 	static int getEndSortSearchUpperBound(int beta);
+	void restoreStack(int pre_stackptr);
 
 	// used for dynamic search state display
 	static const int MAX_PV_LENGTH = 20;
@@ -547,9 +548,10 @@ private:
 
 	static const BitBoard defaultMy = 0x0000000810000000ull;
 	static const BitBoard defaultOp = 0x0000001008000000ull;
-	static const int DEFAULT_BOOK_DEPTH = 8;
+	static const int DEFAULT_BOOK_DEPTH = 10;
 	static const int DEFAULT_BOOK_END_DEPTH = 20;
 	static const int EVAL_RANGE = 12 * RULER;
+	static const int BOOK_ENDGAME_THRESHOLD = 16;
 
 	static bool extendingBook;
 	static bool isBookChanged;
@@ -620,6 +622,15 @@ private:
 	static void addDependency(int pos, int pInd);
 	static void multipleAdd(int pos, int step, int count, int pInd);
 	static bool loadPatterns(std::string patternFile);
+	// advanced flipping
+	static void flipVertical(BitBoard& bb);
+	static void flipHorizonal(BitBoard& bb);
+	static void flipDiagA1H8(BitBoard& bb);
+	static void flipDiagA8H1(BitBoard& bb);
+	static void posFlipVertical(int& pos);
+	static void posFlipHorizonal(int& pos);
+	static void posFlipDiagA1H8(int& pos);
+	static void posFlipDiagA8H1(int& pos);
 
 	// used for analysis
 	AnalyzeResult* analyzeResult;

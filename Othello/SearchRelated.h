@@ -48,6 +48,7 @@ public:
 	virtual void setSpeed(System::String^ speed) = 0;
 	virtual void setTotalNum(System::String^ totalNum) = 0;
 	virtual void setProgress(int percent) = 0;
+	virtual void setProgressState(bool failed);
 	virtual void setFocusedMove(int x, int y) = 0;
 	virtual void setSelectedMove(int x, int y) = 0;
 	virtual void showPrincipleVariation(System::String^ pv);
@@ -60,14 +61,14 @@ public:
 public value class SearchOptions {
 public:
 	int midGameDepth;
-	int partialExactStep50;
-	int partialExactStep90;
+	int partialExactStep80;
+	int partialExactStep95;
 	int partialExactStep99;
 	int winLossStep;
 	int exactGameStep;
 	SearchOptions(int midDepth, int pExact50, int pExact90, int pExact99, int exactStep, int wlStep)
-		: midGameDepth(midDepth), partialExactStep50(pExact50),
-		partialExactStep90(pExact90), partialExactStep99(pExact99), exactGameStep(exactStep),
+		: midGameDepth(midDepth), partialExactStep80(pExact50),
+		partialExactStep95(pExact90), partialExactStep99(pExact99), exactGameStep(exactStep),
 		winLossStep(wlStep)
 	{ ; }
 };
@@ -102,6 +103,16 @@ namespace Players {
 	返回值：type类玩家的ToolTip说明
 	*/
 	System::String^ getPlayerTooltip(PlayerType type);
+
+	/*
+	概述：判断指定玩家类别是否是AI玩家
+
+	参数：
+	type：指定的玩家类别
+
+	返回值：若type是AI玩家，返回true，否则返回false
+	*/
+	bool isAIPlayer(PlayerType type);
 }
 
 } // namespace Othello

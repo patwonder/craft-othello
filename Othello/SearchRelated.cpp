@@ -52,8 +52,8 @@ System::String^ Players::getPlayerTooltip(PlayerType type) {
 	SearchOptions opt = getAISearchOptions(type);
 	System::String^ tooltip = getAIPlayerName(type) + ": "
 		+ opt.midGameDepth + "步 + " + opt.exactGameStep + "步完美终局";
-	if (opt.partialExactStep50 > opt.exactGameStep) {
-		tooltip += "\n于" + opt.partialExactStep50 + "空格时展开终局选择性搜索";
+	if (opt.partialExactStep80 > opt.exactGameStep) {
+		tooltip += "\n于" + opt.partialExactStep80 + "空格时展开终局选择性搜索";
 	}
 	return tooltip;
 }
@@ -101,5 +101,20 @@ SearchOptions Players::getAISearchOptions(PlayerType type) {
 		return SearchOptions(18, 28, 26, 24, 24, 26);
 	default:
 		return SearchOptions(1, 6, 6, 6, 6, 6);
+	}
+}
+
+bool Players::isAIPlayer(PlayerType type) {
+	switch (type) {
+	case PlayerType::EARTH:
+	case PlayerType::CLOUDS:
+	case PlayerType::ORBIT:
+	case PlayerType::MOON:
+	case PlayerType::STAR:
+	case PlayerType::GALAXY:
+	case PlayerType::UNIVERSE:
+		return true;
+	default:
+		return false;
 	}
 }
