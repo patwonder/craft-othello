@@ -142,7 +142,7 @@ System::String^ Craft::getTotalNumDescription(unsigned long long totalNum) {
 }
 
 int Craft::myTurn(GameContext^ gc, Move lastMove) {
-	resetComponents();
+	displayer->setProgressState(false);
 	terminated = false; forced = false;
 	if (lastMove.getColor() != Chess::AVAILABLE) {
 		solver->makeMove(lastMove.getX() * HEIGHT + lastMove.getY(), opColor);
