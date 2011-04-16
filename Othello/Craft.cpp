@@ -247,7 +247,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 	System::Windows::Forms::MessageBox::Show("Solver 未能给出合法棋步。", "出错啦~~",
 		System::Windows::Forms::MessageBoxButtons::OK,
 		System::Windows::Forms::MessageBoxIcon::Error);
-	return -1;
+	return 0;
 }
 
 void Craft::resetComponents() {

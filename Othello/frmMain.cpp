@@ -3668,7 +3668,7 @@ void frmMain::stopSearch() {
 	}
 
 	if (getOpponentPlayerType() == PlayerType::GUI && Players::isAIPlayer(getCurrentPlayerType())) {
-		// man vs machine, clicking on "stop search" forces machine to move
+		// human vs computer, clicking on "stop search" forces computer to move
 		Craft^ craft = safe_cast<Craft^>(getCurrentPlayer());
 		craft->forceMove();
 	} else
