@@ -132,17 +132,21 @@ namespace Othello {
 				guiForm->notifyUser();
 
 				if (gc->getAvailableCount() == 0) {
+					guiForm->startPonder();
 					MessageBox::Show(guiForm, "这回合您欠行。", "提示", MessageBoxButtons::OK,
 						MessageBoxIcon::Information);
+					guiForm->stopPonder();
 					return 0;
 				}
 				guiForm->setGUIPlay(true);
+
 				int result;
 				while ((result = guiForm->getGUIPlay()) == -1) {
 					Application::DoEvents();
 					if (terminated) { result = 0; break; }
 					System::Threading::Thread::Sleep(40);
 				}
+
 				return result;
 			}
 			virtual void reset() {
@@ -323,6 +327,7 @@ namespace Othello {
 		bool searching;
 		bool tipping;
 		bool continueGame;
+		bool pondering;
 		System::Collections::Generic::SortedList<String^, String^>^ themeList;
 		System::ComponentModel::ComponentResourceManager^ resources;
 		System::Collections::Generic::List<ThemeMenuItem^>^ themeMenuList;
@@ -503,6 +508,9 @@ namespace Othello {
 	private: System::Windows::Forms::Timer^  tmrPrompt;
 private: System::Windows::Forms::ToolStripMenuItem^  mnuCopy;
 private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
+private: System::Windows::Forms::ToolStripMenuItem^  mnuPondering;
+private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
+
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -684,6 +692,8 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 this->statusBar2 = (gcnew System::Windows::Forms::StatusStrip());
 				 this->ssPV = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->tmrPrompt = (gcnew System::Windows::Forms::Timer(this->components));
+				 this->mnuPondering = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->toolStripMenuItem11 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBoard))->BeginInit();
 				 this->statusBar->SuspendLayout();
 				 this->toolBar->SuspendLayout();
@@ -1543,9 +1553,9 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 // 
 				 // mnuSetting
 				 // 
-				 this->mnuSetting->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(11) {this->mnuTheme, 
+				 this->mnuSetting->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {this->mnuTheme, 
 					 this->toolStripSeparator15, this->mnuClearCache, this->mnuTableSize, this->mnuAutoClean, this->toolStripMenuItem9, this->mnuDelay, 
-					 this->mnuPlaySound, this->mnuUseBook, this->mnuLearnImmediately, this->mnuFreeMode});
+					 this->mnuPlaySound, this->toolStripMenuItem11, this->mnuUseBook, this->mnuPondering, this->mnuLearnImmediately, this->mnuFreeMode});
 				 this->mnuSetting->Name = L"mnuSetting";
 				 this->mnuSetting->Size = System::Drawing::Size(59, 21);
 				 this->mnuSetting->Text = L"设置(&S)";
@@ -1561,14 +1571,14 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 // mnuDefaultTheme
 				 // 
 				 this->mnuDefaultTheme->Name = L"mnuDefaultTheme";
-				 this->mnuDefaultTheme->Size = System::Drawing::Size(141, 22);
+				 this->mnuDefaultTheme->Size = System::Drawing::Size(152, 22);
 				 this->mnuDefaultTheme->Text = L"经典主题(&D)";
 				 this->mnuDefaultTheme->Click += gcnew System::EventHandler(this, &frmMain::mnuDefaultTheme_Click);
 				 // 
 				 // toolStripMenuItem10
 				 // 
 				 this->toolStripMenuItem10->Name = L"toolStripMenuItem10";
-				 this->toolStripMenuItem10->Size = System::Drawing::Size(138, 6);
+				 this->toolStripMenuItem10->Size = System::Drawing::Size(149, 6);
 				 // 
 				 // toolStripSeparator15
 				 // 
@@ -1593,70 +1603,70 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 // mnu4MB
 				 // 
 				 this->mnu4MB->Name = L"mnu4MB";
-				 this->mnu4MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu4MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu4MB->Text = L"4MB(&1)";
 				 this->mnu4MB->Click += gcnew System::EventHandler(this, &frmMain::mnu4MB_Click);
 				 // 
 				 // mnu8MB
 				 // 
 				 this->mnu8MB->Name = L"mnu8MB";
-				 this->mnu8MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu8MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu8MB->Text = L"8MB(&2)";
 				 this->mnu8MB->Click += gcnew System::EventHandler(this, &frmMain::mnu8MB_Click);
 				 // 
 				 // mnu16MB
 				 // 
 				 this->mnu16MB->Name = L"mnu16MB";
-				 this->mnu16MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu16MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu16MB->Text = L"16MB(&3)";
 				 this->mnu16MB->Click += gcnew System::EventHandler(this, &frmMain::mnu16MB_Click);
 				 // 
 				 // mnu32MB
 				 // 
 				 this->mnu32MB->Name = L"mnu32MB";
-				 this->mnu32MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu32MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu32MB->Text = L"32MB(&4)";
 				 this->mnu32MB->Click += gcnew System::EventHandler(this, &frmMain::mnu32MB_Click);
 				 // 
 				 // mnu64MB
 				 // 
 				 this->mnu64MB->Name = L"mnu64MB";
-				 this->mnu64MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu64MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu64MB->Text = L"64MB(&5)";
 				 this->mnu64MB->Click += gcnew System::EventHandler(this, &frmMain::mnu64MB_Click);
 				 // 
 				 // mnu128MB
 				 // 
 				 this->mnu128MB->Name = L"mnu128MB";
-				 this->mnu128MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu128MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu128MB->Text = L"128MB(&6)";
 				 this->mnu128MB->Click += gcnew System::EventHandler(this, &frmMain::mnu128MB_Click);
 				 // 
 				 // mnu256MB
 				 // 
 				 this->mnu256MB->Name = L"mnu256MB";
-				 this->mnu256MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu256MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu256MB->Text = L"256MB(&7)";
 				 this->mnu256MB->Click += gcnew System::EventHandler(this, &frmMain::mnu256MB_Click);
 				 // 
 				 // mnu512MB
 				 // 
 				 this->mnu512MB->Name = L"mnu512MB";
-				 this->mnu512MB->Size = System::Drawing::Size(132, 22);
+				 this->mnu512MB->Size = System::Drawing::Size(152, 22);
 				 this->mnu512MB->Text = L"512MB(&8)";
 				 this->mnu512MB->Click += gcnew System::EventHandler(this, &frmMain::mnu512MB_Click);
 				 // 
 				 // mnu1GB
 				 // 
 				 this->mnu1GB->Name = L"mnu1GB";
-				 this->mnu1GB->Size = System::Drawing::Size(132, 22);
+				 this->mnu1GB->Size = System::Drawing::Size(152, 22);
 				 this->mnu1GB->Text = L"1GB(&9)";
 				 this->mnu1GB->Click += gcnew System::EventHandler(this, &frmMain::mnu1GB_Click);
 				 // 
 				 // mnu2GB
 				 // 
 				 this->mnu2GB->Name = L"mnu2GB";
-				 this->mnu2GB->Size = System::Drawing::Size(132, 22);
+				 this->mnu2GB->Size = System::Drawing::Size(152, 22);
 				 this->mnu2GB->Text = L"2GB(&0)";
 				 this->mnu2GB->Click += gcnew System::EventHandler(this, &frmMain::mnu2GB_Click);
 				 // 
@@ -2094,6 +2104,18 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 				 this->tmrPrompt->Interval = 3000;
 				 this->tmrPrompt->Tick += gcnew System::EventHandler(this, &frmMain::tmrPrompt_Tick);
 				 // 
+				 // mnuPondering
+				 // 
+				 this->mnuPondering->Name = L"mnuPondering";
+				 this->mnuPondering->Size = System::Drawing::Size(152, 22);
+				 this->mnuPondering->Text = L"后台思考(&P)";
+				 this->mnuPondering->Click += gcnew System::EventHandler(this, &frmMain::mnuPondering_Click);
+				 // 
+				 // toolStripMenuItem11
+				 // 
+				 this->toolStripMenuItem11->Name = L"toolStripMenuItem11";
+				 this->toolStripMenuItem11->Size = System::Drawing::Size(149, 6);
+				 // 
 				 // frmMain
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
@@ -2259,6 +2281,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private:System::Void mnuCopy_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void mnuPaste_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void ssPrompt_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void mnuPondering_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
 		void initPlayerTooltips();
 		void setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type);
@@ -2342,6 +2365,7 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 		PlayerType getOpponentPlayerType();
 		AbstractPlayer^ getCurrentPlayer();
 		AbstractPlayer^ getOpponentPlayer();
+		GameContext^ getCurrentPlayerContext();
 		void setQuestionLevel(QuestionLevel ql);
 		void initEndGameMode();
 		void startNewEndGame(EndGameDifficulty difficulty);
@@ -2372,6 +2396,10 @@ private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 		void prompt(System::String^ content, int timeout, System::Drawing::Image^ icon);
 		void prompt(System::String ^content, System::Drawing::Image ^icon);
 		void setProgressBarState(ProgressBarState state);
+		void startPonder();
+		void stopPonder();
+		void ponderEndedAsync();
+		void ponderEndedMainThread();
 
 #ifdef CHRISTMAS
 		void showChristmasWish();

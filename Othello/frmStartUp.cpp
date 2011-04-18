@@ -142,6 +142,7 @@ System::Void frmStartUp::frmStartUp_FormClosing(System::Object ^sender, System::
 		e->Cancel = true;
 }
 System::Void frmStartUp::frmStartUp_Shown(System::Object ^sender, System::EventArgs ^e) {
+	// mainly to put the doInit function in the back of the message loop
 	BeginInvoke(gcnew SimpleDelegate(this, &frmStartUp::doInit));
 }
 

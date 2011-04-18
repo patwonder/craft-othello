@@ -229,7 +229,6 @@ namespace Othello {
 			void setProgressBarState(ProgressBarState state);
 	private:System::Void frmStartUp_Load(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void frmStartUp_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);
-	private: delegate void SimpleDelegate();
 	private:System::Void frmStartUp_Shown(System::Object ^sender, System::EventArgs ^e);
 	};
 }

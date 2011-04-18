@@ -93,4 +93,6 @@ public:
 	Chess getColor() { return color; }
 };
 
+delegate void SimpleDelegate();
+
 }//namespace Othello

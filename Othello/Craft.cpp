@@ -55,18 +55,22 @@ Craft::Craft(SearchDisplayer^ display, SearchOptions opts,
 	solver = Solver::newInstance();
 	solver->setBookTolerance(userInfo->BookTolerance);
 	solverThreadStart = gcnew ThreadStart(this, &Craft::solverStarter);
+	ponderSolver = Solver::newInstance();
 	res = new SolverResult(0, -1);
 	isDone = false;
 	endSolve = false;
 	forced = false;
+	pondering = false;
 	//if (options.winLossStep < options.exactGameStep)
 	//	options.winLossStep = options.exactGameStep;
 }
 
 Craft::!Craft() {
 	delete solver;
+	delete ponderSolver;
 	delete res;
 	solver = NULL;
+	ponderSolver = NULL;
 	res = NULL;
 }
 
@@ -74,11 +78,8 @@ Craft::~Craft() {
 	this->!Craft();
 }
 
-void Craft::init(GameContext^ gc, Chess color) {
-	myColor = (color == Chess::BLACK) ? Solver::BLACK : Solver::WHITE;
-	opColor = Solver::BLACK + Solver::WHITE - myColor;
+void Craft::gcConvertBoard(GameContext ^gc, int board[], int& empties) {
 	empties = 0;
-	int board[Solver::MAXSTEP];
 	for (int i = 0; i < Solver::MAXSTEP; i++)
 		switch (gc->get(i / HEIGHT, i % HEIGHT)) {
 		case Chess::BLACK :
@@ -91,6 +92,15 @@ void Craft::init(GameContext^ gc, Chess color) {
 			board[i] = Solver::AV;
 			empties++;
 	}
+}
+
+void Craft::init(GameContext^ gc, Chess color) {
+	myColor = (color == Chess::BLACK) ? Solver::BLACK : Solver::WHITE;
+	opColor = Solver::BLACK + Solver::WHITE - myColor;
+	int empties = 0;
+	int board[Solver::MAXSTEP];
+	gcConvertBoard(gc, board, empties);
+	this->empties = empties;
 	solver->setBoard(board);
 }
 
@@ -258,6 +268,8 @@ void Craft::resetComponents() {
 void Craft::reset() {
 	terminated = true;
 	resetComponents();
+	if (pondering)
+		stopPonder();
 	if (solverThread)
 		if (solverThread->IsAlive) {
 			solver->abortSearch();
@@ -392,5 +404,112 @@ void Craft::forceMove() {
 			solverThread->Join();
 			solver->abortSearchComplete();
 			forced = true;
+		}
+}
+
+value class PonderStarterParams {
+public:
+	GameContext^ gc;
+	Craft::PonderComplete^ callback;
+};
+
+void Craft::ponderStarter(System::Object^ param) {
+	PonderStarterParams params = safe_cast<PonderStarterParams>(param);
+	if (isPonderable()) {
+		solver->setBookTolerance(0);
+
+		// guess the opponent move
+		int opMove; SolverResult res(0, 0);
+		if (params.gc->getAvailableCount() > 1) {
+			// do a (relatively) shallow search to guess the move
+			if (empties >= options.partialExactStep80) {
+				res = solver->solve(opColor, options.midGameDepth - 1, userInfo->UseBook);
+			} else if (empties >= options.partialExactStep95) {
+				int percentage;
+				res = solver->partialSolveExact(opColor, false, 80, percentage);
+			} else if (empties >= options.partialExactStep99) {
+				int percentage;
+				res = solver->partialSolveExact(opColor, false, 95, percentage);
+			} else if (empties >= options.exactGameStep) {
+				int percentage;
+				res = solver->partialSolveExact(opColor, false, 99, percentage);
+			} else {
+				res = solver->solveExact(opColor, false);
+			}
+			opMove = res.getBestMove();
+			if (opMove < 0) opMove = -opMove - 1;
+		} else {
+			if (params.gc->getAvailableCount() == 1) {
+				System::Drawing::Point move = params.gc->getAvailableMove(0);
+				opMove = move.X * HEIGHT + move.Y;
+			}
+		}
+
+		if (!forced) {
+			int board[Solver::MAXSTEP]; int empties = 0;
+			gcConvertBoard(params.gc, board, empties);
+			ponderSolver->setBoard(board);
+			int new_empties = empties - 1;
+			if (params.gc->getAvailableCount()) {
+				ponderSolver->makeMove(opMove, opColor);
+				new_empties = empties - 2;
+			}
+
+			// think for our own move
+			// uncomment the following line to ponder only when there're moves available for us
+			//if (solver->getMobility(myColor) > 1)
+				if (new_empties >= options.partialExactStep80) {
+					res = ponderSolver->solve(myColor, options.midGameDepth, userInfo->UseBook);
+				} else if (new_empties >= options.partialExactStep95) {
+					int percentage;
+					res = ponderSolver->partialSolveExact(myColor, false, 80, percentage);
+				} else if (new_empties >= options.partialExactStep99) {
+					int percentage;
+					res = ponderSolver->partialSolveExact(myColor, false, 95, percentage);
+				} else if (new_empties >= options.exactGameStep) {
+					int percentage;
+					res = ponderSolver->partialSolveExact(myColor, false, 99, percentage);
+				} else {
+					res = ponderSolver->solveExact(myColor, false);
+				}
+		}
+
+		solver->setBookTolerance(userInfo->BookTolerance);
+	}
+	pondering = false;
+	params.callback();
+}
+
+void Craft::startPonder(GameContext^ gc, PonderComplete^ callback) {
+	if (pondering) return;
+	forced = false;
+	pondering = true;
+	solverThread = gcnew Thread(gcnew ParameterizedThreadStart(this, &Craft::ponderStarter));
+	PonderStarterParams params;
+	params.gc = gc;
+	params.callback = callback;
+
+	solverThread->Priority = ThreadPriority::Lowest;
+	solverThread->Start(params);
+}
+
+bool Craft::isPondering() {
+	return pondering;
+}
+
+bool Craft::isPonderable() {
+	return (empties >= EMPTIES_PONDER_THRESHOLD && options.midGameDepth >= MIDDEPTH_PONDER_THRESHOLD);
+}
+
+void Craft::stopPonder() {
+	if (!pondering) return;
+	if (solverThread)
+		if (solverThread->IsAlive) {
+			forced = true;
+			solver->abortSearch();
+			ponderSolver->abortSearch();
+			solverThread->Join();
+			solver->abortSearchComplete();
+			ponderSolver->abortSearchComplete();
 		}
 }

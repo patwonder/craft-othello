@@ -161,6 +161,9 @@ void frmAnalyzer::parseGame() {
 
 void frmAnalyzer::stopAnalyze() {
 	aborted = true;
+	solver->abortSearch();
+	solverThread->Join();
+	solver->abortSearchComplete();
 }
 
 void frmAnalyzer::startAnalyze() {
@@ -238,9 +241,6 @@ void frmAnalyzer::startAnalyze() {
 		System::Threading::Thread::Sleep(40);
 		System::Windows::Forms::Application::DoEvents();
 		if (aborted) {
-			solver->abortSearch();
-			solverThread->Join();
-			solver->abortSearchComplete();
 			this->Cursor = ::Cursors::Default;
 			cbAnalyzer->Enabled = true;
 			btnClose->Enabled = true;

@@ -207,7 +207,7 @@ int main(array<System::String ^> ^args) {
 #endif
 #endif
 		return EXIT_SUCCESS;
-	} catch (Exception^ e) {
+	} catch (ArgumentException^ e) {
 		MessageBox::Show(e->ToString(), "Sorry, an error has occured", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		return EXIT_FAILURE;
 	} finally {

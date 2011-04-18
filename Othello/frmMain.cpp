@@ -318,6 +318,10 @@ AbstractPlayer^ frmMain::getOpponentPlayer() {
 	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? whitePlayer : blackPlayer);
 }
 
+GameContext^ frmMain::getCurrentPlayerContext() {
+	return ((gcBlack->getCurrentPlayer() == Chess::BLACK) ? gcBlack : gcWhite);
+}
+
 void frmMain::startGameForGUIPlayer() {
 	if (getCurrentPlayerType() == PlayerType::GUI && !analyzeMode) {
 			startGame();
@@ -402,7 +406,7 @@ System::Void frmMain::mnu4MB_Click(System::Object ^sender, System::EventArgs ^e)
 }
 
 void frmMain::setTableSize(int size) {
-	if (searching) return;
+	if (searching || pondering) return;
 	const int TABLE_ENTRY_SIZE = 64;
 	if (!checkMem(((unsigned long long)size) * TABLE_ENTRY_SIZE)) return;
 	if (userInfo->TableSize != size) {
@@ -1413,8 +1417,10 @@ void frmMain::setGUIPlay(bool state) {
 	if (state) {
 		GUIResult = -1;
 		peekMode = false;
+		startPonder();
 	} else {
 		if (peekMode) leavePeekMode();
+		stopPonder();
 	}
 	GUIPlay = state;
 	tsbtnTip->Enabled = state && !endGameMode;
@@ -1831,6 +1837,8 @@ frmMain::frmMain() {
 	mnuStopSearch->Enabled = false;
 	tipping = false;
 	continueGame = false;
+	pondering = false;
+	mnuPondering->Checked = userInfo->Pondering;
 	initEndGameMode();
 }
 
@@ -2285,6 +2293,7 @@ void frmMain::loadConfig() {
 		userInfo->UseBook = br->ReadBoolean();
 		userInfo->AutoCleanTable = br->ReadBoolean();
 		userInfo->ShowPrincipleVariation = br->ReadBoolean();
+		userInfo->Pondering = br->ReadBoolean();
 	} catch (System::Exception^) {
 		br->Close();
 		return;
@@ -2390,6 +2399,7 @@ void frmMain::saveConfig() {
 		bw->Write(userInfo->UseBook);
 		bw->Write(userInfo->AutoCleanTable);
 		bw->Write(userInfo->ShowPrincipleVariation);
+		bw->Write(userInfo->Pondering);
 	} catch (System::Exception^) {
 		bw->Close();
 		return;
@@ -3618,7 +3628,7 @@ System::Void frmMain::mnuClearCache_Click(System::Object^  sender, System::Event
 }
 
 void frmMain::clearCache() {
-	if (searching) return;
+	if (searching || pondering) return;
 	Solver::clearCache();
 }
 
@@ -3857,4 +3867,51 @@ System::Void frmMain::ssPrompt_Click(System::Object ^sender, System::EventArgs ^
 	tmrPrompt->Enabled = false;
 	ssPrompt->Visible = false;
 	ssPlayers->Visible = true;
+}
+
+void frmMain::startPonder() {
+	if (!userInfo->Pondering) return;
+
+	if (analyzeMode || searching || pondering) return;
+
+	if (getCurrentPlayerType() == PlayerType::GUI && Players::isAIPlayer(getOpponentPlayerType())) {
+		Craft^ craft = safe_cast<Craft^>(getOpponentPlayer());
+		if (!craft->isPondering() && craft->isPonderable()) {
+			craft->startPonder(getCurrentPlayerContext(), gcnew Craft::PonderComplete(this, &frmMain::ponderEndedAsync));
+			pondering = true;
+			setTranspositionTableAllowed(false);
+		}
+	}
+}
+
+void frmMain::stopPonder() {
+	if (!pondering) return;
+	if (getCurrentPlayerType() == PlayerType::GUI && Players::isAIPlayer(getOpponentPlayerType())) {
+		Craft^ craft = safe_cast<Craft^>(getOpponentPlayer());
+		if (craft->isPondering()) {
+			craft->stopPonder();
+		}
+	}
+}
+
+void frmMain::ponderEndedAsync() {
+	if (this->InvokeRequired) {
+		this->BeginInvoke(gcnew SimpleDelegate(this, &frmMain::ponderEndedMainThread));
+	} else ponderEndedMainThread();
+}
+
+void frmMain::ponderEndedMainThread() {
+	pondering = false;
+	if (!searching) setTranspositionTableAllowed(true);
+}
+
+System::Void frmMain::mnuPondering_Click(System::Object ^sender, System::EventArgs ^e) {
+	userInfo->Pondering = !userInfo->Pondering;
+	mnuPondering->Checked = userInfo->Pondering;
+	if (GUIPlay && userInfo->Pondering) {
+		startPonder();
+	}
+	if (!userInfo->Pondering) {
+		stopPonder();
+	}
 }

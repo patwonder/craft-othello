@@ -3502,6 +3502,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 				int minEval = (maxEval < INFINITE - MAXSTEP && maxEval > -INFINITE + MAXSTEP) 
 					? (maxEval - thisTolerance)
 					: maxEval;
+				if (minEval > node.getEval(0)) minEval = node.getEval(0);
 				int randomRange = 1;
 				while (randomRange < node.getMoveCount()) {
 					if (node.getEval(randomRange) < minEval) break;

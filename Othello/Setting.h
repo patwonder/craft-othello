@@ -140,6 +140,7 @@ private:
 	bool useBook;
 	bool autoCleanTable;
 	bool showPrincipleVariation;
+	bool pondering;
 public:
 	UserInfo(void) {
 		playerTypeCount = 0;
@@ -167,6 +168,9 @@ public:
 		UseBook = true;
 		AutoCleanTable = true;
 		ShowPrincipleVariation = false;
+		unsigned long long paff = (unsigned long long)
+			System::Diagnostics::Process::GetCurrentProcess()->ProcessorAffinity.ToInt64();
+		Pondering = ((paff & (paff - 1)) != 0); // at least associated with 2 processors
 	}
 	void addStatistics(PlayerType type, Statistics^ stat) {
 		for (int i = 0; i < playerTypeCount; i++)
@@ -227,6 +231,17 @@ public:
 		void set(bool value)
 		{
 			playSound = value;
+		}
+	}
+	property bool Pondering
+	{
+		bool get()
+		{
+			return pondering;
+		}
+		void set(bool value)
+		{
+			pondering = value;
 		}
 	}
 	property bool ShowEvaluation

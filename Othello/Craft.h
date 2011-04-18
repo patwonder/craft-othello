@@ -59,6 +59,7 @@ private:
 	System::String^ myName;
 	SearchDisplayer^ displayer;
 	CraftEngine::Solver* solver;
+	CraftEngine::Solver* ponderSolver;
 	volatile bool isDone;
 	bool forced;
 	bool terminated;
@@ -69,9 +70,16 @@ private:
 	System::Threading::ThreadStart^ solverThreadStart;
 	int focusedMove;
 	int selectedMove;
+	bool pondering;
 
-	System::String^ pvToString(int pv[], int len);
+	static const int MIDDEPTH_PONDER_THRESHOLD = 6;
+	static const int EMPTIES_PONDER_THRESHOLD = 6;
+
+	static System::String^ pvToString(int pv[], int len);
+	static void gcConvertBoard(GameContext ^gc, int board[], int& empties);
+
 	void solverStarter();
+	void ponderStarter(System::Object^ param);
 	System::String^ getResultDescription();
 	System::String^ getPartialResultDescription(int partialResult, int partialDepth, int percentage);
 	System::String^ getSpeedDescription(int speed);
@@ -93,6 +101,18 @@ public:
 	void forceMove();
 	int getTip(GameContext^ gc, Move lastMove, bool endSolve);
 	SearchOptions getSearchOptions() { return options; }
+
+	delegate void PonderComplete();
+
+	// several assumptions before using the following functions:
+	// assume init() called
+	// assume gc never changes during pondering
+	// assume gc is opponent's gc
+	void startPonder(GameContext^ opponentGameContext, PonderComplete^ callback);
+	void stopPonder();
+	bool isPondering();
+	bool isPonderable();
+
 	~Craft();
 	!Craft();
 };
