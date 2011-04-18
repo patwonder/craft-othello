@@ -37,6 +37,8 @@
 // Othello.cpp : main project file.
 
 #include "stdafx.h"
+#include <cstdlib>
+#include "Solver.h"
 //#include <time.h>
 //#define LEARN
 //#define LEARNBOOK

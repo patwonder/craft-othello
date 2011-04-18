@@ -36,7 +36,6 @@
 ********************************************************************************
 */
 
-#include "Solver.h"
 #include "GameContext.h"
 #include "SearchRelated.h"
 #include "Analyze.h"
@@ -49,6 +48,10 @@ using namespace System::Windows::Forms;
 
 using namespace System::Drawing;
 
+namespace CraftEngine {
+class Solver;
+class AnalyzeResult;
+} // namespace CraftEngine
 
 namespace Othello {
 
@@ -77,17 +80,8 @@ namespace Othello {
 		frmAnalyzer(AnalyzeController^ controller, GameContext^ gc,
 			PlayerType defaultPlayerType);
 	protected:
-		/// <summary>
-		/// 清理所有正在使用的资源。
-		/// </summary>
-		~frmAnalyzer()
-		{
-			if (components)
-			{
-				delete components;
-			}
-			delete solver;
-		}
+		~frmAnalyzer();
+		!frmAnalyzer();
 	private:
 		AnalyzeController^ controller;
 		GameContext^ gc;

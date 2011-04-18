@@ -38,6 +38,7 @@
 #include "StdAfx.h"
 #include "frmAnalyzer.h"
 #include "Conversions.h"
+#include "Solver.h"
 
 using namespace Othello;
 using namespace CraftEngine;
@@ -64,6 +65,18 @@ frmAnalyzer::frmAnalyzer(AnalyzeController^ controller, GameContext^ gc,
 	tmrSetLayout->Interval = 200;
 	btnContinue->Enabled = false;
 	setLayout();
+}
+
+frmAnalyzer::~frmAnalyzer() {
+	if (components)
+		delete components;
+	components = nullptr;
+	this->!frmAnalyzer();
+}
+
+frmAnalyzer::!frmAnalyzer() {
+	delete solver;
+	solver = NULL;
 }
 
 String^ frmAnalyzer::getTwoCharRep(int value) {

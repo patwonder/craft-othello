@@ -36,6 +36,7 @@
 
 #include "StdAfx.h"
 #include "Conversions.h"
+#include "Solver.h"
 
 using namespace Othello;
 using namespace CraftEngine;

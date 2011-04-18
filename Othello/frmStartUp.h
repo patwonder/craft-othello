@@ -37,7 +37,6 @@
 */
 
 #include "Common.h"
-#include "Solver.h"
 #include "frmMain.h"
 #include "ProgressBarState.h"
 

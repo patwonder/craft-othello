@@ -37,10 +37,14 @@
 */
 
 #include "AbstractPlayer.h"
-#include "Solver.h"
 #include "Setting.h"
 #include "SearchRelated.h"
 using namespace System;
+
+namespace CraftEngine {
+class Solver;
+class SolverResult;
+} // namespace CraftEngine
 
 namespace Othello {
 

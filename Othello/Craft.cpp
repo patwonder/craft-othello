@@ -38,6 +38,7 @@
 #include "StdAfx.h"
 #include "Craft.h"
 #include "Conversions.h"
+#include "Solver.h"
 
 using namespace Othello;
 using namespace System::Threading;

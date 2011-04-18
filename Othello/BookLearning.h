@@ -37,7 +37,6 @@
 */
 
 #include "GameContext.h"
-#include "Solver.h"
 #include "Common.h"
 #include "Conversions.h"
 
@@ -47,6 +46,10 @@ using namespace System::Collections;
 using namespace System::Windows::Forms;
 
 using namespace System::Drawing;
+
+namespace CraftEngine {
+class Solver;
+} // namespace CraftEngine
 
 namespace Othello {
 
@@ -62,28 +65,10 @@ namespace Othello {
 	public ref class BookLearning : public System::Windows::Forms::Form
 	{
 	public:
-		BookLearning(GameContext^ gc)
-		{
-			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
-			this->gc = gc;
-			isDone = false;
-			solver = NULL;
-			DialogResult = Windows::Forms::DialogResult::OK;
-		}
+		BookLearning(GameContext ^gc);
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		~BookLearning()
-		{
-			if (components) {
-				delete components;
-			}
-		}
+		~BookLearning();
 	private: System::Windows::Forms::Label^ label1;
 	private: System::ComponentModel::IContainer^  components;
 	protected: 
@@ -160,62 +145,12 @@ namespace Othello {
 
 		}
 #pragma endregion
-	private: System::Void BookLearning_Load(System::Object^  sender, System::EventArgs^  e) {
-				 this->Cursor = Cursors::WaitCursor;
-			 }
-	private: System::Void BookLearning_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
-			 }
-	private: System::Void tmrLearn_Tick(System::Object^  sender, System::EventArgs^  e) {
-				 tmrLearn->Enabled = false;
-				 using namespace System::Threading;
-				 solver = CraftEngine::Solver::newInstance();
-				 Thread^ learnerThread = gcnew Thread(gcnew ThreadStart(this, &BookLearning::learnerStarter));
-				 learnerThread->Start();
-				 while (!isDone) {
-					 System::Threading::Thread::Sleep(40);
-					 System::Windows::Forms::Application::DoEvents();
-					 if (solver)
-						 pbLearn->Value = solver->getBookPercent();
-				 }
-				 delete solver;
-				 solver = NULL;
-				 this->Close();
-			 }
+	private:System::Void BookLearning_Load(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void BookLearning_FormClosed(System::Object ^sender, System::Windows::Forms::FormClosedEventArgs ^e);
+	private:System::Void tmrLearn_Tick(System::Object ^sender, System::EventArgs ^e);
 	private: 
-		void parseGame() {
-			Board^ board = gc->getInitialBoard();
-			int bd[WIDTH * HEIGHT];
-			Conversions::convertBoard(board, bd);
-			int steps[WIDTH * HEIGHT];
-			int pptr = 0;
-			for (int i = 1; i < gc->getCurrentStep(); i++) {
-				Othello::Move move = gc->getMove(i);
-				if (move.getColor() != Chess::AVAILABLE) {
-					steps[pptr++] = move.getX() * HEIGHT + move.getY();
-				}
-			}
-			int fp = CraftEngine::Solver::AV;
-			for (int i = 1; i < gc->getCurrentStep(); i++) {
-				Othello::Move move = gc->getMove(i);
-				if (move.getColor() != Chess::AVAILABLE) {
-					fp = (move.getColor() == Chess::BLACK) ? CraftEngine::Solver::BLACK : CraftEngine::Solver::WHITE;
-					break;
-				}
-			}
-			if (fp != CraftEngine::Solver::AV) solver->parseGame(bd, steps, pptr, fp);
-		}
-		void learnerStarter() {
-			parseGame();
-			solver->extendBook();
-			System::Threading::Thread::Sleep(500);
-			isDone = true;
-		}
-	private: System::Void BookLearning_FormClosing(System::Object^  sender, System::Windows::Forms::FormClosingEventArgs^  e) {
-				 if (!isDone)
-					 e->Cancel = true;
-				 else {
-					 this->Cursor = Cursors::Default;
-				 }
-			 }
+		void parseGame();
+		void learnerStarter();
+	private:System::Void BookLearning_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);
 	};
 }

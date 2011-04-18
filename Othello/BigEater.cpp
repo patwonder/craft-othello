@@ -37,6 +37,7 @@
 
 #include "StdAfx.h"
 #include "BigEater.h"
+#include "Solver.h"
 
 using namespace Othello;
 using namespace System::Threading;

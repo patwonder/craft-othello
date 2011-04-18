@@ -41,7 +41,6 @@
 #include "Game.h"
 #include "RandomPlayer.h"
 #include "dlgChooseMachineType.h"
-#include "Solver.h"
 #include "Craft.h"
 #include "BigEater.h"
 #include "Executor.h"

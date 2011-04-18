@@ -37,7 +37,11 @@
 */
 
 #include "AbstractPlayer.h"
-#include "Solver.h"
+
+namespace CraftEngine {
+class Solver;
+class SolverResult;
+} // namespace CraftEngine
 
 namespace Othello {
 ref class BigEater : public AbstractPlayer {

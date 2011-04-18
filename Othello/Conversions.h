@@ -36,7 +36,6 @@
 */
 
 #include "Common.h"
-#include "Solver.h"
 
 namespace Othello {
 

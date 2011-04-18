@@ -41,6 +41,7 @@
 #include "frmAbout.h"
 #include "SecondInstance.h"
 #include "BoardResolver.h"
+#include "Solver.h"
 
 using namespace System;
 using namespace Othello;
