@@ -3877,9 +3877,9 @@ void frmMain::startPonder() {
 	if (getCurrentPlayerType() == PlayerType::GUI && Players::isAIPlayer(getOpponentPlayerType())) {
 		Craft^ craft = safe_cast<Craft^>(getOpponentPlayer());
 		if (!craft->isPondering() && craft->isPonderable()) {
-			craft->startPonder(getCurrentPlayerContext(), gcnew Craft::PonderComplete(this, &frmMain::ponderEndedAsync));
 			pondering = true;
 			setTranspositionTableAllowed(false);
+			craft->startPonder(getCurrentPlayerContext(), gcnew Craft::PonderComplete(this, &frmMain::ponderEndedAsync));
 		}
 	}
 }

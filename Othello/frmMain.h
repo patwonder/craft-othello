@@ -133,7 +133,14 @@ namespace Othello {
 
 				if (gc->getAvailableCount() == 0) {
 					guiForm->startPonder();
-					MessageBox::Show(guiForm, "这回合您欠行。", "提示", MessageBoxButtons::OK,
+					String^ prompt;
+					if (guiForm->getOpponentPlayerType() == PlayerType::GUI) {
+						prompt = "这回合" + (gc->getCurrentPlayer() == Chess::BLACK ? "黑方" : "白方")
+							+ "欠行。";
+					} else {
+						prompt = "这回合您欠行。";
+					}
+					MessageBox::Show(guiForm, prompt, "提示", MessageBoxButtons::OK,
 						MessageBoxIcon::Information);
 					guiForm->stopPonder();
 					return 0;
