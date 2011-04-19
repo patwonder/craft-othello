@@ -61,7 +61,7 @@ private:
 	CraftEngine::Solver* solver;
 	CraftEngine::Solver* ponderSolver;
 	volatile bool isDone;
-	bool forced;
+	volatile bool forced;
 	bool terminated;
 	bool endSolve;
 	CraftEngine::SolverResult* res;
@@ -70,7 +70,7 @@ private:
 	System::Threading::ThreadStart^ solverThreadStart;
 	int focusedMove;
 	int selectedMove;
-	bool pondering;
+	volatile bool pondering;
 
 	static const int MIDDEPTH_PONDER_THRESHOLD = 6;
 	static const int EMPTIES_PONDER_THRESHOLD = 6;

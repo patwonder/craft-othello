@@ -412,11 +412,11 @@ private:
 	double getSmallerRnd(int rate = 2);
 	SolverResult particularSolve(int color, int depth, int move);
 	int getEndSortSearchDepth() const;
+	void restoreStack(int pre_stackptr);
 	static int getMidSortSearchDepth(int depth);
 	static int getEndSortSearchLowerBound1(int alpha);
 	static int getEndSortSearchLowerBound(int alpha);
 	static int getEndSortSearchUpperBound(int beta);
-	void restoreStack(int pre_stackptr);
 
 	// used for dynamic search state display
 	static const int MAX_PV_LENGTH = 20;
@@ -560,6 +560,7 @@ private:
 	int maxEval, tolerance;
 	static int bookDepth;
 	static int bookEndDepth;
+	static bool fatherAdded; // delayed addFather, for better boot speed
 
 	static bool initBook(std::string bookPath);
 	static void setDefaultNode();

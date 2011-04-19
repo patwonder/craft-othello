@@ -91,6 +91,7 @@ int Solver::bookEndDepth;
 Solver* Solver::staticSolver = NULL;
 bool Solver::extendingBook;
 bool Solver::isBookChanged;
+bool Solver::fatherAdded;
 std::string Solver::bookPath;
 std::string Solver::patternPath;
 const std::string Solver::DEFAULT_PATTERN_PATH = "data.craft";
@@ -706,8 +707,9 @@ bool Solver::initBook(std::string bookPath) {
 	staticSolver = new Solver();
 	if (book->getSize() == 0)
 		setDefaultNode();
-	addFather(book->get(defaultMy, defaultOp));
+	fatherAdded = false;
 #ifdef REEVALUATE
+	addFather(book->get(defaultMy, defaultOp));
 	book->reevaluate();
 #endif
 	return true;
@@ -4610,6 +4612,7 @@ void Solver::addFather(const BookNode& node) {
 			if (newFatherCount == 1) addFather(nextNode);
 		}
 	}
+	fatherAdded = true;
 }
 
 void Solver::setDefaultNode() {
@@ -4901,11 +4904,15 @@ Solver::Book::Book() {
 
 void Solver::extendBook() {
 	extendingBook = true;
-	percent = 0;
-	currentBlock = 100;
+
+	percent = 0; currentBlock = 10; subPercent = 0;
+	if (!fatherAdded)
+		addFather(book->get(defaultMy, defaultOp));
+
+	percent = 10; currentBlock = 90; subPercent = 0;
 	extendSingle();
-	percent = 100;
-	subPercent = 0;
+
+	percent = 100; currentBlock = 0; subPercent = 0;
 	extendingBook = false;
 }
 

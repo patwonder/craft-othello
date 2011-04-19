@@ -193,7 +193,7 @@ void Game::goOn() {
 	}
 	else if (pos >= avCount || pos < 0) {
 		System::Windows::Forms::MessageBox::Show((((*currentPlayer) == Chess::BLACK) ? "Black" : "White") 
-			+ " side failed to give a reasonable move.");
+			+ " side failed to provide a reasonable move.");
 	} else {
 		Point p = chessBoard->getAvailableMove(*currentPlayer, pos);
 		chessBoard->putChess(p.X, p.Y, *currentPlayer);
@@ -213,8 +213,8 @@ void Game::goOn() {
 }
 
 void Game::goBack(int step) {
-	chessBoard->goBack(step);
 	black->reset(); white->reset();
+	chessBoard->goBack(step);
 	gameStarted = false;
 	if (insideGoOn)	gameReseted = true;
 	if (step & 1)
@@ -228,8 +228,8 @@ void Game::goBack(int step) {
 }
 
 void Game::goForward(int step) {
-	chessBoard->goOn(step);
 	black->reset(); white->reset();
+	chessBoard->goOn(step);
 	gameStarted = false;
 	if (insideGoOn) gameReseted = true;
 	if (step & 1)

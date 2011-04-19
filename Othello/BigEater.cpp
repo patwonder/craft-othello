@@ -88,13 +88,15 @@ int BigEater::myTurn(GameContext ^gc, Move lastMove) {
 		return 0;
 	}
 	isDone = false;
-	solverThread = gcnew Thread(solverThreadStart);
-	solverThread->Start();
-	while (!isDone) {
-		System::Windows::Forms::Application::DoEvents();
-		if (terminated) return 0;
-		Thread::Sleep(40);
-	}
+	//solverThread = gcnew Thread(solverThreadStart);
+	//solverThread->Start();
+	//while (!isDone) {
+	//	System::Windows::Forms::Application::DoEvents();
+	//	if (terminated) return 0;
+	//	Thread::Sleep(40);
+	//}
+	// Since little work to be done, we call solverStarter directly in this thread
+	solverStarter();
 	solver->makeMove(res->getBestMove(), myColor);
 	for (int i = 0; i < gc->getAvailableCount(); i++) {
 		System::Drawing::Point thisMove = gc->getAvailableMove(i);

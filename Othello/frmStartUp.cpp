@@ -38,6 +38,7 @@
 #include "StdAfx.h"
 #include "frmStartUp.h"
 #include "Solver.h"
+#include "PbNoAnimation.h"
 
 using namespace Othello;
 
@@ -102,20 +103,15 @@ void frmStartUp::doInit() {
 		case 5:
 			lblState->Text = "完成";
 		}
-		if (percent == pbStartUp->Maximum) {
-			pbStartUp->Maximum = pbStartUp->Maximum + 1;
-			pbStartUp->Value = percent + 1;
-			pbStartUp->Maximum = pbStartUp->Maximum - 1;
-			pbStartUp->Value = percent;
-		}
-		else {
-			pbStartUp->Value = percent + 1;
-			pbStartUp->Value = percent;
-		}
+
+		setProgressBarValueNoAnimation(pbStartUp, percent);
+
 		Application::DoEvents();
+#ifndef REEVALUATE
 		if (!mainForm && part >= 4) {
 			mainForm = gcnew frmMain();
 		}
+#endif
 	}
 	if (!successful) {
 		setProgressBarState(ProgressBarState::Error);

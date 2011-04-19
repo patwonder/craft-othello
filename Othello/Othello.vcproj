@@ -584,6 +584,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\PbNoAnimation.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ProgressBarState.cpp"
 				>
 			</File>
@@ -933,6 +937,10 @@
 					SubType="Designer"
 					>
 				</File>
+			</File>
+			<File
+				RelativePath=".\PbNoAnimation.h"
+				>
 			</File>
 			<File
 				RelativePath=".\ProgressBarState.h"

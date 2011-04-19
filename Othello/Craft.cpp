@@ -456,8 +456,8 @@ void Craft::ponderStarter(System::Object^ param) {
 			}
 
 			// think for our own move
-			// uncomment the following line to ponder only when there're moves available for us
-			//if (solver->getMobility(myColor) > 1)
+			// ponder only when there're moves to choose from
+			if (ponderSolver->getMobility(myColor) > 1)
 				if (new_empties >= options.partialExactStep80) {
 					res = ponderSolver->solve(myColor, options.midGameDepth, userInfo->UseBook);
 				} else if (new_empties >= options.partialExactStep95) {

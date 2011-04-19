@@ -38,6 +38,7 @@
 #include "StdAfx.h"
 #include "BookLearning.h"
 #include "Solver.h"
+#include "PbNoAnimation.h"
 
 using namespace Othello;
 
@@ -71,7 +72,7 @@ System::Void BookLearning::BookLearning_FormClosing(System::Object ^sender, Syst
 void BookLearning::learnerStarter() {
 	parseGame();
 	solver->extendBook();
-	System::Threading::Thread::Sleep(500);
+	//System::Threading::Thread::Sleep(500);
 	isDone = true;
 }
 
@@ -98,8 +99,7 @@ void BookLearning::parseGame() {
 		solver->parseGame(bd, steps, pptr, fp);
 }
 
-System::Void BookLearning::tmrLearn_Tick(System::Object ^sender, System::EventArgs ^e) {
-	tmrLearn->Enabled = false;
+void BookLearning::doLearn() {
 	using namespace System::Threading;
 	solver = CraftEngine::Solver::newInstance();
 	Thread ^learnerThread = gcnew Thread(gcnew ThreadStart(this, &BookLearning::learnerStarter));
@@ -108,13 +108,16 @@ System::Void BookLearning::tmrLearn_Tick(System::Object ^sender, System::EventAr
 		System::Threading::Thread::Sleep(40);
 		System::Windows::Forms::Application::DoEvents();
 		if (solver)
-			pbLearn->Value = solver->getBookPercent();
+			setProgressBarValueNoAnimation(pbLearn, solver->getBookPercent());
 	}
 	delete solver;
 	solver = NULL;
 	this->Close();
 }
 
+System::Void BookLearning::BookLearning_Shown(System::Object ^sender, System::EventArgs ^e) {
+	BeginInvoke(gcnew SimpleDelegate(this, &BookLearning::doLearn));
+}
 
 System::Void BookLearning::BookLearning_FormClosed(System::Object ^sender, System::Windows::Forms::FormClosedEventArgs ^e) {
 

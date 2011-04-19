@@ -78,7 +78,7 @@ namespace Othello {
 		/// Required designer variable.
 		/// </summary>
 
-	private: System::Windows::Forms::Timer^  tmrLearn;
+
 			 GameContext^ gc;
 	private: System::Windows::Forms::ProgressBar^  pbLearn;
 			 volatile bool isDone;
@@ -91,9 +91,7 @@ namespace Othello {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = (gcnew System::ComponentModel::Container());
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->tmrLearn = (gcnew System::Windows::Forms::Timer(this->components));
 			this->pbLearn = (gcnew System::Windows::Forms::ProgressBar());
 			this->SuspendLayout();
 			// 
@@ -108,12 +106,6 @@ namespace Othello {
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"正在学习，请稍候！";
 			// 
-			// tmrLearn
-			// 
-			this->tmrLearn->Enabled = true;
-			this->tmrLearn->Interval = 1;
-			this->tmrLearn->Tick += gcnew System::EventHandler(this, &BookLearning::tmrLearn_Tick);
-			// 
 			// pbLearn
 			// 
 			this->pbLearn->Location = System::Drawing::Point(14, 36);
@@ -126,11 +118,11 @@ namespace Othello {
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(213, 65);
+			this->ClientSize = System::Drawing::Size(216, 69);
 			this->ControlBox = false;
 			this->Controls->Add(this->pbLearn);
 			this->Controls->Add(this->label1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
 			this->MaximizeBox = false;
 			this->MinimizeBox = false;
 			this->Name = L"BookLearning";
@@ -138,6 +130,7 @@ namespace Othello {
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"棋谱学习";
 			this->Load += gcnew System::EventHandler(this, &BookLearning::BookLearning_Load);
+			this->Shown += gcnew System::EventHandler(this, &BookLearning::BookLearning_Shown);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &BookLearning::BookLearning_FormClosed);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &BookLearning::BookLearning_FormClosing);
 			this->ResumeLayout(false);
@@ -147,10 +140,11 @@ namespace Othello {
 #pragma endregion
 	private:System::Void BookLearning_Load(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void BookLearning_FormClosed(System::Object ^sender, System::Windows::Forms::FormClosedEventArgs ^e);
-	private:System::Void tmrLearn_Tick(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void BookLearning_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);
+	private:System::Void BookLearning_Shown(System::Object^  sender, System::EventArgs^  e);
 	private: 
 		void parseGame();
 		void learnerStarter();
-	private:System::Void BookLearning_FormClosing(System::Object ^sender, System::Windows::Forms::FormClosingEventArgs ^e);
+		void doLearn();
 	};
 }
