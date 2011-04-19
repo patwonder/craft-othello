@@ -164,7 +164,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
-		displayer->showPrincipleVariation("--");
+		displayer->showPrincipalVariation("--");
 		return 0;
 	}
 	empties--;
@@ -176,7 +176,7 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 		displayer->setSpeed("");
 		displayer->setTotalNum(getTotalNumDescription(0));
 		displayer->setProgress(100);
-		displayer->showPrincipleVariation(Conversions::pointToString(thisMove));
+		displayer->showPrincipalVariation(Conversions::pointToString(thisMove));
 		return 0;
 	}
 
@@ -204,9 +204,9 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 				setFocusedMove(solver->getFocusedMove());
 				setSelectedMove(solver->getSelectedMove());
 			}
-			if (userInfo->ShowPrincipleVariation) {
+			if (userInfo->ShowPrincipalVariation) {
 				int len = solver->getPV(pv, PV_LENGTH);
-				displayer->showPrincipleVariation(pvToString(pv, len));
+				displayer->showPrincipalVariation(pvToString(pv, len));
 			}
 			unsigned long long totalNum = solver->getEvNum();
 			int speed = (int)(totalNum / (unsigned long long)elapsedMilliseconds);
@@ -232,9 +232,9 @@ int Craft::myTurn(GameContext^ gc, Move lastMove) {
 								: getResultDescription());
 	displayer->setSpeed(getSpeedDescription(speed));
 	displayer->setTotalNum(getTotalNumDescription(totalNum));
-	if (userInfo->ShowPrincipleVariation) {
+	if (userInfo->ShowPrincipalVariation) {
 		int len = solver->getPV(pv, PV_LENGTH);
-		displayer->showPrincipleVariation(pvToString(pv, len));
+		displayer->showPrincipalVariation(pvToString(pv, len));
 	}
 	displayer->setProgress(forced ? solver->getPercent() : 100);
 	if (forced) {

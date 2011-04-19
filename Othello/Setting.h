@@ -139,7 +139,7 @@ private:
 	System::String^ theme;
 	bool useBook;
 	bool autoCleanTable;
-	bool showPrincipleVariation;
+	bool showPrincipalVariation;
 	bool pondering;
 public:
 	UserInfo(void) {
@@ -167,7 +167,7 @@ public:
 #endif
 		UseBook = true;
 		AutoCleanTable = true;
-		ShowPrincipleVariation = false;
+		ShowPrincipalVariation = false;
 		unsigned long long paff = (unsigned long long)
 			System::Diagnostics::Process::GetCurrentProcess()->ProcessorAffinity.ToInt64();
 		Pondering = ((paff & (paff - 1)) != 0); // at least associated with 2 processors
@@ -255,15 +255,15 @@ public:
 			showEvaluation = value;
 		}
 	}
-	property bool ShowPrincipleVariation
+	property bool ShowPrincipalVariation
 	{
 		bool get()
 		{
-			return showPrincipleVariation;
+			return showPrincipalVariation;
 		}
 		void set(bool value)
 		{
-			showPrincipleVariation = value;
+			showPrincipalVariation = value;
 		}
 	}
 	property bool ShowProgress

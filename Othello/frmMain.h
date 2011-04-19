@@ -2103,7 +2103,7 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->ssPV->AutoSize = false;
 				 this->ssPV->Name = L"ssPV";
 				 this->ssPV->Size = System::Drawing::Size(470, 17);
-				 this->ssPV->Text = L"Principle Variation";
+				 this->ssPV->Text = L"Principal Variation";
 				 this->ssPV->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
 				 // 
 				 // tmrPrompt
@@ -2446,7 +2446,7 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 		virtual void setProgressState(bool failed);
 		virtual void setFocusedMove(int x, int y);
 		virtual void setSelectedMove(int x, int y);
-		virtual void showPrincipleVariation(System::String^ pv);
+		virtual void showPrincipalVariation(System::String^ pv);
 		virtual void resetComponents();
 		virtual void searchStarted();
 		virtual void searchEnded();

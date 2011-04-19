@@ -1165,7 +1165,7 @@ System::Void frmMain::frmMain_ResizeEnd(System::Object^  sender, System::EventAr
 }
 
 bool frmMain::needShowPV() {
-	return userInfo->ShowPrincipleVariation && !endGameMode && !analyzeMode && !fairGame;
+	return userInfo->ShowPrincipalVariation && !endGameMode && !analyzeMode && !fairGame;
 }
 
 void frmMain::setLayout() {
@@ -1173,7 +1173,7 @@ void frmMain::setLayout() {
 	//infoPanel->SetBounds(this->ClientSize.Width - infoPanel->Width, infoPanel->Top, infoPanel->Width, statusBar->Top - infoPanel->Top);
 	lstSteps->Height = infoPanel->Height - lblCurrentStep->Bottom + listOffSet;
 	picBoard->Bounds = Rectangle(0, toolBar->Bottom, infoPanel->Left, 
-		(userInfo->ShowPrincipleVariation ? statusBar2 : statusBar)->Top - toolBar->Bottom);
+		(userInfo->ShowPrincipalVariation ? statusBar2 : statusBar)->Top - toolBar->Bottom);
 	int width = picBoard->ClientSize.Width;
 	int height = picBoard->ClientSize.Height;
 	double widthOffSet;
@@ -1813,8 +1813,8 @@ frmMain::frmMain() {
 	mnuShowEvaluation->Checked = userInfo->ShowEvaluation;
 	mnuShowProgress->Checked = userInfo->ShowProgress;
 	mnuShowSpeed->Checked = userInfo->ShowSpeed;
-	mnuShowPV->Checked = userInfo->ShowPrincipleVariation;
-	statusBar2->Visible = userInfo->ShowPrincipleVariation;
+	mnuShowPV->Checked = userInfo->ShowPrincipalVariation;
+	statusBar2->Visible = userInfo->ShowPrincipalVariation;
 	setLayout();
 	mnuUseBook->Checked = userInfo->UseBook;
 	if (!userInfo->UseBook) userInfo->FreeMode = true;
@@ -2292,7 +2292,7 @@ void frmMain::loadConfig() {
 		userInfo->Theme = br->ReadString();
 		userInfo->UseBook = br->ReadBoolean();
 		userInfo->AutoCleanTable = br->ReadBoolean();
-		userInfo->ShowPrincipleVariation = br->ReadBoolean();
+		userInfo->ShowPrincipalVariation = br->ReadBoolean();
 		userInfo->Pondering = br->ReadBoolean();
 	} catch (System::Exception^) {
 		br->Close();
@@ -2398,7 +2398,7 @@ void frmMain::saveConfig() {
 		bw->Write(userInfo->Theme);
 		bw->Write(userInfo->UseBook);
 		bw->Write(userInfo->AutoCleanTable);
-		bw->Write(userInfo->ShowPrincipleVariation);
+		bw->Write(userInfo->ShowPrincipalVariation);
 		bw->Write(userInfo->Pondering);
 	} catch (System::Exception^) {
 		bw->Close();
@@ -3179,7 +3179,7 @@ void frmMain::setSelectedMove(int x, int y) {
 	}
 }
 
-void frmMain::showPrincipleVariation(System::String^ pv) {
+void frmMain::showPrincipalVariation(System::String^ pv) {
 	if (needShowPV())
 		ssPV->Text = "最优着法序列: " + pv;
 }
@@ -3724,8 +3724,8 @@ void frmMain::autoClear() {
 }
 
 System::Void frmMain::mnuShowPV_Click(System::Object^  sender, System::EventArgs^  e) {
-	userInfo->ShowPrincipleVariation = !userInfo->ShowPrincipleVariation;
-	mnuShowPV->Checked = userInfo->ShowPrincipleVariation;
+	userInfo->ShowPrincipalVariation = !userInfo->ShowPrincipalVariation;
+	mnuShowPV->Checked = userInfo->ShowPrincipalVariation;
 	showPVChanged();
 }
 
@@ -3733,7 +3733,7 @@ void frmMain::showPVChanged() {
 	if (searchState && !needShowPV()) {
 		ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 	}
-	bool visible = userInfo->ShowPrincipleVariation;
+	bool visible = userInfo->ShowPrincipalVariation;
 	if (visible == statusBar2->Visible) return;
 	statusBar2->Visible = visible;
 	setLayout();

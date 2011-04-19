@@ -6214,7 +6214,7 @@ void Solver::calcStabilityBound(const BitBoard& my, const BitBoard& op, int& low
 
 int Solver::getPV(int pv[], int length) {
 	int len = min(length, pvLength);
-	memcpy(pv, principleVariation, len * sizeof(int));
+	memcpy(pv, principalVariation, len * sizeof(int));
 	return len;
 }
 
@@ -6223,9 +6223,9 @@ void Solver::initPV() {
 }
 
 void Solver::setPV(BitBoard& my, BitBoard& op, int depth, int firstMove) {
-	principleVariation[0] = firstMove;
+	principalVariation[0] = firstMove;
 	if (checkedMakeMove(firstMove, my, op)) {
-		pvLength = 1 + searchPV(op, my, depth - 1, true, principleVariation + 1, principleVariation + MAX_PV_LENGTH);
+		pvLength = 1 + searchPV(op, my, depth - 1, true, principalVariation + 1, principalVariation + MAX_PV_LENGTH);
 		unMakeMove();
 	} else {
 		pvLength = 1;
@@ -6326,12 +6326,12 @@ int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int*
 void Solver::setBookPV(BitBoard& my, BitBoard& op, int firstMove) {
 	BitBoard work_my = my, work_op = op;
 	int pvLength = 1;
-	principleVariation[0] = firstMove;
+	principalVariation[0] = firstMove;
 	BookNode node;
 	putChess(firstMove, work_my, work_op);
 	BitBoard tmp = work_my; work_my = work_op; work_op = tmp;
 	while (pvLength < MAX_PV_LENGTH && (node = book->get(work_my, work_op)) && node.getMoveCount()) {
-		principleVariation[pvLength++] = node.getMove(0);
+		principalVariation[pvLength++] = node.getMove(0);
 		putChess(node.getMove(0), work_my, work_op);
 		tmp = work_my; work_my = work_op; work_op = tmp;
 	}
