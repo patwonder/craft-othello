@@ -1785,15 +1785,17 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 	if (bestMove2 != -1)
 		emptySortStack[sortStackPtr++] = emptyPtr[bestMove2];
 	int sortStart = sortStackPtr;
-	// add the rest of the moves
-	for (EmptyNode* i = emptyHead->succ; i != emptyTail; i = i->succ) {
-		int current = i->pos;
-		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
-			emptySortStack[sortStackPtr++] = i;
-		}
-	}
+	sortStackPtr = pSortStackPtr + bits(mob);
 
 #ifdef USE_ETC
+	// add the rest of the moves
+	int ptr = sortStart;
+	for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+		int current = enode->pos;
+		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+			emptySortStack[ptr++] = enode;
+		}
+	}
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		EmptyNode* pos = emptySortStack[i];
@@ -1832,6 +1834,16 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 	// sort & search combined
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		if (i == sortStart) {
+#ifndef USE_ETC
+			// add the rest of the moves
+			int ptr = sortStart;
+			for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+				int current = enode->pos;
+				if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+					emptySortStack[ptr++] = enode;
+				}
+			}
+#endif
 			for (int j = sortStart; j < sortStackPtr; j++) {
 				int current = emptySortStack[j]->pos;
 				makeMove(current, my, op);
@@ -4067,14 +4079,16 @@ int Solver::search(BitBoard& my, BitBoard& op, int depth, int alpha, int beta, b
 		sortStack[sortStackPtr++] = bestMove2;
 	}
 	int sortStart = sortStackPtr;
+	sortStackPtr = pSortStackPtr + bits(mob);
+
+#ifdef USE_ETC
 	// add the rest of the moves
+	int ptr = sortStart;
 	for (int i = 0; i < MAXSTEP; i++) {
 		if ((orderTable[i] & mob) && (moveOrder[i] != bestMove) && (moveOrder[i] != bestMove2)) {
-			sortStack[sortStackPtr++] = moveOrder[i];
+			sortStack[ptr++] = moveOrder[i];
 		}
 	}
-	
-#ifdef USE_ETC
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		int pos = sortStack[i];
@@ -4114,6 +4128,15 @@ int Solver::search(BitBoard& my, BitBoard& op, int depth, int alpha, int beta, b
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 
 		if (i == sortStart) {
+#ifndef USE_ETC
+			// add the rest of the moves
+			int ptr = sortStart;
+			for (int j = 0; j < MAXSTEP; j++) {
+				if ((orderTable[j] & mob) && (moveOrder[j] != bestMove) && (moveOrder[j] != bestMove2)) {
+					sortStack[ptr++] = moveOrder[j];
+				}
+			}
+#endif
 			for (int j = sortStart; j < sortStackPtr; j++) {
 				makeMove(sortStack[j], my, op);
 				sortResultStack[j] = -evaluate(op, my);
@@ -5182,14 +5205,16 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		sortStack[sortStackPtr++] = bestMove2;
 	}
 	int sortStart = sortStackPtr;
-	// add the rest of the moves
-	for (int i = 0; i < MAXSTEP; i++) {
-		if ((orderTable[i] & mob) && (moveOrder[i] != bestMove) && (moveOrder[i] != bestMove2)) {
-			sortStack[sortStackPtr++] = moveOrder[i];
-		}
-	}
+	sortStackPtr = pSortStackPtr + bits(mob);
 
 #ifdef USE_ETC
+	// add the rest of the moves
+	int ptr = sortStart;
+	for (int i = 0; i < MAXSTEP; i++) {
+		if ((orderTable[i] & mob) && (moveOrder[i] != bestMove) && (moveOrder[i] != bestMove2)) {
+			sortStack[ptr++] = moveOrder[i];
+		}
+	}
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		int pos = sortStack[i];
@@ -5229,6 +5254,15 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 
 		if (i == sortStart) {
+#ifndef USE_ETC
+			// add the rest of the moves
+			int ptr = sortStart;
+			for (int j = 0; j < MAXSTEP; j++) {
+				if ((orderTable[j] & mob) && (moveOrder[j] != bestMove) && (moveOrder[j] != bestMove2)) {
+					sortStack[ptr++] = moveOrder[j];
+				}
+			}
+#endif
 			for (int j = sortStart; j < sortStackPtr; j++) {
 				makeMove(sortStack[j], my, op);
 				sortResultStack[j] = -evaluate(op, my);
@@ -5469,15 +5503,17 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 	if (bestMove2 != -1)
 		emptySortStack[sortStackPtr++] = emptyPtr[bestMove2];
 	int sortStart = sortStackPtr;
-	// add the rest of the moves
-	for (EmptyNode* i = emptyHead->succ; i != emptyTail; i = i->succ) {
-		int current = i->pos;
-		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
-			emptySortStack[sortStackPtr++] = i;
-		}
-	}
+	sortStackPtr = pSortStackPtr + bits(mob);
 
 #ifdef USE_ETC
+	// add the rest of the moves
+	int ptr = sortStart;
+	for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+		int current = enode->pos;
+		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+			emptySortStack[ptr++] = enode;
+		}
+	}
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		EmptyNode* pos = emptySortStack[i];
@@ -5516,6 +5552,16 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 	// sort & search combined
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		if (i == sortStart) {
+#ifndef USE_ETC
+			// add the rest of the moves
+			int ptr = sortStart;
+			for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+				int current = enode->pos;
+				if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+					emptySortStack[ptr++] = enode;
+				}
+			}
+#endif
 			for (int j = sortStart; j < sortStackPtr; j++) {
 				int current = emptySortStack[j]->pos;
 				makeMove(current, my, op);
@@ -5834,15 +5880,17 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 	if (bestMove2 != -1)
 		emptySortStack[sortStackPtr++] = emptyPtr[bestMove2];
 	int sortStart = sortStackPtr;
-	// add the rest of the moves
-	for (EmptyNode* i = emptyHead->succ; i != emptyTail; i = i->succ) {
-		int current = i->pos;
-		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
-			emptySortStack[sortStackPtr++] = i;
-		}
-	}
+	sortStackPtr = pSortStackPtr + bits(mob);
 
 #ifdef USE_ETC
+	// add the rest of the moves
+	int ptr = sortStart;
+	for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+		int current = enode->pos;
+		if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+			emptySortStack[ptr++] = enode;
+		}
+	}
 	// using enhanced transposition cutoff
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		EmptyNode* pos = emptySortStack[i];
@@ -5881,6 +5929,16 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 	// sort & search combined
 	for (int i = pSortStackPtr; i < sortStackPtr; i++) {
 		if (i == sortStart) {
+#ifndef USE_ETC
+			// add the rest of the moves
+			int ptr = sortStart;
+			for (EmptyNode* enode = emptyHead->succ; enode != emptyTail; enode = enode->succ) {
+				int current = enode->pos;
+				if ((posTable[current] & mob) && (current != bestMove) && (current != bestMove2)) {
+					emptySortStack[ptr++] = enode;
+				}
+			}
+#endif
 			for (int j = sortStart; j < sortStackPtr; j++) {
 				int current = emptySortStack[j]->pos;
 				makeMove(current, my, op);
