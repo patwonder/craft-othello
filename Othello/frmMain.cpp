@@ -3342,7 +3342,7 @@ void frmMain::showMove(int step) {
 	else if (step < currentStep)
 		game->goBack(currentStep - step);
 	else {
-		if (!analyzeMode) setBoard();
+		/*if (!analyzeMode) */setBoard();
 		//if (!gcBlack->isGameEnded()) startGameForGUIPlayer();
 	}
 }

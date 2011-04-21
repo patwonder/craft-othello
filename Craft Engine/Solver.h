@@ -58,6 +58,8 @@
 #define USE_STABILITY
 #define COMPACT
 
+#define SYMMETRIC_PRUNING
+
 namespace CraftEngine {
 
 class CLASSINDLL_CLASS_DECL AnalyzeResult {

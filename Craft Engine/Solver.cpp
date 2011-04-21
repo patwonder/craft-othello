@@ -2474,15 +2474,56 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	int opColor = BLACK + WHITE - color;
 	setEmpties(); sortStackPtr = 0;
 	EmptyNode* positions[MAXSTEP];
+	memset(results, 0, sizeof(results));
+	memset(positions, 0, sizeof(positions));
 
 	int pre_stackptr = stackptr;
 
+#ifdef SYMMETRIC_PRUNING
+	bool is_symmetric[SYMMETRICS];
+	// for symmetric positions, some moves are not searched at all
+	for (int sym = 1; sym < SYMMETRICS; sym++) {
+		is_symmetric[sym] = false;
+		BitBoard work_my = my;
+		BitBoard work_op = op;
+		transformSingle(sym, work_my);
+		if (work_my != my) continue;
+		transformSingle(sym, work_op);
+		if (work_op != op) continue;
+
+		is_symmetric[sym] = true;
+	}
+#endif
 	//sort the moves
 	if (bestMove != -1) {
 		positions[pptr++] = emptyPtr[bestMove];
 	}
 	for (EmptyNode* i = emptyHead->succ; i != emptyTail; i = i->succ)
 		if (posTable[i->pos] & mob && i->pos != bestMove) {
+#ifdef SYMMETRIC_PRUNING
+			bool prunned = false;
+			for (int sym = 1; sym < SYMMETRICS; sym++) {
+				if (is_symmetric[sym]) {
+					int sym_move = i->pos;
+					transformPos(sym, sym_move);
+					for (int j = 0; j < pptr; j++) {
+						if (positions[j]->pos == sym_move) {
+							prunned = true;
+							// still keep track of the prunned move for ETC use,
+							// move ordering here is not important
+							positions[--pCount] = i;
+							if (i->pos == maxptr) {
+								maxptr = sym_move;
+								choice = sym_move;
+							}
+							break;
+						}
+					}
+					if (prunned) break;
+				}
+			}
+			if (prunned) continue;
+#endif
 			positions[pptr] = i;
 			if (empties <= SORT_DEPTH) {
 				pptr++;
@@ -2515,7 +2556,13 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 
 #ifdef USE_ETC_AT_ROOT
 	// using enhanced transposition cutoff
+#ifdef SYMMETRIC_PRUNING
+	// access full range of moves to utilize most of the transposition table
+	int totalCount = bits(mob);
+	for (int i = 0; i < totalCount; i++) {
+#else
 	for (int i = 0; i < pCount; i++) {
+#endif
 		EmptyNode* pos = positions[i];
 		makeMove(pos->pos, my, op);
 		// Enhanced Transpositon Cutoff
@@ -3593,12 +3640,53 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	int pptr = 0;
 	int opColor = BLACK + WHITE - color;
 	int pre_stackptr = stackptr;
+	memset(results, 0, sizeof(results));
+	memset(positions, 0, sizeof(positions));
+
+#ifdef SYMMETRIC_PRUNING
+	bool is_symmetric[SYMMETRICS];
+	// for symmetric positions, some moves are not searched at all
+	for (int sym = 1; sym < SYMMETRICS; sym++) {
+		is_symmetric[sym] = false;
+		BitBoard work_my = my;
+		BitBoard work_op = op;
+		transformSingle(sym, work_my);
+		if (work_my != my) continue;
+		transformSingle(sym, work_op);
+		if (work_op != op) continue;
+
+		is_symmetric[sym] = true;
+	}
+#endif
 
 	// sort the moves
 	if (bestMove != -1)
 		positions[pptr++] = bestMove;
 	for (int i = 0; i < MAXSTEP; i++)
 		if ((orderTable[i] & mob) && (moveOrder[i] != bestMove)) {
+#ifdef SYMMETRIC_PRUNING
+			bool prunned = false;
+			for (int sym = 1; sym < SYMMETRICS; sym++) {
+				if (is_symmetric[sym]) {
+					int sym_move = moveOrder[i];
+					transformPos(sym, sym_move);
+					for (int j = 0; j < pptr; j++) {
+						if (positions[j] == sym_move) {
+							prunned = true;
+							// still keep track of the prunned move for ETC use,
+							// move ordering here is not important
+							positions[--pCount] = moveOrder[i];
+							if (moveOrder[i] == maxptr) {
+								maxptr = sym_move;
+							}
+							break;
+						}
+					}
+					if (prunned) break;
+				}
+			}
+			if (prunned) continue;
+#endif
 			positions[pptr] = moveOrder[i];
 			if (depth <= SORT_DEPTH) {
 				pptr++; continue;
@@ -3631,7 +3719,13 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 
 #ifdef USE_ETC_AT_ROOT
 	// using enhanced transposition cutoff
+#ifdef SYMMETRIC_PRUNING
+	// access full range of moves to utilize most of the transposition table
+	int totalCount = bits(mob);
+	for (int i = 0; i < totalCount; i++) {
+#else
 	for (int i = 0; i < pCount; i++) {
+#endif
 		int pos = positions[i];
 		makeMove(pos, my, op);
 		// Enhanced Transpositon Cutoff

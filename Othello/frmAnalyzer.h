@@ -112,13 +112,9 @@ namespace Othello {
 	private: System::Windows::Forms::ListBox^  lstResult;
 	private: System::Windows::Forms::Button^  btnSave;
 	private: System::Windows::Forms::Button^  btnClose;
-
-
 	private: System::Windows::Forms::Button^  btnAnalyze;
 	private: System::Windows::Forms::Panel^  pnlButtons;
-	private: System::Windows::Forms::Timer^  tmrSetLayout;
 	private: System::Windows::Forms::Button^  btnContinue;
-
 	private: System::ComponentModel::IContainer^  components;
 
 	protected: 
@@ -136,7 +132,6 @@ namespace Othello {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = (gcnew System::ComponentModel::Container());
 			this->cbAnalyzer = (gcnew System::Windows::Forms::ComboBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->pbAnalyze = (gcnew System::Windows::Forms::ProgressBar());
@@ -146,7 +141,6 @@ namespace Othello {
 			this->btnClose = (gcnew System::Windows::Forms::Button());
 			this->btnAnalyze = (gcnew System::Windows::Forms::Button());
 			this->pnlButtons = (gcnew System::Windows::Forms::Panel());
-			this->tmrSetLayout = (gcnew System::Windows::Forms::Timer(this->components));
 			this->btnContinue = (gcnew System::Windows::Forms::Button());
 			this->pnlButtons->SuspendLayout();
 			this->SuspendLayout();
@@ -173,6 +167,8 @@ namespace Othello {
 			// 
 			// pbAnalyze
 			// 
+			this->pbAnalyze->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left) 
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbAnalyze->Location = System::Drawing::Point(180, 24);
 			this->pbAnalyze->MarqueeAnimationSpeed = 50;
 			this->pbAnalyze->Name = L"pbAnalyze";
@@ -190,6 +186,9 @@ namespace Othello {
 			// 
 			// lstResult
 			// 
+			this->lstResult->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom) 
+				| System::Windows::Forms::AnchorStyles::Left) 
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->lstResult->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->lstResult->Font = (gcnew System::Drawing::Font(L"宋体", 10.5F));
 			this->lstResult->FormattingEnabled = true;
@@ -238,6 +237,7 @@ namespace Othello {
 			// 
 			// pnlButtons
 			// 
+			this->pnlButtons->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Right));
 			this->pnlButtons->Controls->Add(this->btnClose);
 			this->pnlButtons->Controls->Add(this->btnAnalyze);
 			this->pnlButtons->Controls->Add(this->btnSave);
@@ -246,13 +246,9 @@ namespace Othello {
 			this->pnlButtons->Size = System::Drawing::Size(264, 28);
 			this->pnlButtons->TabIndex = 5;
 			// 
-			// tmrSetLayout
-			// 
-			this->tmrSetLayout->Interval = 200;
-			this->tmrSetLayout->Tick += gcnew System::EventHandler(this, &frmAnalyzer::tmrSetLayout_Tick);
-			// 
 			// btnContinue
 			// 
+			this->btnContinue->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Bottom | System::Windows::Forms::AnchorStyles::Left));
 			this->btnContinue->FlatStyle = System::Windows::Forms::FlatStyle::System;
 			this->btnContinue->Location = System::Drawing::Point(12, 282);
 			this->btnContinue->Name = L"btnContinue";
@@ -283,7 +279,6 @@ namespace Othello {
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"棋局分析";
 			this->Load += gcnew System::EventHandler(this, &frmAnalyzer::frmAnalyzer_Load);
-			this->SizeChanged += gcnew System::EventHandler(this, &frmAnalyzer::frmAnalyzer_SizeChanged);
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &frmAnalyzer::frmAnalyzer_FormClosed);
 			this->FormClosing += gcnew System::Windows::Forms::FormClosingEventHandler(this, &frmAnalyzer::frmAnalyzer_FormClosing);
 			this->pnlButtons->ResumeLayout(false);
@@ -298,7 +293,6 @@ namespace Othello {
 		String^ getTwoCharRep(int value);
 		void solverStarter();
 		void parseGame();
-		void setLayout();
 		AnalyzedMove getAnalyzedResult(int step, int empties, Chess color,
 			int playedMove, int playedEval, 
 			int bestMove, int bestEval, SearchOptions options);
@@ -315,8 +309,6 @@ namespace Othello {
 	private:System::Void btnAnalyze_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void frmAnalyzer_FormClosed(System::Object ^sender, System::Windows::Forms::FormClosedEventArgs ^e);
 	private:System::Void lstResult_SelectedIndexChanged(System::Object ^sender, System::EventArgs ^e);
-	private:System::Void frmAnalyzer_SizeChanged(System::Object ^sender, System::EventArgs ^e);
-	private:System::Void tmrSetLayout_Tick(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void btnSave_Click(System::Object^  sender, System::EventArgs^  e);
 	private:System::Void btnContinue_Click(System::Object ^sender, System::EventArgs ^e);
 	public:

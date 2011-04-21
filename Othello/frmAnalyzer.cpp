@@ -61,10 +61,7 @@ frmAnalyzer::frmAnalyzer(AnalyzeController^ controller, GameContext^ gc,
 	solverStart = gcnew System::Threading::ThreadStart(this, &frmAnalyzer::solverStarter);
 	dAnalyzeResult = gcnew DetailedAnalyzeResult();
 	btnSave->Enabled = false;
-	tmrSetLayout->Enabled = false;
-	tmrSetLayout->Interval = 200;
 	btnContinue->Enabled = false;
-	setLayout();
 }
 
 frmAnalyzer::~frmAnalyzer() {
@@ -453,26 +450,6 @@ AnalyzedMove frmAnalyzer::getAnalyzedResult(int step) {
 }
 int frmAnalyzer::getSteps() {
 	return dAnalyzeResult->getSteps();
-}
-
-System::Void frmAnalyzer::frmAnalyzer_SizeChanged(System::Object ^sender, System::EventArgs ^e) {
-	tmrSetLayout->Enabled = false;
-	tmrSetLayout->Enabled = true;
-}
-System::Void frmAnalyzer::tmrSetLayout_Tick(System::Object ^sender, System::EventArgs ^e) {
-	tmrSetLayout->Enabled = false;
-	if (this->WindowState != FormWindowState::Minimized)
-		setLayout();
-}
-
-void frmAnalyzer::setLayout() {
-	int rightLimit = this->ClientSize.Width - 12;
-	pbAnalyze->Width = rightLimit - pbAnalyze->Left;
-	pnlButtons->Top = this->ClientSize.Height - 12 - pnlButtons->Height;
-	pnlButtons->Left = rightLimit - pnlButtons->Width;
-	btnContinue->Top = pnlButtons->Top;
-	lstResult->Size = System::Drawing::Size(rightLimit - lstResult->Left, 
-		pnlButtons->Top - 6 - lstResult->Top);
 }
 
 System::Void frmAnalyzer::btnSave_Click(System::Object^  sender, System::EventArgs^  e) {
