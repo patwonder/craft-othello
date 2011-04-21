@@ -602,10 +602,12 @@ private:
 	static int patternOffset[STAGES][ACTUAL_PATTERNS];
 
 	// for evaluate_diff
-	int pattern[ACTUAL_PATTERNS];
-	BitBoard diff_my_last;
-	BitBoard diff_op_last;
-	BitBoard diff_empty_last;
+	struct DiffSet {
+		int pattern[ACTUAL_PATTERNS];
+		BitBoard diff_my_last;
+		BitBoard diff_op_last;
+		BitBoard diff_empty_last;
+	} diff_set[2];
 
 	// learing part
 	static bool initPatterns(std::string patternPath);

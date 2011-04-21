@@ -779,10 +779,12 @@ Solver::Solver(int board[MAXSTEP]) {
 	partialResult = 0;
 
 	// for evaluate_diff
-	memset(pattern, 0, sizeof(pattern));
-	diff_my_last = 0;
-	diff_op_last = 0;
-	diff_empty_last = ~(diff_my_last | diff_op_last);
+	for (int i = 0; i < 2; i++) {
+		memset(diff_set[i].pattern, 0, sizeof(diff_set[i].pattern));
+		diff_set[i].diff_my_last = 0;
+		diff_set[i].diff_op_last = 0;
+		diff_set[i].diff_empty_last = ~(diff_set[i].diff_my_last | diff_set[i].diff_op_last);
+	}
 }
 
 void Solver::setBookTolerance(int tolerance) {
@@ -1486,15 +1488,18 @@ inline int Solver::evaluate(const BitBoard& my, const BitBoard& op) {
 
 int Solver::evaluate_diff(const BitBoard& my, const BitBoard& op) {
 	if (my && op) { // wipeout detection
-		BitBoard plusOne = (my & diff_empty_last) | (op & diff_my_last); // 0 -> 1 && 1 -> 2
-		BitBoard plusTwo = (op & diff_empty_last); // 0 -> 2
+		DiffSet& set = diff_set[empties & 1];
+		BitBoard plusOne = (my & set.diff_empty_last) | (op & set.diff_my_last); // 0 -> 1 && 1 -> 2
+		BitBoard plusTwo = (op & set.diff_empty_last); // 0 -> 2
 		BitBoard empty = ~(my | op);
-		BitBoard minusOne = (my & diff_op_last) | (empty & diff_my_last); // 2 -> 1 && 1 -> 0
-		BitBoard minusTwo = (empty & diff_op_last); // 2 -> 0
+		BitBoard minusOne = (my & set.diff_op_last) | (empty & set.diff_my_last); // 2 -> 1 && 1 -> 0
+		BitBoard minusTwo = (empty & set.diff_op_last); // 2 -> 0
 
-		diff_my_last = my;
-		diff_op_last = op;
-		diff_empty_last = empty;
+		set.diff_my_last = my;
+		set.diff_op_last = op;
+		set.diff_empty_last = empty;
+
+		int* pattern = set.pattern;
 
 		unsigned char* ucmy = (unsigned char*)&plusOne;
 		unsigned char* ucop = (unsigned char*)&plusTwo;
