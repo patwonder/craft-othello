@@ -148,7 +148,7 @@ namespace Othello {
 				guiForm->setGUIPlay(true);
 
 				int result;
-				while ((result = guiForm->getGUIPlay()) == -1) {
+				while ((result = guiForm->getGUIMove()) == -1) {
 					Application::DoEvents();
 					if (terminated) { result = 0; break; }
 					System::Threading::Thread::Sleep(40);
@@ -335,6 +335,14 @@ namespace Othello {
 		bool tipping;
 		bool continueGame;
 		bool pondering;
+		bool miniMode;
+		bool btnStartShown;
+		value struct MiniModeStatus {
+			String^ tsmnuBlackText;
+			String^ tsmnuWhiteText;
+			Rectangle btnStartBounds;
+			AnchorStyles btnStartAnchor;
+		} miniModeStatus;
 		System::Collections::Generic::SortedList<String^, String^>^ themeList;
 		System::ComponentModel::ComponentResourceManager^ resources;
 		System::Collections::Generic::List<ThemeMenuItem^>^ themeMenuList;
@@ -344,10 +352,10 @@ namespace Othello {
 	/// <summary>
 	/// Required designer variable.
 	/// </summary>
-	private: System::Windows::Forms::ToolStripDropDownButton^  tsbtnBlack;
-	private: System::Windows::Forms::ToolStripDropDownButton^  tsbtnNew;
-	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator2;
-	private: System::Windows::Forms::ToolStripDropDownButton^  tsbtnWhite;
+	private: System::Windows::Forms::ToolStripDropDownButton^  tsmnuBlackPlayer;
+	private: System::Windows::Forms::ToolStripDropDownButton^  tsmnuNewGame;
+	private: System::Windows::Forms::ToolStripSeparator^  tssep4;
+	private: System::Windows::Forms::ToolStripDropDownButton^  tsmnuWhitePlayer;
 	private: System::Windows::Forms::ToolStripMenuItem^  tsmnuManToMan;
 	private: System::Windows::Forms::ToolStripMenuItem^  tsmnuMachines;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnRestart;
@@ -360,7 +368,7 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  tsmnuWhiteRandom;
 	private: System::Windows::Forms::ToolStripStatusLabel^  ssResult;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnBack;
-	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator7;
+	private: System::Windows::Forms::ToolStripSeparator^  tssep2;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnContinue;
 	private: System::Windows::Forms::ToolStripProgressBar^  tspb1;
 	private: System::Windows::Forms::ToolStripStatusLabel^  ssSpeed;
@@ -386,7 +394,7 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuHelpContents;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuAbout;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnLearn;
-	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator9;
+	private: System::Windows::Forms::ToolStripSeparator^  tssep3;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuLearnImmediately;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem2;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuView;
@@ -435,7 +443,7 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  toolStripMenuItem3;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnOpenGame;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnSaveGame;
-	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator11;
+	private: System::Windows::Forms::ToolStripSeparator^  tssep1;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuFreeMode;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator12;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuShowStatistics;
@@ -486,7 +494,7 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuEndGameMaster;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator13;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuEndGameCustom;
-	private: System::Windows::Forms::ToolStripSeparator^  toolStripSeparator14;
+	private: System::Windows::Forms::ToolStripSeparator^  tssep0;
 	private: System::Windows::Forms::ToolStripButton^  tsbtnShowStatistics;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem8;
 	private: System::Windows::Forms::ToolStripMenuItem^  tsmnuShowEndGameInfo;
@@ -513,11 +521,10 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuShowPV;
 	private: System::Windows::Forms::ToolStripStatusLabel^  ssPrompt;
 	private: System::Windows::Forms::Timer^  tmrPrompt;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuCopy;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuPondering;
-private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
-
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuCopy;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuPondering;
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -539,7 +546,7 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->ssSpace = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->tspb1 = (gcnew System::Windows::Forms::ToolStripProgressBar());
 				 this->toolBar = (gcnew System::Windows::Forms::ToolStrip());
-				 this->tsbtnNew = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+				 this->tsmnuNewGame = (gcnew System::Windows::Forms::ToolStripDropDownButton());
 				 this->tsmnuManBlackToMachine = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuManWhiteToMachine = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuManToMan = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -555,17 +562,17 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsmnuShowEndGameInfo = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsbtnRestart = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnSetupBoard = (gcnew System::Windows::Forms::ToolStripButton());
-				 this->toolStripSeparator14 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->tssep0 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsbtnOpenGame = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnSaveGame = (gcnew System::Windows::Forms::ToolStripButton());
-				 this->toolStripSeparator11 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->tssep1 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsbtnBack = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnContinue = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnTip = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnForceEndSolve = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnStopSearch = (gcnew System::Windows::Forms::ToolStripButton());
-				 this->toolStripSeparator7 = (gcnew System::Windows::Forms::ToolStripSeparator());
-				 this->tsbtnBlack = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+				 this->tssep2 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->tsmnuBlackPlayer = (gcnew System::Windows::Forms::ToolStripDropDownButton());
 				 this->tsmnuBlackMan = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->toolStripMenuItem5 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsmnuBlackRandom = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -579,7 +586,7 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsmnuBlackStar = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuBlackGalaxy = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuBlackUniverse = (gcnew System::Windows::Forms::ToolStripMenuItem());
-				 this->tsbtnWhite = (gcnew System::Windows::Forms::ToolStripDropDownButton());
+				 this->tsmnuWhitePlayer = (gcnew System::Windows::Forms::ToolStripDropDownButton());
 				 this->tsmnuWhiteMan = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->toolStripMenuItem6 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsmnuWhiteRandom = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -593,10 +600,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsmnuWhiteStar = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuWhiteGalaxy = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->tsmnuWhiteUniverse = (gcnew System::Windows::Forms::ToolStripMenuItem());
-				 this->toolStripSeparator9 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->tssep3 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsbtnShowStatistics = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnAnalyze = (gcnew System::Windows::Forms::ToolStripButton());
-				 this->toolStripSeparator2 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->tssep4 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsbtnLearn = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnExit = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->menuBar = (gcnew System::Windows::Forms::MenuStrip());
@@ -661,7 +668,9 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->mnuDelay1s = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuDelay2s = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuPlaySound = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->toolStripMenuItem11 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->mnuUseBook = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->mnuPondering = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuLearnImmediately = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuFreeMode = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuView = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -699,8 +708,6 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->statusBar2 = (gcnew System::Windows::Forms::StatusStrip());
 				 this->ssPV = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 				 this->tmrPrompt = (gcnew System::Windows::Forms::Timer(this->components));
-				 this->mnuPondering = (gcnew System::Windows::Forms::ToolStripMenuItem());
-				 this->toolStripMenuItem11 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 (cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->picBoard))->BeginInit();
 				 this->statusBar->SuspendLayout();
 				 this->toolBar->SuspendLayout();
@@ -801,11 +808,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 // toolBar
 				 // 
 				 this->toolBar->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
-				 this->toolBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(22) {this->tsbtnNew, this->tsmnuNewEndGame, 
-					 this->tsbtnRestart, this->tsbtnSetupBoard, this->toolStripSeparator14, this->tsbtnOpenGame, this->tsbtnSaveGame, this->toolStripSeparator11, 
-					 this->tsbtnBack, this->tsbtnContinue, this->tsbtnTip, this->tsbtnForceEndSolve, this->tsbtnStopSearch, this->toolStripSeparator7, 
-					 this->tsbtnBlack, this->tsbtnWhite, this->toolStripSeparator9, this->tsbtnShowStatistics, this->tsbtnAnalyze, this->toolStripSeparator2, 
-					 this->tsbtnLearn, this->tsbtnExit});
+				 this->toolBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(22) {this->tsmnuNewGame, this->tsmnuNewEndGame, 
+					 this->tsbtnRestart, this->tsbtnSetupBoard, this->tssep0, this->tsbtnOpenGame, this->tsbtnSaveGame, this->tssep1, this->tsbtnBack, 
+					 this->tsbtnContinue, this->tsbtnTip, this->tsbtnForceEndSolve, this->tsbtnStopSearch, this->tssep2, this->tsmnuBlackPlayer, this->tsmnuWhitePlayer, 
+					 this->tssep3, this->tsbtnShowStatistics, this->tsbtnAnalyze, this->tssep4, this->tsbtnLearn, this->tsbtnExit});
 				 this->toolBar->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::HorizontalStackWithOverflow;
 				 this->toolBar->Location = System::Drawing::Point(0, 25);
 				 this->toolBar->Name = L"toolBar";
@@ -814,17 +820,17 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->toolBar->TabIndex = 6;
 				 this->toolBar->Text = L"工具条";
 				 // 
-				 // tsbtnNew
+				 // tsmnuNewGame
 				 // 
-				 this->tsbtnNew->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				 this->tsbtnNew->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->tsmnuManBlackToMachine, 
+				 this->tsmnuNewGame->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				 this->tsmnuNewGame->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->tsmnuManBlackToMachine, 
 					 this->tsmnuManWhiteToMachine, this->tsmnuManToMan, this->tsmnuMachines});
-				 this->tsbtnNew->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsbtnNew.Image")));
-				 this->tsbtnNew->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
-				 this->tsbtnNew->ImageTransparentColor = System::Drawing::Color::Magenta;
-				 this->tsbtnNew->Name = L"tsbtnNew";
-				 this->tsbtnNew->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnNew->Text = L"新游戏";
+				 this->tsmnuNewGame->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsmnuNewGame.Image")));
+				 this->tsmnuNewGame->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
+				 this->tsmnuNewGame->ImageTransparentColor = System::Drawing::Color::Magenta;
+				 this->tsmnuNewGame->Name = L"tsmnuNewGame";
+				 this->tsmnuNewGame->Size = System::Drawing::Size(45, 36);
+				 this->tsmnuNewGame->Text = L"新游戏";
 				 // 
 				 // tsmnuManBlackToMachine
 				 // 
@@ -942,10 +948,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsbtnSetupBoard->ToolTipText = L"预设棋局";
 				 this->tsbtnSetupBoard->Click += gcnew System::EventHandler(this, &frmMain::tsbtnSetupBoard_Click);
 				 // 
-				 // toolStripSeparator14
+				 // tssep0
 				 // 
-				 this->toolStripSeparator14->Name = L"toolStripSeparator14";
-				 this->toolStripSeparator14->Size = System::Drawing::Size(6, 39);
+				 this->tssep0->Name = L"tssep0";
+				 this->tssep0->Size = System::Drawing::Size(6, 39);
 				 // 
 				 // tsbtnOpenGame
 				 // 
@@ -969,10 +975,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsbtnSaveGame->Text = L"保存游戏";
 				 this->tsbtnSaveGame->Click += gcnew System::EventHandler(this, &frmMain::tsbtnSaveGame_Click);
 				 // 
-				 // toolStripSeparator11
+				 // tssep1
 				 // 
-				 this->toolStripSeparator11->Name = L"toolStripSeparator11";
-				 this->toolStripSeparator11->Size = System::Drawing::Size(6, 39);
+				 this->tssep1->Name = L"tssep1";
+				 this->tssep1->Size = System::Drawing::Size(6, 39);
 				 // 
 				 // tsbtnBack
 				 // 
@@ -1029,23 +1035,23 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsbtnStopSearch->Text = L"停止搜索";
 				 this->tsbtnStopSearch->Click += gcnew System::EventHandler(this, &frmMain::tsbtnStopSearch_Click);
 				 // 
-				 // toolStripSeparator7
+				 // tssep2
 				 // 
-				 this->toolStripSeparator7->Name = L"toolStripSeparator7";
-				 this->toolStripSeparator7->Size = System::Drawing::Size(6, 39);
+				 this->tssep2->Name = L"tssep2";
+				 this->tssep2->Size = System::Drawing::Size(6, 39);
 				 // 
-				 // tsbtnBlack
+				 // tsmnuBlackPlayer
 				 // 
-				 this->tsbtnBlack->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				 this->tsbtnBlack->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {this->tsmnuBlackMan, 
+				 this->tsmnuBlackPlayer->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				 this->tsmnuBlackPlayer->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {this->tsmnuBlackMan, 
 					 this->toolStripMenuItem5, this->tsmnuBlackRandom, this->tsmnuBlackBigEat, this->tsmnuBlackEarth, this->toolStripSeparator3, this->tsmnuBlackClouds, 
 					 this->tsmnuBlackOrbit, this->tsmnuBlackMoon, this->toolStripSeparator4, this->tsmnuBlackStar, this->tsmnuBlackGalaxy, this->tsmnuBlackUniverse});
-				 this->tsbtnBlack->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsbtnBlack.Image")));
-				 this->tsbtnBlack->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
-				 this->tsbtnBlack->ImageTransparentColor = System::Drawing::Color::Magenta;
-				 this->tsbtnBlack->Name = L"tsbtnBlack";
-				 this->tsbtnBlack->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnBlack->Text = L"选择黑方";
+				 this->tsmnuBlackPlayer->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsmnuBlackPlayer.Image")));
+				 this->tsmnuBlackPlayer->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
+				 this->tsmnuBlackPlayer->ImageTransparentColor = System::Drawing::Color::Magenta;
+				 this->tsmnuBlackPlayer->Name = L"tsmnuBlackPlayer";
+				 this->tsmnuBlackPlayer->Size = System::Drawing::Size(45, 36);
+				 this->tsmnuBlackPlayer->Text = L"选择黑方";
 				 // 
 				 // tsmnuBlackMan
 				 // 
@@ -1132,18 +1138,18 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsmnuBlackUniverse->Text = L"宇宙(&Universe)";
 				 this->tsmnuBlackUniverse->Click += gcnew System::EventHandler(this, &frmMain::tsmnuBlackUniverse_Click);
 				 // 
-				 // tsbtnWhite
+				 // tsmnuWhitePlayer
 				 // 
-				 this->tsbtnWhite->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
-				 this->tsbtnWhite->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {this->tsmnuWhiteMan, 
+				 this->tsmnuWhitePlayer->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				 this->tsmnuWhitePlayer->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {this->tsmnuWhiteMan, 
 					 this->toolStripMenuItem6, this->tsmnuWhiteRandom, this->tsmnuWhiteBigEat, this->tsmnuWhiteEarth, this->toolStripSeparator5, this->tsmnuWhiteClouds, 
 					 this->tsmnuWhiteOrbit, this->tsmnuWhiteMoon, this->toolStripSeparator6, this->tsmnuWhiteStar, this->tsmnuWhiteGalaxy, this->tsmnuWhiteUniverse});
-				 this->tsbtnWhite->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsbtnWhite.Image")));
-				 this->tsbtnWhite->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
-				 this->tsbtnWhite->ImageTransparentColor = System::Drawing::Color::Magenta;
-				 this->tsbtnWhite->Name = L"tsbtnWhite";
-				 this->tsbtnWhite->Size = System::Drawing::Size(45, 36);
-				 this->tsbtnWhite->Text = L"选择白方";
+				 this->tsmnuWhitePlayer->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsmnuWhitePlayer.Image")));
+				 this->tsmnuWhitePlayer->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
+				 this->tsmnuWhitePlayer->ImageTransparentColor = System::Drawing::Color::Magenta;
+				 this->tsmnuWhitePlayer->Name = L"tsmnuWhitePlayer";
+				 this->tsmnuWhitePlayer->Size = System::Drawing::Size(45, 36);
+				 this->tsmnuWhitePlayer->Text = L"选择白方";
 				 // 
 				 // tsmnuWhiteMan
 				 // 
@@ -1230,10 +1236,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsmnuWhiteUniverse->Text = L"宇宙(&Universe)";
 				 this->tsmnuWhiteUniverse->Click += gcnew System::EventHandler(this, &frmMain::tsmnuWhiteUniverse_Click);
 				 // 
-				 // toolStripSeparator9
+				 // tssep3
 				 // 
-				 this->toolStripSeparator9->Name = L"toolStripSeparator9";
-				 this->toolStripSeparator9->Size = System::Drawing::Size(6, 39);
+				 this->tssep3->Name = L"tssep3";
+				 this->tssep3->Size = System::Drawing::Size(6, 39);
 				 // 
 				 // tsbtnShowStatistics
 				 // 
@@ -1257,10 +1263,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tsbtnAnalyze->Text = L"分析";
 				 this->tsbtnAnalyze->Click += gcnew System::EventHandler(this, &frmMain::tsbtnAnalyze_Click);
 				 // 
-				 // toolStripSeparator2
+				 // tssep4
 				 // 
-				 this->toolStripSeparator2->Name = L"toolStripSeparator2";
-				 this->toolStripSeparator2->Size = System::Drawing::Size(6, 39);
+				 this->tssep4->Name = L"tssep4";
+				 this->tssep4->Size = System::Drawing::Size(6, 39);
 				 // 
 				 // tsbtnLearn
 				 // 
@@ -1578,14 +1584,14 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 // mnuDefaultTheme
 				 // 
 				 this->mnuDefaultTheme->Name = L"mnuDefaultTheme";
-				 this->mnuDefaultTheme->Size = System::Drawing::Size(152, 22);
+				 this->mnuDefaultTheme->Size = System::Drawing::Size(141, 22);
 				 this->mnuDefaultTheme->Text = L"经典主题(&D)";
 				 this->mnuDefaultTheme->Click += gcnew System::EventHandler(this, &frmMain::mnuDefaultTheme_Click);
 				 // 
 				 // toolStripMenuItem10
 				 // 
 				 this->toolStripMenuItem10->Name = L"toolStripMenuItem10";
-				 this->toolStripMenuItem10->Size = System::Drawing::Size(149, 6);
+				 this->toolStripMenuItem10->Size = System::Drawing::Size(138, 6);
 				 // 
 				 // toolStripSeparator15
 				 // 
@@ -1610,70 +1616,70 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 // mnu4MB
 				 // 
 				 this->mnu4MB->Name = L"mnu4MB";
-				 this->mnu4MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu4MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu4MB->Text = L"4MB(&1)";
 				 this->mnu4MB->Click += gcnew System::EventHandler(this, &frmMain::mnu4MB_Click);
 				 // 
 				 // mnu8MB
 				 // 
 				 this->mnu8MB->Name = L"mnu8MB";
-				 this->mnu8MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu8MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu8MB->Text = L"8MB(&2)";
 				 this->mnu8MB->Click += gcnew System::EventHandler(this, &frmMain::mnu8MB_Click);
 				 // 
 				 // mnu16MB
 				 // 
 				 this->mnu16MB->Name = L"mnu16MB";
-				 this->mnu16MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu16MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu16MB->Text = L"16MB(&3)";
 				 this->mnu16MB->Click += gcnew System::EventHandler(this, &frmMain::mnu16MB_Click);
 				 // 
 				 // mnu32MB
 				 // 
 				 this->mnu32MB->Name = L"mnu32MB";
-				 this->mnu32MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu32MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu32MB->Text = L"32MB(&4)";
 				 this->mnu32MB->Click += gcnew System::EventHandler(this, &frmMain::mnu32MB_Click);
 				 // 
 				 // mnu64MB
 				 // 
 				 this->mnu64MB->Name = L"mnu64MB";
-				 this->mnu64MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu64MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu64MB->Text = L"64MB(&5)";
 				 this->mnu64MB->Click += gcnew System::EventHandler(this, &frmMain::mnu64MB_Click);
 				 // 
 				 // mnu128MB
 				 // 
 				 this->mnu128MB->Name = L"mnu128MB";
-				 this->mnu128MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu128MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu128MB->Text = L"128MB(&6)";
 				 this->mnu128MB->Click += gcnew System::EventHandler(this, &frmMain::mnu128MB_Click);
 				 // 
 				 // mnu256MB
 				 // 
 				 this->mnu256MB->Name = L"mnu256MB";
-				 this->mnu256MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu256MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu256MB->Text = L"256MB(&7)";
 				 this->mnu256MB->Click += gcnew System::EventHandler(this, &frmMain::mnu256MB_Click);
 				 // 
 				 // mnu512MB
 				 // 
 				 this->mnu512MB->Name = L"mnu512MB";
-				 this->mnu512MB->Size = System::Drawing::Size(152, 22);
+				 this->mnu512MB->Size = System::Drawing::Size(132, 22);
 				 this->mnu512MB->Text = L"512MB(&8)";
 				 this->mnu512MB->Click += gcnew System::EventHandler(this, &frmMain::mnu512MB_Click);
 				 // 
 				 // mnu1GB
 				 // 
 				 this->mnu1GB->Name = L"mnu1GB";
-				 this->mnu1GB->Size = System::Drawing::Size(152, 22);
+				 this->mnu1GB->Size = System::Drawing::Size(132, 22);
 				 this->mnu1GB->Text = L"1GB(&9)";
 				 this->mnu1GB->Click += gcnew System::EventHandler(this, &frmMain::mnu1GB_Click);
 				 // 
 				 // mnu2GB
 				 // 
 				 this->mnu2GB->Name = L"mnu2GB";
-				 this->mnu2GB->Size = System::Drawing::Size(152, 22);
+				 this->mnu2GB->Size = System::Drawing::Size(132, 22);
 				 this->mnu2GB->Text = L"2GB(&0)";
 				 this->mnu2GB->Click += gcnew System::EventHandler(this, &frmMain::mnu2GB_Click);
 				 // 
@@ -1732,12 +1738,24 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->mnuPlaySound->Text = L"音效(&S)";
 				 this->mnuPlaySound->Click += gcnew System::EventHandler(this, &frmMain::mnuPlaySound_Click);
 				 // 
+				 // toolStripMenuItem11
+				 // 
+				 this->toolStripMenuItem11->Name = L"toolStripMenuItem11";
+				 this->toolStripMenuItem11->Size = System::Drawing::Size(149, 6);
+				 // 
 				 // mnuUseBook
 				 // 
 				 this->mnuUseBook->Name = L"mnuUseBook";
 				 this->mnuUseBook->Size = System::Drawing::Size(152, 22);
 				 this->mnuUseBook->Text = L"使用棋谱(&B)";
 				 this->mnuUseBook->Click += gcnew System::EventHandler(this, &frmMain::mnuUseBook_Click);
+				 // 
+				 // mnuPondering
+				 // 
+				 this->mnuPondering->Name = L"mnuPondering";
+				 this->mnuPondering->Size = System::Drawing::Size(152, 22);
+				 this->mnuPondering->Text = L"后台思考(&P)";
+				 this->mnuPondering->Click += gcnew System::EventHandler(this, &frmMain::mnuPondering_Click);
 				 // 
 				 // mnuLearnImmediately
 				 // 
@@ -2111,18 +2129,6 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 				 this->tmrPrompt->Interval = 3000;
 				 this->tmrPrompt->Tick += gcnew System::EventHandler(this, &frmMain::tmrPrompt_Tick);
 				 // 
-				 // mnuPondering
-				 // 
-				 this->mnuPondering->Name = L"mnuPondering";
-				 this->mnuPondering->Size = System::Drawing::Size(152, 22);
-				 this->mnuPondering->Text = L"后台思考(&P)";
-				 this->mnuPondering->Click += gcnew System::EventHandler(this, &frmMain::mnuPondering_Click);
-				 // 
-				 // toolStripMenuItem11
-				 // 
-				 this->toolStripMenuItem11->Name = L"toolStripMenuItem11";
-				 this->toolStripMenuItem11->Size = System::Drawing::Size(149, 6);
-				 // 
 				 // frmMain
 				 // 
 				 this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
@@ -2296,7 +2302,7 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 		AbstractPlayer^ createPlayer(PlayerType type, Chess colorReserved);
 		void createGame(GameOption option);
 		void setGUIPlay(bool state);
-		int getGUIPlay();
+		int getGUIMove();
 		void loadDefaultTheme();
 		void playSound(SoundPlayer^ player);
 		bool imageAbort();
@@ -2407,7 +2413,10 @@ private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
 		void stopPonder();
 		void ponderEndedAsync();
 		void ponderEndedMainThread();
-
+		void switchMiniMode();
+		void enterMiniMode();
+		void leaveMiniMode();
+		void setDiscNumbersMiniMode();
 #ifdef CHRISTMAS
 		void showChristmasWish();
 #endif

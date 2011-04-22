@@ -124,7 +124,7 @@
   <data name="toolBar.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>123, 17</value>
   </data>
-  <data name="tsbtnNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tsmnuNewGame.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAtiSURBVFhHrZh7WJVV9sf3uXCVOwiiJpATMKFcDiAqIIIK
@@ -612,7 +612,7 @@
         +5buXZVaHgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="tsbtnBlack.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tsmnuBlackPlayer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAXFSURBVFhHtVf7T5RHFP12FxZYXKPSyII2KBSBXdhdQEAe
@@ -643,7 +643,7 @@
         PYt/AYYIORBjviLyAAAAAElFTkSuQmCC
 </value>
   </data>
-  <data name="tsbtnWhite.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tsmnuWhitePlayer.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAaPSURBVFhHtVdrTFRXEL4LEtuCBAQ1SIKPYnSXxy4iIAjY

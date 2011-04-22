@@ -559,9 +559,9 @@ void frmMain::restoreState() {
 	try {
 		game->startGame();
 		btnStart->Text = gameJustStarted ? "开始游戏" : "继续游戏";
-		btnStart->Visible = true;
+		btnStart->Visible = btnStartShown = true;
 	} catch (IllegalGameStateException^) {
-		btnStart->Visible = false;
+		btnStart->Visible = btnStartShown = false;
 		gcBlack = game->getContext(Chess::BLACK);
 		gcWhite = game->getContext(Chess::WHITE);
 		addMoves();
@@ -923,7 +923,7 @@ void frmMain::startGame() {
 		analyzer->Close();
 		return;
 	}
-	btnStart->Visible = false;
+	btnStart->Visible = btnStartShown = false;
 	continueGame = true;
 	if (userInfo->PlaySound && gameJustStarted) 
 		playSound(startSound);
@@ -1083,6 +1083,7 @@ void frmMain::setBoard() {
 	lblBCount->Text = gcBlack->getAvailableCount().ToString();
 	lblWCount->Text = gcWhite->getAvailableCount().ToString();
 	lblEmpty->Text = gcBlack->getEmptyNumber().ToString();
+	if (miniMode) setDiscNumbersMiniMode();
 	if (!gcBlack->isGameEnded()) {
 		lblCStep->Text = gcBlack->getCurrentStep().ToString();
 		if (currentPlayer == Chess::BLACK) {
@@ -1130,7 +1131,7 @@ void frmMain::setBoard() {
 
 System::Void frmMain::backBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
 	// check the situation when new users don't click "Start" button before making the first move
-	if (!analyzeMode && btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+	if (!analyzeMode && btnStartShown && e->Button == System::Windows::Forms::MouseButtons::Left) {
 		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
 	}
 	// In case people make an illegal move
@@ -1155,6 +1156,7 @@ System::Void frmMain::tmrLayout_Tick(System::Object ^sender, System::EventArgs ^
 }
 
 System::Void frmMain::frmMain_SizeChanged(System::Object ^sender, System::EventArgs ^e) {
+	if (peekMode) leavePeekMode();
 	tmrLayout->Enabled = false;
 	picBoard->Visible = false;
 	tmrLayout->Enabled = true;
@@ -1172,8 +1174,9 @@ void frmMain::setLayout() {
 	static int const listOffSet = -15;
 	//infoPanel->SetBounds(this->ClientSize.Width - infoPanel->Width, infoPanel->Top, infoPanel->Width, statusBar->Top - infoPanel->Top);
 	lstSteps->Height = infoPanel->Height - lblCurrentStep->Bottom + listOffSet;
-	picBoard->Bounds = Rectangle(0, toolBar->Bottom, infoPanel->Left, 
-		(userInfo->ShowPrincipalVariation ? statusBar2 : statusBar)->Top - toolBar->Bottom);
+	picBoard->Bounds = Rectangle(0, toolBar->Bottom,
+		miniMode ? this->ClientRectangle.Right : infoPanel->Left, 
+		(miniMode ? this->ClientRectangle.Bottom : (userInfo->ShowPrincipalVariation ? statusBar2 : statusBar)->Top) - toolBar->Bottom);
 	int width = picBoard->ClientSize.Width;
 	int height = picBoard->ClientSize.Height;
 	double widthOffSet;
@@ -1315,6 +1318,10 @@ void frmMain::enterPeekMode() {
 	lblBCount->Text = temp->getAvailableCount(Chess::BLACK).ToString();
 	lblWCount->Text = temp->getAvailableCount(Chess::WHITE).ToString();
 	lblEmpty->Text = temp->getNumber(Chess::AVAILABLE).ToString();
+	if (miniMode) {
+		tsmnuBlackPlayer->Text = temp->getNumber(Chess::BLACK).ToString("00") + " 子";
+		tsmnuWhitePlayer->Text = temp->getNumber(Chess::WHITE).ToString("00") + " 子";
+	}
 	this->Cursor = ::Cursors::Default;
 }
 
@@ -1331,6 +1338,7 @@ void frmMain::leavePeekMode() {
 	lblBCount->Text = gcBlack->getAvailableCount().ToString();
 	lblWCount->Text = gcWhite->getAvailableCount().ToString();
 	lblEmpty->Text = gcBlack->getEmptyNumber().ToString();
+	if (miniMode) setDiscNumbersMiniMode();
 	int selX = selection.X, selY = selection.Y;
 	setSelection(-1, -1);
 	setSelection(selX, selY);
@@ -1359,7 +1367,7 @@ System::Void frmMain::picBoard_MouseUp(System::Object ^sender, System::Windows::
 
 System::Void frmMain::picBoard_MouseClick(System::Object ^sender, System::Windows::Forms::MouseEventArgs ^e) {
 	// check the situation when new users don't click "Start" button before making the first move
-	if (!analyzeMode && btnStart->Visible && e->Button == System::Windows::Forms::MouseButtons::Left) {
+	if (!analyzeMode && btnStartShown && e->Button == System::Windows::Forms::MouseButtons::Left) {
 		prompt("请单击右侧面板上的\"" + btnStart->Text + "\"按钮。", iconInfo);
 	}
 	// In case people make an illegal move
@@ -1430,7 +1438,7 @@ void frmMain::setGUIPlay(bool state) {
 	setSelection(-1, -1);
 }
 
-int frmMain::getGUIPlay() {
+int frmMain::getGUIMove() {
 	return GUIResult;
 }
 
@@ -1815,7 +1823,6 @@ frmMain::frmMain() {
 	mnuShowSpeed->Checked = userInfo->ShowSpeed;
 	mnuShowPV->Checked = userInfo->ShowPrincipalVariation;
 	statusBar2->Visible = userInfo->ShowPrincipalVariation;
-	setLayout();
 	mnuUseBook->Checked = userInfo->UseBook;
 	if (!userInfo->UseBook) userInfo->FreeMode = true;
 	mnuFreeMode->Checked = userInfo->FreeMode;
@@ -1839,7 +1846,11 @@ frmMain::frmMain() {
 	continueGame = false;
 	pondering = false;
 	mnuPondering->Checked = userInfo->Pondering;
+	miniMode = false;
+	btnStartShown = false;
 	initEndGameMode();
+
+	setLayout();
 }
 
 frmMain::~frmMain() {
@@ -2069,7 +2080,7 @@ System::Void frmMain::frmMain_KeyDown(System::Object ^sender, System::Windows::F
 			break;
 		case Keys::Enter:
 		case Keys::Space:
-			if (btnStart->Visible) {
+			if (btnStartShown) {
 				startGame();
 			} else {
 				if (!GUIPlay || peekMode) return;
@@ -2105,6 +2116,9 @@ System::Void frmMain::frmMain_KeyDown(System::Object ^sender, System::Windows::F
 			if (mnuStopSearch->Enabled)
 				stopSearch();
 			break;
+		case Keys::F11:
+			switchMiniMode();
+			break;
 		default:
 			e->Handled = false;
 		}
@@ -2112,21 +2126,21 @@ System::Void frmMain::frmMain_KeyDown(System::Object ^sender, System::Windows::F
 		switch (e->KeyCode) {
 		case Keys::N:
 			if (analyzeMode) return;
-			if (tsbtnNew->Enabled)
-				tsbtnNew->ShowDropDown();
+			if (tsmnuNewGame->Enabled)
+				tsmnuNewGame->ShowDropDown();
 			break;
 		case Keys::R:
 			restartGame();
 			break;
 		case Keys::B:
 			if (analyzeMode) return;
-			if (tsbtnBlack->Enabled)
-				tsbtnBlack->ShowDropDown();
+			if (tsmnuBlackPlayer->Enabled)
+				tsmnuBlackPlayer->ShowDropDown();
 			break;
 		case Keys::W:
 			if (analyzeMode) return;
-			if (tsbtnWhite->Enabled)
-				tsbtnWhite->ShowDropDown();
+			if (tsmnuWhitePlayer->Enabled)
+				tsmnuWhitePlayer->ShowDropDown();
 			break;
 		case Keys::L:
 			if (mnuLearn->Enabled)
@@ -3238,7 +3252,7 @@ void frmMain::enterAnalyzeMode() {
 	if (gameRunning) game->pauseGame();
 	analyzeMode = true;
 	previousStep = gcBlack->getCurrentStep();
-	tsbtnNew->Enabled = false;
+	tsmnuNewGame->Enabled = false;
 	mnuNew->Enabled = false;
 	tsbtnRestart->Enabled = false;
 	mnuRestart->Enabled = false;
@@ -3247,8 +3261,8 @@ void frmMain::enterAnalyzeMode() {
 	previousLearnEnabled = mnuLearn->Enabled;
 	tsbtnLearn->Enabled = false;
 	mnuLearn->Enabled = false;
-	tsbtnBlack->Enabled = false;
-	tsbtnWhite->Enabled = false;
+	tsmnuBlackPlayer->Enabled = false;
+	tsmnuWhitePlayer->Enabled = false;
 	tsmnuNewEndGame->Enabled = false;
 	mnuNewEndGame->Enabled = false;
 	tsbtnOpenGame->Enabled = false;
@@ -3271,7 +3285,7 @@ void frmMain::leaveAnalyzeMode() {
 	setQuestionLevel(QuestionLevel::NONE);
 	showMove(previousStep);
 	if (!gcBlack->isGameEnded()) startGameForGUIPlayer();
-	tsbtnNew->Enabled = true;
+	tsmnuNewGame->Enabled = true;
 	mnuNew->Enabled = true;
 	tsbtnRestart->Enabled = true;
 	mnuRestart->Enabled = true;
@@ -3279,8 +3293,8 @@ void frmMain::leaveAnalyzeMode() {
 	mnuSetupBoard->Enabled = true;
 	mnuLearn->Enabled = previousLearnEnabled && gcBlack->isGameEnded();
 	tsbtnLearn->Enabled = previousLearnEnabled && gcBlack->isGameEnded();
-	tsbtnBlack->Enabled = true;
-	tsbtnWhite->Enabled = true;
+	tsmnuBlackPlayer->Enabled = true;
+	tsmnuWhitePlayer->Enabled = true;
 	tsmnuNewEndGame->Enabled = (wthorFileList->Count > 0);
 	mnuNewEndGame->Enabled = tsmnuNewEndGame->Enabled;
 	tsbtnOpenGame->Enabled = true;
@@ -3509,8 +3523,8 @@ void frmMain::showEndGameInfo(WThorGame^ game, int bestResult, int empties, Ches
 
 void frmMain::enterEndGameMode() {
 	endGameMode = true;
-	tsbtnBlack->Enabled = false;
-	tsbtnWhite->Enabled = false;
+	tsmnuBlackPlayer->Enabled = false;
+	tsmnuWhitePlayer->Enabled = false;
 	tsbtnAnalyze->Enabled = false;
 	mnuAnalyze->Enabled = false;
 	tsmnuShowEndGameInfo->Enabled = true;
@@ -3521,8 +3535,8 @@ void frmMain::enterEndGameMode() {
 
 void frmMain::leaveEndGameMode() {
 	endGameMode = false;
-	tsbtnBlack->Enabled = true;
-	tsbtnWhite->Enabled = true;
+	tsmnuBlackPlayer->Enabled = true;
+	tsmnuWhitePlayer->Enabled = true;
 	tsbtnAnalyze->Enabled = true;
 	tsmnuShowEndGameInfo->Enabled = false;
 	mnuShowEndGameInfo->Enabled = false;
@@ -3733,9 +3747,10 @@ void frmMain::showPVChanged() {
 	if (searchState && !needShowPV()) {
 		ssPV->Text = "最优着法序列: (仅自由模式下进行搜索时显示)";
 	}
-	bool visible = userInfo->ShowPrincipalVariation;
+	bool visible = userInfo->ShowPrincipalVariation && !miniMode;
 	if (visible == statusBar2->Visible) return;
 	statusBar2->Visible = visible;
+	if (peekMode) leavePeekMode();
 	setLayout();
 }
 
@@ -3914,4 +3929,88 @@ System::Void frmMain::mnuPondering_Click(System::Object ^sender, System::EventAr
 	if (!userInfo->Pondering) {
 		stopPonder();
 	}
+}
+
+void frmMain::switchMiniMode() {
+	if (miniMode)
+		leaveMiniMode();
+	else enterMiniMode();
+}
+
+void frmMain::enterMiniMode() {
+	if (miniMode) return;
+	if (peekMode) leavePeekMode();
+
+	tsbtnSetupBoard->Visible = false;
+	tsbtnOpenGame->Visible = false;
+	tsbtnSaveGame->Visible = false;
+	tsbtnShowStatistics->Visible = false;
+	tsbtnAnalyze->Visible = false;
+	tsbtnExit->Visible = false;
+	tssep0->Visible = false;
+	tssep3->Visible = false;
+	tssep4->Visible = false;
+	infoPanel->Visible = false;
+	statusBar->Visible = false;
+	menuBar->Visible = false;
+	statusBar2->Visible = false;
+
+	miniModeStatus.tsmnuBlackText = tsmnuBlackPlayer->Text;
+	miniModeStatus.tsmnuWhiteText = tsmnuWhitePlayer->Text;
+	tsmnuBlackPlayer->DisplayStyle = ToolStripItemDisplayStyle::ImageAndText;
+	tsmnuWhitePlayer->DisplayStyle = ToolStripItemDisplayStyle::ImageAndText;
+	tsmnuBlackPlayer->ToolTipText = tsmnuBlackPlayer->Text;
+	tsmnuWhitePlayer->ToolTipText = tsmnuWhitePlayer->Text;
+
+	miniModeStatus.btnStartBounds = btnStart->Bounds;
+	miniModeStatus.btnStartAnchor = btnStart->Anchor;
+	infoPanel->Controls->Remove(btnStart);
+	picBoard->Controls->Add(btnStart);
+	btnStart->Anchor = AnchorStyles::Right | AnchorStyles::Top;
+	btnStart->Location = Point(picBoard->ClientRectangle.Right - btnStart->Width, 0);
+	btnStart->BringToFront();
+
+	miniMode = true;
+	setLayout();
+	setDiscNumbersMiniMode();
+}
+
+void frmMain::leaveMiniMode() {
+	if (!miniMode) return;
+	if (peekMode) leavePeekMode();
+
+	tsbtnSetupBoard->Visible = true;
+	tsbtnOpenGame->Visible = true;
+	tsbtnSaveGame->Visible = true;
+	tsbtnShowStatistics->Visible = true;
+	tsbtnAnalyze->Visible = true;
+	tsbtnExit->Visible = true;
+	tssep0->Visible = true;
+	tssep3->Visible = true;
+	tssep4->Visible = true;
+	infoPanel->Visible = true;
+	statusBar->Visible = true;
+	menuBar->Visible = true;
+	statusBar2->Visible = userInfo->ShowPrincipalVariation;
+
+	tsmnuBlackPlayer->Text = miniModeStatus.tsmnuBlackText;
+	tsmnuWhitePlayer->Text = miniModeStatus.tsmnuWhiteText;
+	tsmnuBlackPlayer->DisplayStyle = ToolStripItemDisplayStyle::Image;
+	tsmnuWhitePlayer->DisplayStyle = ToolStripItemDisplayStyle::Image;
+	tsmnuBlackPlayer->ToolTipText = "";
+	tsmnuWhitePlayer->ToolTipText = "";
+
+	picBoard->Controls->Remove(btnStart);
+	infoPanel->Controls->Add(btnStart);
+	btnStart->Anchor = miniModeStatus.btnStartAnchor;
+	btnStart->Bounds = miniModeStatus.btnStartBounds;
+	btnStart->BringToFront();
+
+	miniMode = false;
+	setLayout();
+}
+
+void frmMain::setDiscNumbersMiniMode() {
+	tsmnuBlackPlayer->Text = gcBlack->getNumber().ToString("00") + " 子";
+	tsmnuWhitePlayer->Text = gcWhite->getNumber().ToString("00") + " 子";
 }

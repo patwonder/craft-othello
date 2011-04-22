@@ -98,8 +98,8 @@ void Engine::initialize() {
 }
 
 void Engine::initialize(String^ patternPath, String^ bookPath) {
-	char* bp = (char*)(int)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bookPath);
-	char* pp = (char*)(int)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(patternPath);
+	wchar_t* bp = (wchar_t*)System::Runtime::InteropServices::Marshal::StringToHGlobalUni(bookPath).ToPointer();
+	wchar_t* pp = (wchar_t*)System::Runtime::InteropServices::Marshal::StringToHGlobalUni(patternPath).ToPointer();
 	bool init = Solver::initialize(pp, bp);
 	System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)bp);
 	System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)pp);

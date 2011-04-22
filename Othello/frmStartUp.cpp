@@ -67,8 +67,8 @@ void frmStartUp::initStarter() {
 	} catch (...) {
 	}
 
-	char *bp = (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(bookStorePath);
-	char *pp = (char*)(void*)System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(patternPath);
+	wchar_t* bp = (wchar_t*)System::Runtime::InteropServices::Marshal::StringToHGlobalUni(bookStorePath).ToPointer();
+	wchar_t* pp = (wchar_t*)System::Runtime::InteropServices::Marshal::StringToHGlobalUni(patternPath).ToPointer();
 	successful = Solver::initialize(pp, bp);
 	System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)bp);
 	System::Runtime::InteropServices::Marshal::FreeHGlobal((System::IntPtr)pp);

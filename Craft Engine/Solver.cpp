@@ -92,10 +92,10 @@ Solver* Solver::staticSolver = NULL;
 bool Solver::extendingBook;
 bool Solver::isBookChanged;
 bool Solver::fatherAdded;
-std::string Solver::bookPath;
-std::string Solver::patternPath;
-const std::string Solver::DEFAULT_PATTERN_PATH = "data.craft";
-const std::string Solver::DEFAULT_BOOK_PATH = "book.craft";
+std::wstring Solver::bookPath;
+std::wstring Solver::patternPath;
+const std::wstring Solver::DEFAULT_PATTERN_PATH = L"data.craft";
+const std::wstring Solver::DEFAULT_BOOK_PATH = L"book.craft";
 
 #ifdef STABILITY
 int Solver::twoTo3Base[256];
@@ -697,7 +697,7 @@ void Solver::initTable() {
 	//patternValues = 0;
 }
 
-bool Solver::initBook(std::string bookPath) {
+bool Solver::initBook(std::wstring bookPath) {
 	extendingBook = false;
 	isBookChanged = false;
 	setBookDepth(DEFAULT_BOOK_DEPTH);
@@ -727,8 +727,8 @@ int Solver::getInitPercent() {
 	return initPercent;
 }
 
-bool Solver::initialize(std::string patternPath, std::string bookPath) {
-	std::locale::global(std::locale("")); // solving the 'path with chinese chars' problem
+bool Solver::initialize(std::wstring patternPath, std::wstring bookPath) {
+	//std::locale::global(std::locale("")); // solving the 'path with chinese chars' problem
 
 	initPercent = 10;
 
@@ -3069,7 +3069,7 @@ int Solver::getBookPercent() const {
 	return percent + (subPercent * currentBlock / 100);
 }
 
-bool Solver::loadPatterns(std::string patternFile) {
+bool Solver::loadPatterns(std::wstring patternFile) {
 	std::ifstream in(patternFile.c_str(), std::ios::binary | std::ios::in);
 	if (!in) return false;
 	float value;
@@ -3123,7 +3123,7 @@ bool Solver::loadPatterns(std::string patternFile) {
 	//br->Close();
 }
 
-bool Solver::initPatterns(std::string patternPath) {
+bool Solver::initPatterns(std::wstring patternPath) {
 	deltaSum = 0;
 	occurance = 0;
 	patternValues = new int[ALL_STAGE_PATTERN_COUNT];
@@ -4390,7 +4390,7 @@ size_t Solver::getCacheSize() {
 	return currentTableSize;
 }
 
-bool Solver::loadBook(std::string bookFile) {
+bool Solver::loadBook(std::wstring bookFile) {
 	std::ifstream in(bookFile.c_str(), std::ios::binary | std::ios::in);
 	if (!in) {
 		book = new Book();
@@ -4432,46 +4432,9 @@ bool Solver::loadBook(std::string bookFile) {
 	}
 	in.close();
 	return true;
-	//System::IO::FileStream^ fs;
-	//try {
-	//	fs = 
-	//		gcnew System::IO::FileStream(bookFile, System::IO::FileMode::Open, System::IO::FileAccess::Read);
-	//} catch (System::Exception^) {
-	//	book = new Book();
-	//	return;
-	//}
-	//
-	//System::IO::BinaryReader^ br = gcnew System::IO::BinaryReader(fs);
-	//try {
-	//	int bookSize = br->ReadInt32();
-	//	if (bookSize <= 0) {
-	//		book = new Book();
-	//		return;
-	//	}
-	//	book = new Book(bookSize * 3 / 2);
-	//	for (int i = 0; i < bookSize; i++) {
-	//		BookNode node;
-	//		node.setMy(br->ReadUInt64());
-	//		node.setOp(br->ReadUInt64());
-	//		node.setMoveCount(br->ReadSByte());
-	//		for (int j = 0; j < node.getMoveCount(); j++) {
-	//			node.setMove(j, br->ReadSByte());
-	//			node.setEval(j, br->ReadInt32());
-	//		}
-	//		book->insert(node);
-	//	}
-	//} catch (System::Exception^) {
-	//	br->Close();
-	//	System::Windows::Forms::MessageBox::Show("读取 " + bookFile + " 文件出错。\n请确认此文件的完整性，然后再试一次。",
-	//		"读取棋谱文件出错", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
-	//	exit(-1);
-	//	return;
-	//}
-	//System::Diagnostics::Debug::WriteLine("Book loaded from " + bookFile);
-	//br->Close();
 }
 
-bool Solver::saveBook(std::string bookFile) {
+bool Solver::saveBook(std::wstring bookFile) {
 	std::ofstream out(bookFile.c_str(), std::ios::binary | std::ios::out);
 	if (!out) return false;
 	int bookNodes = 0;
@@ -4508,46 +4471,6 @@ bool Solver::saveBook(std::string bookFile) {
 	}
 	out.close();
 	return true;
-
-	//System::IO::FileStream^ fs;
-	//try {
-	//	fs = 
-	//		gcnew System::IO::FileStream(bookFile, System::IO::FileMode::Create, System::IO::FileAccess::Write);
-	//} catch (System::Exception^) {
-	//	System::Windows::Forms::MessageBox::Show("写入 " + bookFile + " 文件出错。\n请确认您对其有写入权限。",
-	//		"写入棋谱文件出错", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
-	//	return;
-	//}
-	//System::IO::BinaryWriter^ bw = gcnew System::IO::BinaryWriter(fs);
-	//try {
-	//	int bookNodes = 0;
-	//	for (int i = 0; i < book->getCapacity(); i++) {
-	//		BookNode node = book->get(i);
-	//		if (node) if (node.getMoveCount())
-	//			bookNodes++;
-	//	}
-	//	bw->Write(bookNodes);
-	//	for (int i = 0; i < book->getCapacity(); i++) {
-	//		BookNode node = book->get(i);
-	//		if (node) if (node.getMoveCount()) {
-	//			bw->Write(node.getMy());
-	//			bw->Write(node.getOp());
-	//			bw->Write(System::SByte(node.getMoveCount()));
-	//			for (int j = 0; j < node.getMoveCount(); j++) {
-	//				bw->Write(System::SByte(node.getMove(j)));
-	//				bw->Write(node.getEval(j));
-	//			}
-	//		}
-	//	}
-	//} catch (System::Exception^) {
-	//	System::Windows::Forms::MessageBox::Show("写入 " + bookFile + " 文件出错。\n请确认您对其有写入权限。",
-	//		"写入棋谱文件出错", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
-	//	bw->Close();
-	//	return;
-	//}
-	//System::Diagnostics::Debug::WriteLine("Book written to " + bookFile);
-	//bw->Close();
-	//isBookChanged = false;
 }
 
 bool Solver::saveBook() {

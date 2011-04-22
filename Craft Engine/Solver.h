@@ -153,12 +153,12 @@ public:
 	static const int MAXSTEP = 8 * 8;
 	static const int INFINITE = 1000000000;
 	static const int RULER = CraftEngine::RULER;
-	static const std::string DEFAULT_PATTERN_PATH;
-	static const std::string DEFAULT_BOOK_PATH;
+	static const std::wstring DEFAULT_PATTERN_PATH;
+	static const std::wstring DEFAULT_BOOK_PATH;
 	
 	// initialization and cleanup
 	static bool initialize();
-	static bool initialize(std::string patternPath, std::string bookPath);
+	static bool initialize(std::wstring patternPath, std::wstring bookPath);
 	static void cleanup();
 	static int getInitPart();
 	static int getInitPercent();
@@ -374,8 +374,8 @@ private:
 	int sortResultStack[MAX_STACK_SIZE];
 	int sortStackPtr;
 
-	static std::string bookPath;
-	static std::string patternPath;
+	static std::wstring bookPath;
+	static std::wstring patternPath;
 
 	Solver();
 	Solver(int board[MAXSTEP]);
@@ -564,13 +564,13 @@ private:
 	static int bookEndDepth;
 	static bool fatherAdded; // delayed addFather, for better boot speed
 
-	static bool initBook(std::string bookPath);
+	static bool initBook(std::wstring bookPath);
 	static void setDefaultNode();
 	static void addFather(const BookNode& node);
 	static void correctEval();
 	static void propagateEval(const BookNode& from);
-	static bool loadBook(std::string bookFile);
-	static bool saveBook(std::string bookFile);
+	static bool loadBook(std::wstring bookFile);
+	static bool saveBook(std::wstring bookFile);
 	void expandNode(BookNode& node);
 	void extendSingle();
 	static void connectChilds(BookNode& node);
@@ -612,7 +612,7 @@ private:
 	} diff_set[2];
 
 	// learing part
-	static bool initPatterns(std::string patternPath);
+	static bool initPatterns(std::wstring patternPath);
 	static void flipSingle(int dir, BitBoard& bb);
 	static void flipPos(int dir, int& pos);
 	static void reverseSingle(BitBoard& bb);
@@ -626,7 +626,7 @@ private:
 	void reverseColor();
 	static void addDependency(int pos, int pInd);
 	static void multipleAdd(int pos, int step, int count, int pInd);
-	static bool loadPatterns(std::string patternFile);
+	static bool loadPatterns(std::wstring patternFile);
 	// advanced flipping
 	static void flipVertical(BitBoard& bb);
 	static void flipHorizonal(BitBoard& bb);
