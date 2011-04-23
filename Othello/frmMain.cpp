@@ -1319,8 +1319,8 @@ void frmMain::enterPeekMode() {
 	lblWCount->Text = temp->getAvailableCount(Chess::WHITE).ToString();
 	lblEmpty->Text = temp->getNumber(Chess::AVAILABLE).ToString();
 	if (miniMode) {
-		tsmnuBlackPlayer->Text = temp->getNumber(Chess::BLACK).ToString("00") + " 子";
-		tsmnuWhitePlayer->Text = temp->getNumber(Chess::WHITE).ToString("00") + " 子";
+		tsmnuBlackPlayer->Text = temp->getNumber(Chess::BLACK).ToString("00") + "子";
+		tsmnuWhitePlayer->Text = temp->getNumber(Chess::WHITE).ToString("00") + "子";
 	}
 	this->Cursor = ::Cursors::Default;
 }
@@ -3944,6 +3944,7 @@ void frmMain::enterMiniMode() {
 	tsbtnSetupBoard->Visible = false;
 	tsbtnOpenGame->Visible = false;
 	tsbtnSaveGame->Visible = false;
+	tsbtnForceEndSolve->Visible = false;
 	tsbtnShowStatistics->Visible = false;
 	tsbtnAnalyze->Visible = false;
 	tsbtnExit->Visible = false;
@@ -3962,7 +3963,7 @@ void frmMain::enterMiniMode() {
 	tsmnuWhitePlayer->DisplayStyle = ToolStripItemDisplayStyle::ImageAndText;
 	tsmnuBlackPlayer->ToolTipText = tsmnuBlackPlayer->Text;
 	tsmnuWhitePlayer->ToolTipText = tsmnuWhitePlayer->Text;
-
+	
 	miniModeStatus.btnStartBounds = btnStart->Bounds;
 	miniModeStatus.btnStartAnchor = btnStart->Anchor;
 	infoPanel->Controls->Remove(btnStart);
@@ -3970,6 +3971,16 @@ void frmMain::enterMiniMode() {
 	btnStart->Anchor = AnchorStyles::Right | AnchorStyles::Top;
 	btnStart->Location = Point(picBoard->ClientRectangle.Right - btnStart->Width, 0);
 	btnStart->BringToFront();
+
+	if (this->WindowState != FormWindowState::Maximized) {
+		miniModeStatus.widthBeforeShrink = this->Width;
+		miniModeStatus.heightBeforeShrink = this->Height;
+		this->Size = System::Drawing::Size(this->Width - infoPanel->Width, 
+			this->Height - menuBar->Height - statusBar->Height);
+	} else {
+		miniModeStatus.widthBeforeShrink = 0;
+		miniModeStatus.heightBeforeShrink = 0;
+	}
 
 	miniMode = true;
 	setLayout();
@@ -3983,6 +3994,7 @@ void frmMain::leaveMiniMode() {
 	tsbtnSetupBoard->Visible = true;
 	tsbtnOpenGame->Visible = true;
 	tsbtnSaveGame->Visible = true;
+	tsbtnForceEndSolve->Visible = true;
 	tsbtnShowStatistics->Visible = true;
 	tsbtnAnalyze->Visible = true;
 	tsbtnExit->Visible = true;
@@ -4008,13 +4020,17 @@ void frmMain::leaveMiniMode() {
 	btnStart->Bounds = miniModeStatus.btnStartBounds;
 	btnStart->BringToFront();
 
+	if (miniModeStatus.widthBeforeShrink || miniModeStatus.heightBeforeShrink) {
+		this->Size = System::Drawing::Size(miniModeStatus.widthBeforeShrink, miniModeStatus.heightBeforeShrink);
+	}
+
 	miniMode = false;
 	setLayout();
 }
 
 void frmMain::setDiscNumbersMiniMode() {
-	tsmnuBlackPlayer->Text = gcBlack->getNumber().ToString("00") + " 子";
-	tsmnuWhitePlayer->Text = gcWhite->getNumber().ToString("00") + " 子";
+	tsmnuBlackPlayer->Text = gcBlack->getNumber().ToString("00") + "子";
+	tsmnuWhitePlayer->Text = gcWhite->getNumber().ToString("00") + "子";
 }
 
 System::Void frmMain::mnuSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e) {

@@ -342,6 +342,8 @@ namespace Othello {
 			String^ tsmnuWhiteText;
 			Rectangle btnStartBounds;
 			AnchorStyles btnStartAnchor;
+			int widthBeforeShrink;
+			int heightBeforeShrink;
 		} miniModeStatus;
 		System::Collections::Generic::SortedList<String^, String^>^ themeList;
 		System::ComponentModel::ComponentResourceManager^ resources;
