@@ -3949,7 +3949,8 @@ void frmMain::enterMiniMode() {
 	tsbtnExit->Visible = false;
 	tssep0->Visible = false;
 	tssep3->Visible = false;
-	tssep4->Visible = false;
+	tsbtnSwitchMiniMode->Visible = true;
+
 	infoPanel->Visible = false;
 	statusBar->Visible = false;
 	menuBar->Visible = false;
@@ -3987,7 +3988,8 @@ void frmMain::leaveMiniMode() {
 	tsbtnExit->Visible = true;
 	tssep0->Visible = true;
 	tssep3->Visible = true;
-	tssep4->Visible = true;
+	tsbtnSwitchMiniMode->Visible = false;
+
 	infoPanel->Visible = true;
 	statusBar->Visible = true;
 	menuBar->Visible = true;
@@ -4013,4 +4015,12 @@ void frmMain::leaveMiniMode() {
 void frmMain::setDiscNumbersMiniMode() {
 	tsmnuBlackPlayer->Text = gcBlack->getNumber().ToString("00") + " 子";
 	tsmnuWhitePlayer->Text = gcWhite->getNumber().ToString("00") + " 子";
+}
+
+System::Void frmMain::mnuSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e) {
+	switchMiniMode();
+}
+
+System::Void frmMain::tsbtnSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e) {
+	switchMiniMode();
 }

@@ -525,6 +525,11 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuPondering;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
+
+private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem12;
+private: System::Windows::Forms::ToolStripMenuItem^  mnuSwitchMiniMode;
+private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
+
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -606,6 +611,7 @@ namespace Othello {
 				 this->tssep4 = (gcnew System::Windows::Forms::ToolStripSeparator());
 				 this->tsbtnLearn = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->tsbtnExit = (gcnew System::Windows::Forms::ToolStripButton());
+				 this->tsbtnSwitchMiniMode = (gcnew System::Windows::Forms::ToolStripButton());
 				 this->menuBar = (gcnew System::Windows::Forms::MenuStrip());
 				 this->mnuGame = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuNew = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -678,6 +684,8 @@ namespace Othello {
 				 this->mnuShowSpeed = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuShowProgress = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuShowPV = (gcnew System::Windows::Forms::ToolStripMenuItem());
+				 this->toolStripMenuItem12 = (gcnew System::Windows::Forms::ToolStripSeparator());
+				 this->mnuSwitchMiniMode = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuHelp = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->mnuHelpContents = (gcnew System::Windows::Forms::ToolStripMenuItem());
 				 this->toolStripMenuItem4 = (gcnew System::Windows::Forms::ToolStripSeparator());
@@ -808,10 +816,10 @@ namespace Othello {
 				 // toolBar
 				 // 
 				 this->toolBar->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
-				 this->toolBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(22) {this->tsmnuNewGame, this->tsmnuNewEndGame, 
+				 this->toolBar->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(23) {this->tsmnuNewGame, this->tsmnuNewEndGame, 
 					 this->tsbtnRestart, this->tsbtnSetupBoard, this->tssep0, this->tsbtnOpenGame, this->tsbtnSaveGame, this->tssep1, this->tsbtnBack, 
 					 this->tsbtnContinue, this->tsbtnTip, this->tsbtnForceEndSolve, this->tsbtnStopSearch, this->tssep2, this->tsmnuBlackPlayer, this->tsmnuWhitePlayer, 
-					 this->tssep3, this->tsbtnShowStatistics, this->tsbtnAnalyze, this->tssep4, this->tsbtnLearn, this->tsbtnExit});
+					 this->tssep3, this->tsbtnShowStatistics, this->tsbtnAnalyze, this->tssep4, this->tsbtnLearn, this->tsbtnExit, this->tsbtnSwitchMiniMode});
 				 this->toolBar->LayoutStyle = System::Windows::Forms::ToolStripLayoutStyle::HorizontalStackWithOverflow;
 				 this->toolBar->Location = System::Drawing::Point(0, 25);
 				 this->toolBar->Name = L"toolBar";
@@ -1290,6 +1298,18 @@ namespace Othello {
 				 this->tsbtnExit->Size = System::Drawing::Size(36, 36);
 				 this->tsbtnExit->Text = L"退出";
 				 this->tsbtnExit->Click += gcnew System::EventHandler(this, &frmMain::tsbtnExit_Click);
+				 // 
+				 // tsbtnSwitchMiniMode
+				 // 
+				 this->tsbtnSwitchMiniMode->DisplayStyle = System::Windows::Forms::ToolStripItemDisplayStyle::Image;
+				 this->tsbtnSwitchMiniMode->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"tsbtnSwitchMiniMode.Image")));
+				 this->tsbtnSwitchMiniMode->ImageScaling = System::Windows::Forms::ToolStripItemImageScaling::None;
+				 this->tsbtnSwitchMiniMode->ImageTransparentColor = System::Drawing::Color::Magenta;
+				 this->tsbtnSwitchMiniMode->Name = L"tsbtnSwitchMiniMode";
+				 this->tsbtnSwitchMiniMode->Size = System::Drawing::Size(36, 36);
+				 this->tsbtnSwitchMiniMode->Text = L"返回完整界面(F11)";
+				 this->tsbtnSwitchMiniMode->Visible = false;
+				 this->tsbtnSwitchMiniMode->Click += gcnew System::EventHandler(this, &frmMain::tsbtnSwitchMiniMode_Click);
 				 // 
 				 // menuBar
 				 // 
@@ -1773,8 +1793,8 @@ namespace Othello {
 				 // 
 				 // mnuView
 				 // 
-				 this->mnuView->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {this->mnuShowEvaluation, 
-					 this->mnuShowSpeed, this->mnuShowProgress, this->mnuShowPV});
+				 this->mnuView->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(6) {this->mnuShowEvaluation, 
+					 this->mnuShowSpeed, this->mnuShowProgress, this->mnuShowPV, this->toolStripMenuItem12, this->mnuSwitchMiniMode});
 				 this->mnuView->Name = L"mnuView";
 				 this->mnuView->Size = System::Drawing::Size(60, 21);
 				 this->mnuView->Text = L"查看(&V)";
@@ -1782,30 +1802,43 @@ namespace Othello {
 				 // mnuShowEvaluation
 				 // 
 				 this->mnuShowEvaluation->Name = L"mnuShowEvaluation";
-				 this->mnuShowEvaluation->Size = System::Drawing::Size(141, 22);
+				 this->mnuShowEvaluation->Size = System::Drawing::Size(168, 22);
 				 this->mnuShowEvaluation->Text = L"估值(&E)";
 				 this->mnuShowEvaluation->Click += gcnew System::EventHandler(this, &frmMain::mnuShowEvaluation_Click);
 				 // 
 				 // mnuShowSpeed
 				 // 
 				 this->mnuShowSpeed->Name = L"mnuShowSpeed";
-				 this->mnuShowSpeed->Size = System::Drawing::Size(141, 22);
+				 this->mnuShowSpeed->Size = System::Drawing::Size(168, 22);
 				 this->mnuShowSpeed->Text = L"搜索速度(&D)";
 				 this->mnuShowSpeed->Click += gcnew System::EventHandler(this, &frmMain::mnuShowSpeed_Click);
 				 // 
 				 // mnuShowProgress
 				 // 
 				 this->mnuShowProgress->Name = L"mnuShowProgress";
-				 this->mnuShowProgress->Size = System::Drawing::Size(141, 22);
+				 this->mnuShowProgress->Size = System::Drawing::Size(168, 22);
 				 this->mnuShowProgress->Text = L"搜索进度(&P)";
 				 this->mnuShowProgress->Click += gcnew System::EventHandler(this, &frmMain::mnuShowProgress_Click);
 				 // 
 				 // mnuShowPV
 				 // 
 				 this->mnuShowPV->Name = L"mnuShowPV";
-				 this->mnuShowPV->Size = System::Drawing::Size(141, 22);
+				 this->mnuShowPV->Size = System::Drawing::Size(168, 22);
 				 this->mnuShowPV->Text = L"最优序列(&V)";
 				 this->mnuShowPV->Click += gcnew System::EventHandler(this, &frmMain::mnuShowPV_Click);
+				 // 
+				 // toolStripMenuItem12
+				 // 
+				 this->toolStripMenuItem12->Name = L"toolStripMenuItem12";
+				 this->toolStripMenuItem12->Size = System::Drawing::Size(165, 6);
+				 // 
+				 // mnuSwitchMiniMode
+				 // 
+				 this->mnuSwitchMiniMode->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"mnuSwitchMiniMode.Image")));
+				 this->mnuSwitchMiniMode->Name = L"mnuSwitchMiniMode";
+				 this->mnuSwitchMiniMode->Size = System::Drawing::Size(168, 22);
+				 this->mnuSwitchMiniMode->Text = L"切换迷你界面(&M)";
+				 this->mnuSwitchMiniMode->Click += gcnew System::EventHandler(this, &frmMain::mnuSwitchMiniMode_Click);
 				 // 
 				 // mnuHelp
 				 // 
@@ -2295,6 +2328,8 @@ namespace Othello {
 	private:System::Void mnuPaste_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void ssPrompt_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void mnuPondering_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void mnuSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e);
+	private:System::Void tsbtnSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
 		void initPlayerTooltips();
 		void setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type);
