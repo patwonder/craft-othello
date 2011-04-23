@@ -183,13 +183,13 @@ const int Solver::patternPtr[ACTUAL_PATTERNS] = {
 
 /*
 0 - 0
-fh - fh
+fv - fv
 fd1 - fd1
 fd2 - fd2
-fv - fv
-fv fh - fv fh
-fv fd1 - fv fd2
-fv fd2 - fv fd1
+fh - fh
+fh fv - fh fv
+fh fd1 - fh fd2
+fh fd2 - fh fd1
 */
 const int Solver::antiPattern[SYMMETRICS] = {0, 1, 2, 3, 4, 5, 7, 6};
 
@@ -2481,6 +2481,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 
 #ifdef SYMMETRIC_PRUNING
 	bool is_symmetric[SYMMETRICS];
+	int symmetric_mapping[MAXSTEP];
 	// for symmetric positions, some moves are not searched at all
 	for (int sym = 1; sym < SYMMETRICS; sym++) {
 		is_symmetric[sym] = false;
@@ -2501,17 +2502,18 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 	for (EmptyNode* i = emptyHead->succ; i != emptyTail; i = i->succ)
 		if (posTable[i->pos] & mob && i->pos != bestMove) {
 #ifdef SYMMETRIC_PRUNING
-			bool prunned = false;
+			bool pruned = false;
 			for (int sym = 1; sym < SYMMETRICS; sym++) {
 				if (is_symmetric[sym]) {
 					int sym_move = i->pos;
 					transformPos(sym, sym_move);
 					for (int j = 0; j < pptr; j++) {
 						if (positions[j]->pos == sym_move) {
-							prunned = true;
-							// still keep track of the prunned move for ETC use,
+							pruned = true;
+							// still keep track of the pruned move for ETC use,
 							// move ordering here is not important
 							positions[--pCount] = i;
+							symmetric_mapping[pCount] = sym_move;
 							if (i->pos == maxptr) {
 								maxptr = sym_move;
 								choice = sym_move;
@@ -2519,10 +2521,10 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 							break;
 						}
 					}
-					if (prunned) break;
+					if (pruned) break;
 				}
 			}
-			if (prunned) continue;
+			if (pruned) continue;
 #endif
 			positions[pptr] = i;
 			if (empties <= SORT_DEPTH) {
@@ -2573,7 +2575,11 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			&& -info->upper > alpha) {
 			alpha = -info->upper;
 			maxresult = alpha;
+#ifdef SYMMETRIC_PRUNING
+			maxptr = (i >= pCount) ? symmetric_mapping[i] : pos->pos;
+#else
 			maxptr = pos->pos;
+#endif
 			choice = maxptr;
 			if (alpha >= beta) {
 				unMakeMove();
@@ -2586,7 +2592,11 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			&& -info->upper > alpha) {
 			alpha = -info->upper;
 			maxresult = alpha;
+#ifdef SYMMETRIC_PRUNING
+			maxptr = (i >= pCount) ? symmetric_mapping[i] : pos->pos;
+#else
 			maxptr = pos->pos;
+#endif
 			choice = maxptr;
 			if (alpha >= beta) {
 				unMakeMove();
@@ -3645,6 +3655,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 
 #ifdef SYMMETRIC_PRUNING
 	bool is_symmetric[SYMMETRICS];
+	int symmetric_mapping[MAXSTEP];
 	// for symmetric positions, some moves are not searched at all
 	for (int sym = 1; sym < SYMMETRICS; sym++) {
 		is_symmetric[sym] = false;
@@ -3665,27 +3676,28 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 	for (int i = 0; i < MAXSTEP; i++)
 		if ((orderTable[i] & mob) && (moveOrder[i] != bestMove)) {
 #ifdef SYMMETRIC_PRUNING
-			bool prunned = false;
+			bool pruned = false;
 			for (int sym = 1; sym < SYMMETRICS; sym++) {
 				if (is_symmetric[sym]) {
 					int sym_move = moveOrder[i];
 					transformPos(sym, sym_move);
 					for (int j = 0; j < pptr; j++) {
 						if (positions[j] == sym_move) {
-							prunned = true;
-							// still keep track of the prunned move for ETC use,
+							pruned = true;
+							// still keep track of the pruned moves for ETC use,
 							// move ordering here is not important
 							positions[--pCount] = moveOrder[i];
+							symmetric_mapping[pCount] = moveOrder[i];
 							if (moveOrder[i] == maxptr) {
 								maxptr = sym_move;
 							}
 							break;
 						}
 					}
-					if (prunned) break;
+					if (pruned) break;
 				}
 			}
-			if (prunned) continue;
+			if (pruned) continue;
 #endif
 			positions[pptr] = moveOrder[i];
 			if (depth <= SORT_DEPTH) {
@@ -3736,7 +3748,11 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			&& ((info->flags & TP_MPC) == 0 || (flags & TP_MPC)) && -info->upper > alpha) {
 			alpha = -info->upper;
 			maxresult = alpha;
+#ifdef SYMMETRIC_PRUNING
+			maxptr = (i >= pCount) ? symmetric_mapping[i] : pos;
+#else
 			maxptr = pos;
+#endif
 			if (alpha >= beta) {
 				unMakeMove();
 				setPV(my, op, depth, maxptr);
@@ -3748,7 +3764,11 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 			&& ((info->flags & TP_MPC) == 0 || (flags & TP_MPC)) && -info->upper > alpha) {
 			alpha = -info->upper;
 			maxresult = alpha;
+#ifdef SYMMETRIC_PRUNING
+			maxptr = (i >= pCount) ? symmetric_mapping[i] : pos;
+#else
 			maxptr = pos;
+#endif
 			if (alpha >= beta) {
 				unMakeMove();
 				setPV(my, op, depth, maxptr);
