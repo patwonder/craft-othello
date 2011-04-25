@@ -129,6 +129,13 @@ int main(array<System::String ^> ^args) {
 				return EXIT_SUCCESS;
 		}
 
+		bool lockless = false;
+		//Start locklessly, for debugging purpose only
+		if (args->Length == 1 && 
+			(args[0]->ToUpper()->Equals("/LOCKLESS") || args[0]->ToUpper()->Equals("-LOCKLESS"))) {
+			lockless = true;
+		}
+
 		// Detect multiple instances, using the upgrade code for the mutex
 #ifndef LEARN
 #ifndef LEARNBOOK
@@ -138,16 +145,20 @@ int main(array<System::String ^> ^args) {
 		appPath = appPath->Replace("_", "__");
 		appPath = appPath->Replace("\\", "_p");
 		*/
-		CSingleInstance^ si = gcnew CSingleInstance(/*appPath*/UPGRADE_CODE);
+		CSingleInstance^ si;
+		if (!lockless)
+			si = gcnew CSingleInstance(/*appPath*/UPGRADE_CODE);
 		try { /* mutex release */
-			if (si->isRunning()) {
-				if (SecondInstance::WM_SISTART) {
-					SecondInstance::CLRPostMessage((System::IntPtr)SecondInstance::CLR_HWND_BROADCAST,
-						SecondInstance::WM_SISTART, System::IntPtr::Zero, System::IntPtr::Zero);
-				} else {
-					MessageBox::Show(__APP_NAME__ + " 已经在运行了！", "提示", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+			if (!lockless) {
+				if (si->isRunning()) {
+					if (SecondInstance::WM_SISTART) {
+						SecondInstance::CLRPostMessage((System::IntPtr)SecondInstance::CLR_HWND_BROADCAST,
+							SecondInstance::WM_SISTART, System::IntPtr::Zero, System::IntPtr::Zero);
+					} else {
+						MessageBox::Show(__APP_NAME__ + " 已经在运行了！", "提示", MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+					}
+					return EXIT_SUCCESS;
 				}
-				return EXIT_SUCCESS;
 			}
 			SHOW(Application::CompanyName);
 			SHOW(Application::ProductName);
@@ -202,7 +213,8 @@ int main(array<System::String ^> ^args) {
 #ifndef LEARN
 #ifndef LEARNBOOK
 		} finally { /* mutex release */
-			si->closeMutex();
+			if (!lockless)
+				si->closeMutex();
 		}
 #endif
 #endif
