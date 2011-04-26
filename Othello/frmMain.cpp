@@ -2543,13 +2543,7 @@ void frmMain::setSelection(int x, int y) {
 }
 
 void frmMain::showAbout() {
-	//String^ message = applicationName + " " + applicationVersion + "\r\n"
-	//	+ "程序设计: Patrick\r\n"
-	//	+ "E-mail: patrick880905@sina.com\r\n"
-	//	+ "QQ: 511754081\r\n"
-	//	+ "如有什么意见或建议, 欢迎与我联系.";
 	setPaused(true);
-	//MessageBox::Show(this, message, "关于", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	frmAbout^ aboutDlg = gcnew frmAbout();
 	aboutDlg->ShowDialog(this);
 	delete aboutDlg;

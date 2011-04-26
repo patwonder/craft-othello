@@ -193,7 +193,7 @@ namespace Othello {
 				 this->label2->Name = L"label2";
 				 this->label2->Size = System::Drawing::Size(180, 80);
 				 this->label2->TabIndex = 5;
-				 this->label2->Text = L"Author: Patrick\r\nE-mail: patrick880905@sina.com\r\nQQ: 511754081\r\n";
+				 this->label2->Text = "Author: " __AUTHOR__ "\r\nE-mail: " __AUTHOR_EMAIL__ "\r\nQQ: " __AUTHOR_QQ__ "\r\n";
 				 // 
 				 // frmStartUp
 				 // 

@@ -142,7 +142,7 @@ namespace Othello {
 			this->lblInfo->Name = L"lblInfo";
 			this->lblInfo->Size = System::Drawing::Size(270, 84);
 			this->lblInfo->TabIndex = 1;
-			this->lblInfo->Text = L"程序设计: Patrick\r\nE-mail: patrick880905@sina.com\r\nQQ: 511754081\r\n如有什么意见或建议, 欢迎与我联系.";
+			this->lblInfo->Text = L"程序设计: \r\nE-mail: \r\nQQ: \r\n如有什么意见或建议, 欢迎与我联系.";
 			// 
 			// pic
 			// 
@@ -254,6 +254,8 @@ namespace Othello {
 		}
 #pragma endregion
 	private: System::Void frmAbout_Load(System::Object^  sender, System::EventArgs^  e) {
+				lblInfo->Text = "程序设计: " __AUTHOR__ "\r\nE-mail: " __AUTHOR_EMAIL__ "\r\nQQ: " __AUTHOR_QQ__ "\r\n如有什么意见或建议, 欢迎与我联系.";
+
 				String^ title = __APP_NAME__ + " " + __APP_VERSION__;
 				lblTitle->Text = title;
 				Text = "关于 " + __APP_NAME__;

@@ -57,6 +57,10 @@
 #define __APP_VERSION__ (System::Windows::Forms::Application::ProductVersion + __APP_SPECIAL_VERSION__ + __APP_SPECIAL_VERSION_2__)
 #endif
 
+#define __AUTHOR__ "Patrick"
+#define __AUTHOR_EMAIL__ "patrick880905@sina.com"
+#define __AUTHOR_QQ__ "511754081"
+
 namespace Othello {
 
 //棋子颜色
