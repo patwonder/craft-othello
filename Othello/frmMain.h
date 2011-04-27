@@ -2333,6 +2333,7 @@ private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
 	private:System::Void mnuSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e);
 	private:System::Void tsbtnSwitchMiniMode_Click(System::Object ^sender, System::EventArgs ^e);
 	private:
+		void startResize();
 		void initPlayerTooltips();
 		void setMenuPlayerTooltip(ToolStripMenuItem ^mnu, PlayerType type);
 		void setSelection(int x, int y);

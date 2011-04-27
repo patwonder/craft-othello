@@ -1155,11 +1155,15 @@ System::Void frmMain::tmrLayout_Tick(System::Object ^sender, System::EventArgs ^
 	}
 }
 
-System::Void frmMain::frmMain_SizeChanged(System::Object ^sender, System::EventArgs ^e) {
-	if (peekMode) leavePeekMode();
+void frmMain::startResize() {
 	tmrLayout->Enabled = false;
 	picBoard->Visible = false;
 	tmrLayout->Enabled = true;
+}
+
+System::Void frmMain::frmMain_SizeChanged(System::Object ^sender, System::EventArgs ^e) {
+	if (peekMode) leavePeekMode();
+	startResize();
 }
 System::Void frmMain::frmMain_ResizeBegin(System::Object^  sender, System::EventArgs^  e) {
 }
@@ -3977,7 +3981,7 @@ void frmMain::enterMiniMode() {
 	}
 
 	miniMode = true;
-	setLayout();
+	startResize();
 	setDiscNumbersMiniMode();
 }
 
@@ -4019,7 +4023,7 @@ void frmMain::leaveMiniMode() {
 	}
 
 	miniMode = false;
-	setLayout();
+	startResize();
 }
 
 void frmMain::setDiscNumbersMiniMode() {
