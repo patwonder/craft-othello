@@ -104,6 +104,23 @@ SearchOptions Players::getAISearchOptions(PlayerType type) {
 	}
 }
 
+bool Players::isComputerPlayer(PlayerType type) {
+	switch (type) {
+	case PlayerType::RANDOM:
+	case PlayerType::BIG_EAT:
+	case PlayerType::EARTH:
+	case PlayerType::CLOUDS:
+	case PlayerType::ORBIT:
+	case PlayerType::MOON:
+	case PlayerType::STAR:
+	case PlayerType::GALAXY:
+	case PlayerType::UNIVERSE:
+		return true;
+	default:
+		return false;
+	}
+}
+
 bool Players::isAIPlayer(PlayerType type) {
 	switch (type) {
 	case PlayerType::EARTH:

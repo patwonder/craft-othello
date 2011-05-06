@@ -2882,7 +2882,7 @@ void frmMain::setFairness() {
 		return;
 	}
 	if (blackType == PlayerType::GUI) {
-		if (Players::isAIPlayer(whiteType)) {
+		if (Players::isComputerPlayer(whiteType)) {
 			fairGame = game->isLearnable();
 			if (fairGame) {
 				goBackChance = getGoBackChance(whiteType);
@@ -2890,7 +2890,7 @@ void frmMain::setFairness() {
 			}
 		}
 	} else if (whiteType == PlayerType::GUI) {
-		if (Players::isAIPlayer(blackType)) {
+		if (Players::isComputerPlayer(blackType)) {
 			fairGame = game->isLearnable();
 			if (fairGame) {
 				goBackChance = getGoBackChance(blackType);

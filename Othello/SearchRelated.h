@@ -113,6 +113,16 @@ namespace Players {
 	返回值：若type是AI玩家，返回true，否则返回false
 	*/
 	bool isAIPlayer(PlayerType type);
+
+	/*
+	概述：判断指定玩家类别是否是电脑玩家(包括随机、大食)
+
+	参数：
+	type：指定的玩家类别
+
+	返回值：若type是电脑玩家，返回true，否则返回false
+	*/
+	bool isComputerPlayer(PlayerType type);
 }
 
 } // namespace Othello
