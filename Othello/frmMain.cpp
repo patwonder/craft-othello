@@ -51,6 +51,10 @@ void frmMain::playerMoved(Othello::Move move,
 		GameContext^ gcBlack, GameContext^ gcWhite) {
 	addMove(gcBlack->getCurrentStep() - 1, move);
 	setBoard();
+	if (gcBlack->getCurrentStep() > 2 || move.getColor() != Chess::AVAILABLE
+		&& (move.getColor() == Chess::BLACK ? blackType : whiteType) == PlayerType::GUI) {
+		firstActionMade = true;
+	}
 	continueGame = true;
 	if (userInfo->PlaySound && move.getColor() != Chess::AVAILABLE)
 		playSound(goSound);
@@ -287,7 +291,10 @@ void frmMain::playerChanged(Chess currentPlayer,
 	gameRunning = false;
 	if (gcBlack->isGameEnded())
 		restartGame();
-	else restoreState();
+	else {
+		restoreState();
+		startGameForGUIPlayer();
+	}
 }
 
 void frmMain::timeLimitChanged(int timeLimit,
@@ -332,14 +339,22 @@ void frmMain::gameGoneBack(int step,
 		GameContext^ gcBlack, GameContext^ gcWhite) {
 	gameRunning = false;
 	restoreState();
-	startGameForGUIPlayer();
+	if (fairGame) {
+		startGame();
+	} else {
+		startGameForGUIPlayer();
+	}
 }
 
 void frmMain::gameGoneForward(int step,
 		GameContext^ gcBlack, GameContext^ gcWhite) {
 	gameRunning = false;
 	restoreState();
-	startGameForGUIPlayer();
+	if (fairGame) {
+		startGame();
+	} else {
+		startGameForGUIPlayer();
+	}
 }
 
 void frmMain::gameHasBeenPaused(Chess currentPlayer,
@@ -479,7 +494,7 @@ void frmMain::goForward() {
 		game->goForward(goForwardCount);
 
 		if (fairGame) {
-			goBackChance++;
+			if (!isGameJustStarted()) goBackChance++;
 			tsbtnBack->ToolTipText = tsbtnBack->Text + "(剩余 " + goBackChance + " 次)";
 			if (goBackChance <= 3) {
 				prompt("您还剩下 " + goBackChance + " 次悔棋机会！", iconWarning);
@@ -499,6 +514,10 @@ void frmMain::goBack() {
 		return;
 	}
 	if (gcBlack->getCurrentStep() > 1) {
+		if (fairGame && isGameJustStarted()) {
+			goBackChance++;
+		}
+
 		if (fairGame && (goBackChance == 0)) {
 			setPaused(true);
 			bool ifbreak = breakFairness("您的悔棋次数已达到限制，继续悔棋将记您本次对局为负。\n确实要悔棋吗？");
@@ -675,7 +694,7 @@ void frmMain::changePlayer(PlayerType type, Chess color) {
 	}
 	if (gameChanged) {
 		game->changeGame(blackPlayer, whitePlayer);
-		if (gameJustStarted) setFairness();
+		if (isGameJustStarted()) setFairness();
 	}
 }
 
@@ -726,12 +745,20 @@ void frmMain::restartGame() {
 	setPaused(false);
 	if (!ifbreak) return;
 	setGameJustStarted(true);
+	firstActionMade = false;
 	tsbtnAnalyze->Enabled = false;
 	mnuAnalyze->Enabled = false;
 	game->resetGame();
-	setFairness();
+	if (!endGameMode) setFairness();
 	if (endGameMode) startGame();
-	else autoClear();
+	else {
+		autoClear();
+		if (fairGame) {
+			startGame();
+		} else {
+			startGameForGUIPlayer();
+		}
+	}
 }
 
 System::Void frmMain::tsmnuMachines_Click(System::Object ^sender, System::EventArgs ^e) {
@@ -917,6 +944,7 @@ String^ frmMain::getMoveDescription(int step, Othello::Move move) {
 }
 
 void frmMain::startGame() {
+	if (!gameRunning) return;
 	if (analyzing) return;
 	if (analyzeMode) {
 		previousStep = gcBlack->getCurrentStep();
@@ -998,6 +1026,17 @@ void frmMain::setGameJustStarted(bool state) {
 }
 
 void frmMain::startNewGame(GameOption option) {
+	startNewGameCore(option);
+	if (!analyzeMode) {
+		if (fairGame) {
+			startGame();
+		} else {
+			startGameForGUIPlayer();
+		}
+	}
+}
+
+void frmMain::startNewGameCore(GameOption option) {
 	if (analyzeMode) return;
 	if (endGameMode) leaveEndGameMode();
 	setPaused(true);
@@ -1008,6 +1047,7 @@ void frmMain::startNewGame(GameOption option) {
 	createGame(option);
 	game->addObserver(this);
 	setGameJustStarted(true);
+	firstActionMade = false;
 	restoreState();
 	setFairness();
 	autoClear();
@@ -2713,9 +2753,12 @@ void frmMain::openGameFile(String^ fileName) {
 	}
 	reader->Close();
 	bool pGameJustStarted = gameJustStarted;
+	bool pFirstActionMade = firstActionMade;
 	setGameJustStarted(false);
+	firstActionMade = true;
 	if (!game->parseGame(board, moveSequence, moveCount, first)) {
 		setGameJustStarted(pGameJustStarted);
+		firstActionMade = pFirstActionMade;
 		System::Windows::Forms::MessageBox::Show(this, "无效游戏存档：\n" + fileName,
 			"游戏存档无效", System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Stop);
 		return;
@@ -2723,6 +2766,8 @@ void frmMain::openGameFile(String^ fileName) {
 	fairGame = false;
 	setGameInfo();
 	autoClear();
+
+	startGameForGUIPlayer();
 }
 
 void frmMain::openGame() {
@@ -2832,12 +2877,12 @@ void frmMain::setGameInfo() {
 
 void frmMain::setFairness() {
 	fairGame = false;
-	if (userInfo->FreeMode) {
+	if (userInfo->FreeMode || gcBlack->getCurrentStep() > 2) {
 		setGameInfo();
 		return;
 	}
 	if (blackType == PlayerType::GUI) {
-		if (whiteType != PlayerType::GUI && whiteType != PlayerType::NETWORK) {
+		if (Players::isAIPlayer(whiteType)) {
 			fairGame = game->isLearnable();
 			if (fairGame) {
 				goBackChance = getGoBackChance(whiteType);
@@ -2845,7 +2890,7 @@ void frmMain::setFairness() {
 			}
 		}
 	} else if (whiteType == PlayerType::GUI) {
-		if (blackType != PlayerType::NETWORK) {
+		if (Players::isAIPlayer(blackType)) {
 			fairGame = game->isLearnable();
 			if (fairGame) {
 				goBackChance = getGoBackChance(blackType);
@@ -2924,16 +2969,37 @@ int frmMain::getTipChance(PlayerType type) {
 	}
 }
 
+bool frmMain::isGameJustStarted() {
+	return gameJustStarted || !firstActionMade;
+}
+
 bool frmMain::breakFairness(String ^prompt) {
+	bool strictMode = false;
+	return breakFairness(prompt, strictMode);
+}
+
+bool frmMain::breakFairness(String ^prompt, bool strictMode) {
 	if (userInfo->FreeMode) return true;
 	if (!fairGame) return true;
-	if (gameJustStarted) return true;
-	Windows::Forms::DialogResult res = MessageBox::Show(this, prompt, "提示", MessageBoxButtons::YesNo, 
-		MessageBoxIcon::Question, MessageBoxDefaultButton::Button2);
-	if (res == Windows::Forms::DialogResult::No) return false;
+	bool justStarted;
+	bool bIsGameJustStarted = isGameJustStarted();
+	if (strictMode) {
+		justStarted = gameJustStarted;
+	} else {
+		justStarted = bIsGameJustStarted;
+	}
+	if (justStarted) return true;
+	if (!bIsGameJustStarted) {
+		Windows::Forms::DialogResult res = MessageBox::Show(this, prompt, "提示", MessageBoxButtons::YesNo, 
+			MessageBoxIcon::Question, MessageBoxDefaultButton::Button2);
+		if (res == Windows::Forms::DialogResult::No) return false;
+	}
 	fairGame = false;
-	PlayerType opponentType = (blackType == PlayerType::GUI) ? whiteType : blackType;
-	userInfo->getStatistics(opponentType)->recordGame(-WIDTH * HEIGHT);
+	firstActionMade = true;
+	if (!bIsGameJustStarted) {
+		PlayerType opponentType = (blackType == PlayerType::GUI) ? whiteType : blackType;
+		userInfo->getStatistics(opponentType)->recordGame(-WIDTH * HEIGHT);
+	}
 	setGameInfo();
 	return true;
 }
@@ -2947,7 +3013,7 @@ void frmMain::changeMode() {
 	if (!userInfo->FreeMode) userInfo->UseBook = true;
 	mnuFreeMode->Checked = userInfo->FreeMode;
 	mnuUseBook->Checked = userInfo->UseBook;
-	if (gameJustStarted) setFairness();
+	if (isGameJustStarted()) setFairness();
 }
 
 System::Void frmMain::mnuFreeMode_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -2996,7 +3062,7 @@ void frmMain::forceEndSolve() {
 		}
 	}
 
-	bool ifbreak = breakFairness("继续进行终局求解将记您本次对局为负。\n确实要进行终局求解吗？");
+	bool ifbreak = breakFairness("继续进行终局求解将记您本次对局为负。\n确实要进行终局求解吗？", true);
 	setPaused(false);
 	if (!ifbreak) return;
 	
@@ -3028,7 +3094,7 @@ void frmMain::getGUITip() {
 	if (guiContext->getAvailableCount() == 0) {
 		return;
 	}
-	if (fairGame && (guiContext->getAvailableCount() == 1)) {
+	if (fairGame && (guiContext->getAvailableCount() == 1 || isGameJustStarted())) {
 		tipChance++;
 	}
 
@@ -3237,7 +3303,7 @@ void frmMain::showAnalyzer() {
 	} else {
 		if (gameJustStarted) return;
 		setPaused(true);
-		bool ifbreak = breakFairness("继续分析棋局将计您本次对局为负。\n确实要进行分析吗？");
+		bool ifbreak = breakFairness("继续分析棋局将计您本次对局为负。\n确实要进行分析吗？", true);
 		setPaused(false);
 		if (!ifbreak) return;
 		analyzer = gcnew frmAnalyzer(this, gcBlack, userInfo->Analyzer);
@@ -3485,7 +3551,7 @@ bool frmMain::startNewEndGame(int gameIndex, int empties) {
 	}
 	option.board = board;
 	option.firstPlayer = currentPlayer;
-	startNewGame(option);
+	startNewGameCore(option);
 	
 	this->Cursor = Cursors::WaitCursor;
 	if (endGameInfoShowing) endGameInfoWindow->Cursor = Cursors::WaitCursor;
@@ -3552,8 +3618,7 @@ void frmMain::endGameInfoShown() {
 
 void frmMain::endGameInfoClosed() {
 	this->Enabled = true;
-	if (gcBlack->getCurrentPlayer() == currentEndGamePlayer)
-		startGame();
+	startGame();
 	enterEndGameMode();
 	endGameInfoShowing = false;
 	endGameInfoWindow = nullptr;
@@ -3685,7 +3750,7 @@ void frmMain::stopSearch() {
 
 	if (!tipping) {
 		setPaused(true);
-		bool ifbreak = breakFairness("停止搜索将记您本次对局为负。\n确实要停止搜索吗？");
+		bool ifbreak = breakFairness("停止搜索将记您本次对局为负。\n确实要停止搜索吗？", true);
 		setPaused(false);
 		if (!ifbreak) return;
 	}
@@ -3717,7 +3782,7 @@ System::Void frmMain::mnuUseBook_Click(System::Object^  sender, System::EventArg
 	if (!userInfo->UseBook) userInfo->FreeMode = true;
 	mnuUseBook->Checked = userInfo->UseBook;
 	mnuFreeMode->Checked = userInfo->FreeMode;
-	if (gameJustStarted) setFairness();
+	if (isGameJustStarted()) setFairness();
 }
 
 void frmMain::notifyUser() {

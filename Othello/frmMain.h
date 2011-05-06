@@ -305,7 +305,7 @@ namespace Othello {
 		static String^ helpFile = appPath + "Help.chm";
 		String^ backgroundName;
 		unsigned long long memorySize;
-		bool fairGame, gameJustStarted;
+		bool fairGame, gameJustStarted, firstActionMade;
 		int goBackChance, tipChance;
 		AbstractPlayer^ guiTipper;
 		bool peekMode;
@@ -527,11 +527,9 @@ namespace Othello {
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuPaste;
 	private: System::Windows::Forms::ToolStripMenuItem^  mnuPondering;
 	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem11;
-
-private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem12;
-private: System::Windows::Forms::ToolStripMenuItem^  mnuSwitchMiniMode;
-private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
-
+	private: System::Windows::Forms::ToolStripSeparator^  toolStripMenuItem12;
+	private: System::Windows::Forms::ToolStripMenuItem^  mnuSwitchMiniMode;
+	private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
 	private: System::Windows::Forms::Button^  btnStart;
 
 #pragma region Windows Form Designer generated code
@@ -2350,6 +2348,7 @@ private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
 		void startNewGame();
 		void startGame();
 		void startNewGame(GameOption option);
+		void startNewGameCore(GameOption option);
 		void setGameJustStarted(bool state);
 		void exitProgram();
 		void endCurrentGame();
@@ -2391,7 +2390,10 @@ private: System::Windows::Forms::ToolStripButton^  tsbtnSwitchMiniMode;
 		void changeMode();
 		int getGoBackChance(PlayerType type);
 		int getTipChance(PlayerType type);
-		bool breakFairness(String^ prompt);
+		bool breakFairness(String ^prompt, bool strictMode);
+		bool breakFairness(String ^prompt);
+
+		bool isGameJustStarted();
 		PlayerType readPlayerType(IO::BinaryReader^ br);
 		Statistics^ readStatistics(IO::BinaryReader^ br);
 		void writePlayerType(IO::BinaryWriter^ bw, PlayerType type);
