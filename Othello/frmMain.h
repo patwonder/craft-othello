@@ -282,7 +282,7 @@ namespace Othello {
 			"统计信息: Ctrl+I\n"
 			"提示: T\n"
 			"终局求解: F\n"
-			"停止搜索: P\n"
+			"停止搜索/强制落子: P\n"
 			"分析棋局: Ctrl+A\n"
 			"显示残局信息: Ctrl+K\n"
 			"打开/保存游戏: Ctrl+O/Ctrl+S\n"
