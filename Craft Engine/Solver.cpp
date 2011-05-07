@@ -1675,13 +1675,13 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 		if (infoDeeper->depth == tabledepth) {
 			if (infoDeeper->lower >= beta)
 				return infoDeeper->lower;
-			if (infoDeeper->upper <= alpha)
-				return infoDeeper->upper;
 			if (infoDeeper->lower > alpha) {
 				alpha = infoDeeper->lower;
 				maxresult = alpha;
 				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
 			if (infoDeeper->upper < beta)
 				beta = infoDeeper->upper;
 		} else if (infoDeeper->depth < empties) {
@@ -1706,13 +1706,13 @@ int Solver::searchExact(BitBoard& my, BitBoard& op, int alpha, int beta, bool la
 		if (infoNewer->depth == tabledepth) {
 			if (infoNewer->lower >= beta)
 				return infoNewer->lower;
-			if (infoNewer->upper <= alpha)
-				return infoNewer->upper;
 			if (infoNewer->lower > alpha) {
 				alpha = infoNewer->lower;
 				maxresult = alpha;
 				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
 			if (infoNewer->upper < beta)
 				beta = infoNewer->upper;
 		} else if (infoNewer->depth < empties) {
@@ -4139,13 +4139,13 @@ int Solver::search(BitBoard& my, BitBoard& op, int depth, int alpha, int beta, b
 		if (infoDeeper->depth == depth && !(infoDeeper->flags & TP_MPC)) { // force no mpc
 			if (infoDeeper->lower >= beta)
 				return infoDeeper->lower;
-			if (infoDeeper->upper <= alpha)
-				return infoDeeper->upper;
 			if (infoDeeper->lower > alpha) {
 				alpha = infoDeeper->lower;
 				maxresult = alpha;
 				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
 			if (infoDeeper->upper < beta) {
 				beta = infoDeeper->upper;
 			}
@@ -4159,13 +4159,13 @@ int Solver::search(BitBoard& my, BitBoard& op, int depth, int alpha, int beta, b
 		if (infoNewer->depth == depth && !(infoNewer->flags & TP_MPC)) { // force no mpc
 			if (infoNewer->lower >= beta)
 				return infoNewer->lower;
-			if (infoNewer->upper <= alpha)
-				return infoNewer->upper;
 			if (infoNewer->lower > alpha) {
 				alpha = infoNewer->lower;
 				maxresult = alpha;
 				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
 			if (infoNewer->upper < beta) {
 				beta = infoNewer->upper;
 			}
@@ -5165,13 +5165,13 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		if (infoDeeper->depth == depth) {
 			if (infoDeeper->lower >= beta)
 				return infoDeeper->lower;
-			if (infoDeeper->upper <= alpha)
-				return infoDeeper->upper;
 			if (infoDeeper->lower > alpha) {
 				alpha = infoDeeper->lower;
 				maxresult = alpha;
 				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
 			if (infoDeeper->upper < beta) {
 				beta = infoDeeper->upper;
 			}
@@ -5185,13 +5185,13 @@ int Solver::search_mpc(BitBoard &my, BitBoard &op, int depth, int alpha, int bet
 		if (infoNewer->depth == depth) {
 			if (infoNewer->lower >= beta)
 				return infoNewer->lower;
-			if (infoNewer->upper <= alpha)
-				return infoNewer->upper;
 			if (infoNewer->lower > alpha) {
 				alpha = infoNewer->lower;
 				maxresult = alpha;
 				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
 			if (infoNewer->upper < beta) {
 				beta = infoNewer->upper;
 			}
@@ -5410,13 +5410,13 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 		if (infoDeeper->depth >= tabledepth) {
 			if (infoDeeper->lower >= beta)
 				return infoDeeper->lower;
-			if (infoDeeper->upper <= alpha)
-				return infoDeeper->upper;
 			if (infoDeeper->lower > alpha) {
 				alpha = infoDeeper->lower;
 				maxresult = alpha;
 				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
 			if (infoDeeper->upper < beta)
 				beta = infoDeeper->upper;
 		} else if (infoDeeper->depth < empties) {
@@ -5441,13 +5441,13 @@ int Solver::searchExact_epc(BitBoard& my, BitBoard& op, int alpha, int beta, boo
 		if (infoNewer->depth >= tabledepth) {
 			if (infoNewer->lower >= beta)
 				return infoNewer->lower;
-			if (infoNewer->upper <= alpha)
-				return infoNewer->upper;
 			if (infoNewer->lower > alpha) {
 				alpha = infoNewer->lower;
 				maxresult = alpha;
 				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
 			if (infoNewer->upper < beta)
 				beta = infoNewer->upper;
 		} else if (infoNewer->depth < empties) {
@@ -5813,13 +5813,13 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 		if (infoDeeper->depth == tabledepth) {
 			if (infoDeeper->lower >= beta)
 				return infoDeeper->lower;
-			if (infoDeeper->upper <= alpha)
-				return infoDeeper->upper;
 			if (infoDeeper->lower > alpha) {
 				alpha = infoDeeper->lower;
 				maxresult = alpha;
 				maxptr = infoDeeper->pos;
 			}
+			if (infoDeeper->upper <= alpha)
+				return infoDeeper->upper;
 			if (infoDeeper->upper < beta)
 				beta = infoDeeper->upper;
 		} else if (infoDeeper->depth < empties) {
@@ -5844,13 +5844,13 @@ int Solver::searchExact_parity(BitBoard& my, BitBoard& op, int alpha, int beta, 
 		if (infoNewer->depth == tabledepth) {
 			if (infoNewer->lower >= beta)
 				return infoNewer->lower;
-			if (infoNewer->upper <= alpha)
-				return infoNewer->upper;
 			if (infoNewer->lower > alpha) {
 				alpha = infoNewer->lower;
 				maxresult = alpha;
 				maxptr = infoNewer->pos;
 			}
+			if (infoNewer->upper <= alpha)
+				return infoNewer->upper;
 			if (infoNewer->upper < beta)
 				beta = infoNewer->upper;
 		} else if (infoNewer->depth < empties) {
