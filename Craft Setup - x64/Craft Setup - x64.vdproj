@@ -111,12 +111,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_24F847B590BF46B7BBFE737503B5B709"
-        "OwnerKey" = "8:_43BD018C7CC4442AAF50EA78A97AEB62"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_26E0AA102CDB4DF98097B7B8AFBED0F9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -189,18 +183,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_43BD018C7CC4442AAF50EA78A97AEB62"
-        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_43BD018C7CC4442AAF50EA78A97AEB62"
-        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4581A21440A64FAD8D74D7206F7AB97F"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -233,6 +215,12 @@
         {
         "MsmKey" = "8:_579EDDB48351481ABA4E179926C1C20F"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5A4343A2066248ABA3DDAA16976C80CA"
+        "OwnerKey" = "8:_C28973CA59FC4697AB4C5B24829A68E9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -479,6 +467,18 @@
         {
         "MsmKey" = "8:_C0555AD2DB534EBDB2DDE4EFAD587AFC"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C28973CA59FC4697AB4C5B24829A68E9"
+        "OwnerKey" = "8:_B4EF5CE3B3A242FF85941BBD12F36DC5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C28973CA59FC4697AB4C5B24829A68E9"
+        "OwnerKey" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2764,23 +2764,23 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Craft 1.4.0"
-        "ProductCode" = "8:{2AFBFEC6-4F96-4808-AB46-A900C65B49D8}"
-        "PackageCode" = "8:{B54A2B64-9C71-41FB-A09B-5BD97039DC4E}"
+        "ProductName" = "8:Craft 2.0.0"
+        "ProductCode" = "8:{901CEDFC-3D8B-4A8C-9556-4B0AD32A8AA9}"
+        "PackageCode" = "8:{AC953A90-3E32-40C6-9D48-C6CF3FCCF5B7}"
         "UpgradeCode" = "8:{874DC322-366F-4F04-98A2-238FC1C23BCE}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.4.0"
+        "ProductVersion" = "8:2.0.0"
         "Manufacturer" = "8:Patrick"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Craft 1.4.0"
+        "Title" = "8:Craft 2.0.0"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Patrick"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Craft 1.4.0 - Patrick 的黑白棋程序"
+        "ARPCOMMENTS" = "8:Craft 2.0.0 - Patrick 的黑白棋程序"
         "ARPURLINFOABOUT" = "8:"
         "ARPPRODUCTICON" = "8:_F0A3136F4A4B417AA28EEC8C02286EBB"
         "ARPIconIndex" = "3:117"
@@ -3640,7 +3640,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_24F847B590BF46B7BBFE737503B5B709"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_5A4343A2066248ABA3DDAA16976C80CA"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -3654,7 +3654,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_43BD018C7CC4442AAF50EA78A97AEB62"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C28973CA59FC4697AB4C5B24829A68E9"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -3673,7 +3673,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B4EF5CE3B3A242FF85941BBD12F36DC5"
             {
-            "SourcePath" = "8:..\\Othello\\Release\\CraftEngine.dll"
+            "SourcePath" = "8:..\\Othello\\x64\\Release\\CraftEngine.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"
@@ -3701,7 +3701,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F0A3136F4A4B417AA28EEC8C02286EBB"
             {
-            "SourcePath" = "8:..\\Othello\\Release\\Craft.exe"
+            "SourcePath" = "8:..\\Othello\\x64\\Release\\Craft.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E5566365F26D4738BB927FD01AA0444F"

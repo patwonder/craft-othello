@@ -6225,7 +6225,7 @@ void Solver::Book::reevaluate() {
 	//			staticSolver->propagateEval(node);
 	//	}
 	//}
-	saveBook("book_reevaluated.craft");
+	saveBook(L"book_reevaluated.craft");
 	isBookChanged = false;
 
 	{
