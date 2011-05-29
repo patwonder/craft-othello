@@ -125,22 +125,18 @@ namespace Othello {
 			// 
 			this->btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
 			this->btnOK->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->btnOK->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
-			this->btnOK->Location = System::Drawing::Point(228, 327);
+			this->btnOK->Location = System::Drawing::Point(227, 327);
 			this->btnOK->Name = L"btnOK";
-			this->btnOK->Size = System::Drawing::Size(78, 29);
+			this->btnOK->Size = System::Drawing::Size(78, 28);
 			this->btnOK->TabIndex = 0;
 			this->btnOK->Text = L"关闭";
 			this->btnOK->UseVisualStyleBackColor = true;
 			// 
 			// lblInfo
 			// 
-			this->lblInfo->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
-			this->lblInfo->Location = System::Drawing::Point(36, 87);
+			this->lblInfo->Location = System::Drawing::Point(36, 86);
 			this->lblInfo->Name = L"lblInfo";
-			this->lblInfo->Size = System::Drawing::Size(270, 84);
+			this->lblInfo->Size = System::Drawing::Size(269, 84);
 			this->lblInfo->TabIndex = 1;
 			this->lblInfo->Text = L"程序设计: \r\nE-mail: \r\nQQ: \r\n如有什么意见或建议, 欢迎与我联系.";
 			// 
@@ -148,7 +144,7 @@ namespace Othello {
 			// 
 			this->pic->Cursor = System::Windows::Forms::Cursors::Default;
 			this->pic->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"pic.Image")));
-			this->pic->Location = System::Drawing::Point(9, 9);
+			this->pic->Location = System::Drawing::Point(9, 8);
 			this->pic->Margin = System::Windows::Forms::Padding(0);
 			this->pic->Name = L"pic";
 			this->pic->Size = System::Drawing::Size(64, 64);
@@ -158,9 +154,7 @@ namespace Othello {
 			// 
 			// lblTitle
 			// 
-			this->lblTitle->Font = (gcnew System::Drawing::Font(L"微软雅黑", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(0)));
-			this->lblTitle->Location = System::Drawing::Point(76, 9);
+			this->lblTitle->Location = System::Drawing::Point(76, 8);
 			this->lblTitle->Name = L"lblTitle";
 			this->lblTitle->Size = System::Drawing::Size(230, 64);
 			this->lblTitle->TabIndex = 3;
@@ -169,12 +163,10 @@ namespace Othello {
 			// 
 			// lblPage
 			// 
-			this->lblPage->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->lblPage->LinkArea = System::Windows::Forms::LinkArea(16, 39);
 			this->lblPage->Location = System::Drawing::Point(13, 285);
 			this->lblPage->Name = L"lblPage";
-			this->lblPage->Size = System::Drawing::Size(293, 39);
+			this->lblPage->Size = System::Drawing::Size(293, 40);
 			this->lblPage->TabIndex = 1;
 			this->lblPage->TabStop = true;
 			this->lblPage->Text = L"欢迎访问 Craft 的主页\r\nhttp://code.google.com/p/craft-othello/";
@@ -184,12 +176,10 @@ namespace Othello {
 			// 
 			// lblCopyleft
 			// 
-			this->lblCopyleft->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->lblCopyleft->LinkArea = System::Windows::Forms::LinkArea(55, 28);
 			this->lblCopyleft->Location = System::Drawing::Point(36, 217);
 			this->lblCopyleft->Name = L"lblCopyleft";
-			this->lblCopyleft->Size = System::Drawing::Size(273, 60);
+			this->lblCopyleft->Size = System::Drawing::Size(273, 59);
 			this->lblCopyleft->TabIndex = 1;
 			this->lblCopyleft->TabStop = true;
 			this->lblCopyleft->Text = L"Copyright © 2008-2011  Patrick\r\n本程序遵循GNU GPL协议, 详情请见:\r\nhttp://www.gnu.org/license" 
@@ -200,11 +190,9 @@ namespace Othello {
 			// btnThanks
 			// 
 			this->btnThanks->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->btnThanks->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->btnThanks->Location = System::Drawing::Point(16, 327);
 			this->btnThanks->Name = L"btnThanks";
-			this->btnThanks->Size = System::Drawing::Size(78, 29);
+			this->btnThanks->Size = System::Drawing::Size(78, 28);
 			this->btnThanks->TabIndex = 2;
 			this->btnThanks->Text = L"致谢";
 			this->btnThanks->UseVisualStyleBackColor = true;
@@ -254,11 +242,16 @@ namespace Othello {
 		}
 #pragma endregion
 	private: System::Void frmAbout_Load(System::Object^  sender, System::EventArgs^  e) {
-				lblInfo->Text = "程序设计: " __AUTHOR__ "\r\nE-mail: " __AUTHOR_EMAIL__ "\r\nQQ: " __AUTHOR_QQ__ "\r\n如有什么意见或建议, 欢迎与我联系.";
+				 for each (Control^ ctrl in Controls) {
+					 ctrl->Font = SystemFonts::MessageBoxFont;
+				 }
+				 lblTitle->Font = gcnew System::Drawing::Font(lblTitle->Font->Name, 2.0f * lblTitle->Font->SizeInPoints, FontStyle::Bold, GraphicsUnit::Point);
 
-				String^ title = __APP_NAME__ + " " + __APP_VERSION__;
-				lblTitle->Text = title;
-				Text = "关于 " + __APP_NAME__;
+				 lblInfo->Text = "程序设计: " __AUTHOR__ "\r\nE-mail: " __AUTHOR_EMAIL__ "\r\nQQ: " __AUTHOR_QQ__ "\r\n如有什么意见或建议, 欢迎与我联系.";
+
+				 String^ title = __APP_NAME__ + " " + __APP_VERSION__;
+				 lblTitle->Text = title;
+				 Text = "关于 " + __APP_NAME__;
 			 }
 	private: System::Void lblPage_LinkClicked(System::Object^  sender, System::Windows::Forms::LinkLabelLinkClickedEventArgs^  e);
 	private: System::Void btnThanks_Click(System::Object^  sender, System::EventArgs^  e);

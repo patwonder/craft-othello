@@ -103,8 +103,6 @@ namespace Othello {
 			// 
 			// label1
 			// 
-			this->label1->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->label1->Location = System::Drawing::Point(12, 9);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(217, 39);
@@ -113,23 +111,19 @@ namespace Othello {
 			// 
 			// lstHelpers
 			// 
-			this->lstHelpers->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->lstHelpers->FormattingEnabled = true;
-			this->lstHelpers->ItemHeight = 17;
+			this->lstHelpers->ItemHeight = 12;
 			this->lstHelpers->Items->AddRange(gcnew cli::array< System::Object^  >(4) {L"Maxi", L"Zach", L"Coder", L"(And all others~)"});
 			this->lstHelpers->Location = System::Drawing::Point(12, 51);
 			this->lstHelpers->Name = L"lstHelpers";
 			this->lstHelpers->SelectionMode = System::Windows::Forms::SelectionMode::None;
-			this->lstHelpers->Size = System::Drawing::Size(217, 106);
+			this->lstHelpers->Size = System::Drawing::Size(217, 100);
 			this->lstHelpers->TabIndex = 1;
 			// 
 			// btnOK
 			// 
 			this->btnOK->DialogResult = System::Windows::Forms::DialogResult::OK;
 			this->btnOK->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->btnOK->Font = (gcnew System::Drawing::Font(L"微软雅黑", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(134)));
 			this->btnOK->Location = System::Drawing::Point(151, 163);
 			this->btnOK->Name = L"btnOK";
 			this->btnOK->Size = System::Drawing::Size(78, 29);
@@ -155,9 +149,15 @@ namespace Othello {
 			this->ShowIcon = false;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterParent;
 			this->Text = L"致谢";
+			this->Load += gcnew System::EventHandler(this, &frmThanks::frmThanks_Load);
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
-	};
+	private: System::Void frmThanks_Load(System::Object^  sender, System::EventArgs^  e) {
+				 for each (Control^ ctrl in Controls) {
+					 ctrl->Font = SystemFonts::MessageBoxFont;
+				 }
+			 }
+};
 }

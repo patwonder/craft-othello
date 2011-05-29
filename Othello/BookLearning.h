@@ -82,6 +82,7 @@ namespace Othello {
 			 GameContext^ gc;
 	private: System::Windows::Forms::ProgressBar^  pbLearn;
 			 volatile bool isDone;
+
 			 CraftEngine::Solver* solver;
 
 #pragma region Windows Form Designer generated code
@@ -119,10 +120,9 @@ namespace Othello {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(216, 69);
-			this->ControlBox = false;
 			this->Controls->Add(this->pbLearn);
 			this->Controls->Add(this->label1);
-			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximizeBox = false;
 			this->MinimizeBox = false;
 			this->Name = L"BookLearning";

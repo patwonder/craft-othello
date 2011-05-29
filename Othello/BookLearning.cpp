@@ -116,6 +116,7 @@ void BookLearning::doLearn() {
 }
 
 System::Void BookLearning::BookLearning_Shown(System::Object ^sender, System::EventArgs ^e) {
+	this->ControlBox = false;
 	BeginInvoke(gcnew SimpleDelegate(this, &BookLearning::doLearn));
 }
 
