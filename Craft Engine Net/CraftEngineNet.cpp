@@ -146,6 +146,26 @@ void Engine::setBookTolerance(int tolerance) {
 	solver->setBookTolerance(tolerance);
 }
 
+int Engine::getBookTolerance() {
+	return solver->getBookTolerance();
+}
+
+void Engine::setTolerance(int tolerance) {
+	solver->setTolerance(tolerance);
+}
+
+int Engine::getTolerance() {
+	return solver->getTolerance();
+}
+
+void Engine::setExactTolerance(int tolerance) {
+	solver->setExactTolerance(tolerance);
+}
+
+int Engine::getExactTolerance() {
+	return solver->getExactTolerance();
+}
+
 void Engine::setCacheSize(size_t newCacheSize) {
 	try {
 		Solver::setCacheSize(newCacheSize);

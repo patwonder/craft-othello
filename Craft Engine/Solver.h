@@ -182,6 +182,12 @@ public:
 	void abortSearch();
 	void abortSearchComplete();
 
+	// randomness
+	void setTolerance(int tolerance);
+	void setExactTolerance(int tolerance);
+	int getTolerance() const;
+	int getExactTolerance() const;
+
 	// dynamic search display
 	unsigned long long getEvNum() const;
 	int getPercent() const;
@@ -211,6 +217,7 @@ public:
 	static bool saveBook();
 	void extendBook();
 	void setBookTolerance(int tolerance);
+	int getBookTolerance() const;
 	static void setBookDepth(int depth);
 	static void setBookEndDepth(int depth);
 
@@ -377,6 +384,8 @@ private:
 	static std::wstring bookPath;
 	static std::wstring patternPath;
 
+	int midTolerance, exactTolerance;
+
 	Solver();
 	Solver(int board[MAXSTEP]);
 	static void initConstants();
@@ -485,7 +494,7 @@ private:
 		BitBoard* fatherMy, *fatherOp;
 		char* fatherMove;
 	};
-	static class Book;
+	class Book;
 	class BookNode {
 	private:
 		BasicBookNode* node;
@@ -523,7 +532,7 @@ private:
 		void setFatherOp(int index, const BitBoard& fatherOp);
 		void setFatherMove(int index, int fatherMove);
 	};
-	static class Book {
+	class Book {
 	private:
 		static const int DEFAULT_CAPACITY = 10;
 		static const int LOAD_FACTOR = 75;

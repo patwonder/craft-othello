@@ -122,6 +122,28 @@ namespace CraftEngineNet {
 		///参数：
 		///  tolerance: 随机性大小
 		void setBookTolerance(int tolerance);
+		
+		///获取设置的棋谱随机性大小
+		int getBookTolerance();
+
+		///设置中局随机性大小，默认为0
+		///设置后返回的中局棋步的估值与最大估值之间的差距至多为tolerance
+		///参数：
+		///  tolerance: 随机性大小
+		void setTolerance(int tolerance);
+		
+		///获取设置的中局随机性大小
+		int getTolerance();
+
+		///设置精确搜索随机性大小，默认为0
+		///设置后返回的精确搜索棋步的估值与最大估值之间的差距至多为tolerance
+		///参数：
+		///  tolerance: 随机性大小
+		void setExactTolerance(int tolerance);
+		
+		///获取设置的精确搜索随机性大小
+		int getExactTolerance();
+
 		///设置缓存大小(单表节点数, 占用内存空间为返回值*64字节)
 		///参数：
 		///  newCacheSize: 缓存大小，必须等于1 << N，0<=N<=30

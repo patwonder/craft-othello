@@ -770,6 +770,7 @@ Solver::Solver(int board[MAXSTEP]) {
 	evnum = 0;
 	percent = subPercent = currentBlock = 0;
 	tolerance = 0;
+	midTolerance = exactTolerance = 0;
 	analyzeResult = NULL;
 	aborted = false;
 	sortStackPtr = 0;
@@ -789,6 +790,26 @@ Solver::Solver(int board[MAXSTEP]) {
 
 void Solver::setBookTolerance(int tolerance) {
 	this->tolerance = tolerance;
+}
+
+int Solver::getBookTolerance() const {
+	return tolerance;
+}
+
+void Solver::setTolerance(int tolerance) {
+	midTolerance = tolerance;
+}
+
+int Solver::getTolerance() const {
+	return midTolerance;
+}
+
+void Solver::setExactTolerance(int tolerance) {
+	exactTolerance = tolerance;
+}
+
+int Solver::getExactTolerance() const {
+	return exactTolerance;
 }
 
 void Solver::setBoard(int board[MAXSTEP]) {
@@ -2940,6 +2961,67 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 			setPV(my, op, tabledepth, choice);
 		}
 	}
+
+	int moveTaken = choice;
+	int moveValue = maxresult;
+	if (exactTolerance != 0 && !winLoss && maxptr == choice) {
+		percent = 99;
+		// do a tolerance search in bounds (maxresult-T+1, maxresult-T)
+		// to quickly determine candidate moves
+		int bound;
+		bound = (palpha > maxresult - exactTolerance) ? palpha : (maxresult - exactTolerance);
+		// do not allow making losing or drawing moves...
+		//if (bound < 0 && maxresult >= 0) {
+		//	bound = 0;
+		//}
+		//if (bound <= 0 && maxresult > 0) {
+		//	bound = 2;
+		//}
+		if (bound & 1) bound++;
+		int candidates[MAXSTEP];
+		candidates[0] = maxptr;
+		int numCandidates = 1;
+		for (int c = 0; c < pCount; c++) {
+			int pos = positions[c]->pos;
+			if (pos == maxptr) continue;
+			if (bound == -MAXSTEP) {
+				candidates[numCandidates++] = pos;
+				continue;
+			}
+
+			focusedMove = pos;
+			makeMoveAndSetEmpties(emptyPtr[pos], my, op);
+			int result = -(this->*searchFunction)(op, my, -bound, -bound + 2, true);
+			if (aborted) {
+				restoreStack(pre_stackptr);
+				return SolverResult(maxresult, choice);
+			}
+			unMakeMoveAndSetEmpties();
+			
+			if (result >= bound) {
+				candidates[numCandidates++] = pos;
+			}
+		}
+		// pick up a move randomly
+		unsigned int rnd;
+		rand_s(&rnd);
+		moveTaken = candidates[rnd % numCandidates];
+		selectedMove = moveTaken;
+		if (moveTaken != maxptr) {
+			// calculate the move value
+			if (maxresult != bound) {
+				focusedMove = moveTaken;
+				makeMoveAndSetEmpties(emptyPtr[moveTaken], my, op);
+				moveValue = -(this->*searchFunction)(op, my, -maxresult, -bound, true);
+				if (aborted) {
+					restoreStack(pre_stackptr);
+					return SolverResult(bound, moveTaken);
+				}
+				unMakeMoveAndSetEmpties();
+			}
+		}
+	}
+
 	percent = 100;
 
 	int lowerbound = 
@@ -2958,7 +3040,7 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		saveTp(zobPos, my, op, -MAXSTEP - 1, maxresult, maxptr, tabledepth, 0);
 	else 
 		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, tabledepth, 0);
-	return SolverResult(maxresult, choice);
+	return SolverResult(moveValue, moveTaken);
 }
 
 int Solver::searchBigEat(int color, int alpha, int beta, int depth, bool lastFound) {
@@ -3836,7 +3918,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 					return SolverResult(partialResult, selectedMove);
 				}
 				if (results[i] < iteralpha
-					|| (iterdepth <= MPC_DEPTH_THRESHOLD && results[i] == iteralpha)) { 
+					|| (iterdepth <= MPC_DEPTH_THRESHOLD && results[i] == iteralpha)) {
 					// no better evaluations, throw away the step
 					unMakeMove();
 					if (results[i] > results[0]) {
@@ -4000,6 +4082,72 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		partialResult = maxresult;
 		selectedMove = maxptr;
 	}
+
+	int moveTaken = maxptr;
+	int moveValue = maxresult;
+	if (midTolerance != 0) {
+		percent = 99;
+		// do a tolerance search in bounds (maxresult-T+1, maxresult-T)
+		// to quickly determine candidate moves
+		int bound;
+		if (maxresult < MID_SEARCH_BOUND && maxresult > -MID_SEARCH_BOUND) {
+			bound = (palpha > maxresult - midTolerance) ? palpha : (maxresult - midTolerance);
+		} else if (maxresult >= MID_SEARCH_BOUND) {
+			bound = MID_SEARCH_BOUND;
+		} else {
+			bound = -INFINITE;
+		}
+		int candidates[MAXSTEP];
+		candidates[0] = maxptr;
+		int numCandidates = 1;
+		for (int c = 0; c < pCount; c++) {
+			int pos = positions[c];
+			if (pos == maxptr) continue;
+			if (bound == -INFINITE) {
+				candidates[numCandidates++] = pos;
+				continue;
+			}
+
+			focusedMove = pos;
+			makeMove(pos, my, op);
+			int result = (depth == 1) ? -strongEvaluate(op, my) :
+				((depth == 2) ? -checkedSearch(op, my, depth - 1, -bound, -bound + 1, true) :
+				((depth > MPC_DEPTH_THRESHOLD) ?
+				-search_mpc(op, my, depth - 1, -bound, -bound + 1, true)
+				: -search(op, my, depth - 1, -bound, -bound + 1, true)));
+			if (aborted) {
+				restoreStack(pre_stackptr);
+				return SolverResult(maxresult, maxptr);
+			}
+			unMakeMove();
+			
+			if (result >= bound) {
+				candidates[numCandidates++] = pos;
+			}
+		}
+		// pick up a move randomly
+		unsigned int rnd;
+		rand_s(&rnd);
+		moveTaken = candidates[rnd % numCandidates];
+		selectedMove = moveTaken;
+		if (moveTaken != maxptr) {
+			// calculate the move value
+			if (maxresult != bound) {
+				focusedMove = moveTaken;
+				makeMove(moveTaken, my, op);
+				moveValue = (depth == 1) ? -strongEvaluate(op, my) :
+					((depth == 2) ? -checkedSearch(op, my, depth - 1, -maxresult, -bound, true) :
+					((depth > MPC_DEPTH_THRESHOLD) ?
+					-search_mpc(op, my, depth - 1, -maxresult, -bound, true)
+					: -search(op, my, depth - 1, -maxresult, -bound, true)));
+				if (aborted) {
+					restoreStack(pre_stackptr);
+					return SolverResult(bound, moveTaken);
+				}
+				unMakeMove();
+			}
+		}
+	}
 	percent = 100;
 
 	if (maxresult >= beta && pbeta == beta) 
@@ -4008,7 +4156,7 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		saveTp(zobPos, my, op, -INFINITE - 1, maxresult, maxptr, depth, flags);
 	else 
 		saveTp(zobPos, my, op, maxresult, maxresult, maxptr, depth, flags);
-	return SolverResult(maxresult, maxptr);
+	return SolverResult(moveValue, moveTaken);
 }
 
 int Solver::checkedSearch(BitBoard &my, BitBoard &op, int depth, int alpha, int beta, bool lastFound) {
