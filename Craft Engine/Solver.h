@@ -211,7 +211,7 @@ public:
 	static const int PARTIALDEPTH_WLD = -1;
 	static const int PARTIALDEPTH_EXACT = -2;
 	void parseGame(int board[], int steps[], int totalSteps, int fp = BLACK);
-	void clearGame();//
+	void clearGame();
 
 	// used for book learning
 	static bool saveBook();
@@ -248,7 +248,7 @@ private:
 	static const int MID_USE_SORT_DEPTH = 4;
 	static const int END_WINDOW_SIZE = 5;
 	static const int MID_WINDOW_SIZE = 2001;
-	static const int DEEP_COVER = 1;
+	static const int DEEP_COVER = 0; // deprecated; transposition table aging implemented
 	static const int MAXDEPTH = 30;
 	static const int MAX_STACK_SIZE = 1024;
 	static const unsigned char DIR1 = 1;
@@ -445,11 +445,22 @@ private:
 		int upper;
 		short depth;
 		short pos;
-		unsigned int flags;
+		unsigned short searchId;
+		unsigned short flags;
 		BitBoard my;
 		BitBoard op;
 	};
-	static const unsigned int TP_MPC = 0x1; // mark mpc nodes
+	static const unsigned short TP_MPC = 0x1; // mark mpc nodes
+	// aging
+	static unsigned short currentSearchId;
+	static BitBoard lastSearchMy;
+	static BitBoard lastSearchOp;
+	static const int MAX_POS_DISTANCE = 2;
+	static int calcPositionDistance(const BitBoard& my1, const BitBoard& op1, const BitBoard& my2, const BitBoard& op2);
+	static void applyAging(const BitBoard& my, const BitBoard& op);
+	static const int SEARCH_ID_ADJUST_THRESHOLD = 60000;
+	static const int SEARCH_ID_ADJUST_TARGET_MAX = 30000;
+	static void adjustSearchId();
 
 	void initPV();
 	void setPV(BitBoard& my, BitBoard& op, int depth, int firstMove);
@@ -476,7 +487,7 @@ private:
 	};
 
 	static TPEntry* tp;
-	void saveTp(int zobPos, const BitBoard& my, const BitBoard& op, 
+	static void saveTp(int zobPos, const BitBoard& my, const BitBoard& op, 
 		int lower, int upper, int pos, int depth, unsigned int flags);
 
 	static void initTable();

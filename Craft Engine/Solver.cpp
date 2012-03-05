@@ -48,6 +48,15 @@
 //#define COUNT_INTERNAL_NODES
 #define USE_EVEN_DEEPENING
 
+#ifdef _DEBUG
+
+#include <Windows.h>
+#include <sstream>
+#undef min
+#undef INFINITE
+
+#endif // _DEBUG
+
 //const unsigned long long int ULONG_defaultNodemy = 0x0000001008000000ull;
 namespace CraftEngine {
 
@@ -96,7 +105,9 @@ std::wstring Solver::bookPath;
 std::wstring Solver::patternPath;
 const std::wstring Solver::DEFAULT_PATTERN_PATH = L"data.craft";
 const std::wstring Solver::DEFAULT_BOOK_PATH = L"book.craft";
-
+unsigned short Solver::currentSearchId = 0;
+BitBoard Solver::lastSearchMy = Solver::defaultMy;
+BitBoard Solver::lastSearchOp = Solver::defaultOp;
 #ifdef STABILITY
 int Solver::twoTo3Base[256];
 #endif
@@ -2516,6 +2527,9 @@ SolverResult Solver::solveExactInternal(int color, bool winLoss, int epcStage) {
 		is_symmetric[sym] = true;
 	}
 #endif
+
+	applyAging(my, op);
+
 	//sort the moves
 	if (bestMove != -1) {
 		positions[pptr++] = emptyPtr[bestMove];
@@ -3564,12 +3578,14 @@ void Solver::clearGame() {
 	stackptr = 0;
 }
 
-int min(int a, int b) {
-	return (a > b) ? b : a;
+template<class T>
+static T min(T a, T b) {
+	return (a < b) ? a : b;
 }
 
-float abs(float x) {
-	return (x < 0) ? (-x) : (x);
+template<class T>
+static T abs(T x) {
+	return (x < 0) ? -x : x;
 }
 
 double Solver::getSmallerRnd(int rate) {
@@ -3751,6 +3767,8 @@ SolverResult Solver::solve(int color, int depth, bool useBook) {
 		is_symmetric[sym] = true;
 	}
 #endif
+
+	applyAging(my, op);
 
 	// sort the moves
 	if (bestMove != -1)
@@ -4538,6 +4556,10 @@ inline void Solver::unMakeMoveAndSetEmpties() {
 
 void Solver::clearCache() {
 	memset(tp, 0, sizeof(TPEntry) * currentTableSize);
+	// should clear search id as well
+	currentSearchId = 0;
+	lastSearchMy = defaultMy;
+	lastSearchOp = defaultOp;
 }
 
 bool Solver::checkTableSize(size_t tableSize) {
@@ -4670,6 +4692,9 @@ void Solver::expandNode(BookNode& node) {
 	stackptr = 0;
 	sortStackPtr = 0;
 	empties = MAXSTEP - bits(black) - bits(white);
+
+	applyAging(black, white);
+
 	if (empties > bookEndDepth) {
 		int middepth = bookDepth - (empties & 1); // Make book evals look more stable
 		for (int i = 0; i < MAXSTEP; i++)
@@ -4678,13 +4703,8 @@ void Solver::expandNode(BookNode& node) {
 				int eval;
 				BookNode child = book->get(white, black);
 				int value = (localmax > 0) ? localmax - EVAL_RANGE : -EVAL_RANGE;
-				if (child) {
-					if (child.getMoveCount())
-						result[pptr] = eval = -child.getEval(0);
-					else
-						result[pptr] = eval = -search(white, black, middepth - 1, -INFINITE, 
-							-value, true);
-				}
+				if (child && child.getMoveCount())
+					result[pptr] = eval = -child.getEval(0);
 				else
 					result[pptr] = eval = -search(white, black, middepth - 1, -INFINITE, 
 						-value, true);
@@ -6598,6 +6618,7 @@ void Solver::saveTp(int zobPos, const BitBoard& my, const BitBoard& op,
 		if (upper < info->upper) {
 			info->upper = upper;
 		}
+		info->searchId = currentSearchId;
 		return;
 	}
 	info = &entry->newer;
@@ -6609,12 +6630,15 @@ void Solver::saveTp(int zobPos, const BitBoard& my, const BitBoard& op,
 		if (upper < info->upper) {
 			info->upper = upper;
 		}
+		info->searchId = currentSearchId;
 		return;
 	}
-	if (depth >= entry->deeper.depth - DEEP_COVER) {
+	// implement aging
+	if (depth + currentSearchId >= entry->deeper.depth + entry->deeper.searchId - DEEP_COVER) {
 		entry->newer = entry->deeper;
 		info = &entry->deeper;
-	}
+		info->searchId = currentSearchId;
+	} // else info is already pointing to entry->newer
 	info->lower = lower;
 	info->upper = upper;
 	info->depth = depth;
@@ -6694,5 +6718,94 @@ void Solver::posFlipDiagA8H1(int& pos) {
 	pos = (((pos >> 3) | (pos << 3)) & 63) ^ 63;
 }
 
+int Solver::calcPositionDistance(const BitBoard& my1, const BitBoard& op1, const BitBoard& my2, const BitBoard& op2) {
+	// roughly check disc count first
+	int discs1 = bits(my1) + bits(op1);
+	int discs2 = bits(my2) + bits(op2);
+	if (discs1 == discs2) {
+		if (my1 == my2 && op1 == op2) {
+			return 0;
+		} else if (my1 == op2 && op1 == my2) {
+			// reversed state, check if either position has 0 mobility
+			if (mobility(my1, op1) == 0 || mobility(my2, op2) == 0) {
+				// 0 mobility - consider positions identical
+				return 0;
+			} else {
+				// otherwise, positions not identical
+				return MAX_POS_DISTANCE;
+			}
+		} else {
+			return MAX_POS_DISTANCE;
+		}
+	}
+	if (abs(discs1 - discs2) >= MAX_POS_DISTANCE) {
+		return MAX_POS_DISTANCE;
+	}
+
+	// do a shallow search to match the 2 positions
+	BitBoard from_my, from_op, target_my, target_op;
+	if (discs1 < discs2) {
+		from_my = my1;
+		from_op = op1;
+		target_my = my2;
+		target_op = op2;
+	} else {
+		from_my = my2;
+		from_op = op2;
+		target_my = my1;
+		target_op = op1;
+	}
+
+	int min_distance = MAX_POS_DISTANCE;
+	BitBoard mob = mobility(from_my, from_op);
+	if (mob) {
+		for (int pos = 0; pos < MAXSTEP; pos++) {
+			BitBoard work_my = from_my, work_op = from_op;
+			if (posTable[pos] & mob) {
+				putChess(pos, work_my, work_op);
+				int distance = calcPositionDistance(work_op, work_my, target_my, target_op);
+				if (distance < MAX_POS_DISTANCE) {
+					// once found a match, break the search
+					min_distance = distance + 1;
+					break;
+				}
+			}
+		}
+	}
+
+	return min_distance;
+}
+
+void Solver::applyAging(const BitBoard& my, const BitBoard& op) {
+	// should be called each time a solve starts
+	int distance = calcPositionDistance(lastSearchMy, lastSearchOp, my, op);
+	currentSearchId += distance;
+	lastSearchMy = my; lastSearchOp = op;
+	if (currentSearchId > SEARCH_ID_ADJUST_THRESHOLD) {
+		adjustSearchId();
+	}
+#ifdef _DEBUG
+	std::wstringstream wss;
+	wss << "Current Search Id: " << currentSearchId;
+	MessageBox(NULL, wss.str().c_str(), L"Search Id", MB_OK);
+#endif // _DEBUG
+}
+
+void Solver::adjustSearchId() {
+	// adjust search ids in transposition table in order to prevent search id overflow
+	if (currentSearchId <= SEARCH_ID_ADJUST_TARGET_MAX) return;
+	int diff = currentSearchId - SEARCH_ID_ADJUST_TARGET_MAX;
+	for (unsigned int i = 0; i < (unsigned int)currentTableSize; i++) {
+		TPEntry* entry = &tp[i];
+		if (entry->deeper.depth) {
+			if (entry->deeper.searchId < diff) {
+				entry->deeper.searchId = 0;
+			} else {
+				entry->deeper.searchId-= diff;
+			}
+		}
+	}
+	currentSearchId -= diff;
+}
 
 } // namespace CraftEngine
