@@ -201,6 +201,12 @@ public:
 		return currentEpcPercentage;
 	}
 	int getPV(int pv[], int length);
+	bool ifShowPV() const {
+		return showPV;
+	}
+	void setShowPV(bool showPV) {
+		this->showPV = showPV;
+	}
 
 	// the transposition table stuff
 	static void clearCache();
@@ -461,12 +467,16 @@ private:
 	static const int SEARCH_ID_ADJUST_THRESHOLD = 60000;
 	static const int SEARCH_ID_ADJUST_TARGET_MAX = 30000;
 	static void adjustSearchId();
+	static bool keepSearchId; // keep search id, ignore the effect of applyAging
 
 	void initPV();
+	bool showPV;
 	void setPV(BitBoard& my, BitBoard& op, int depth, int firstMove);
 	void setBookPV(BitBoard& my, BitBoard& op, int firstMove);
 	// extract principal variation from transposition table ONLY - no ETC used
-	int searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd);
+	int searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd, bool dontExpand = false);
+	// for exact pv lines that reaches PV_EXPAND_THRESHOLD-empty position, fully expand it (may require some search)
+	static const int PV_EXPAND_THRESHOLD = 12;
 
 	static unsigned int bZobrist[0x10000];
 	static unsigned int wZobrist[0x10000];

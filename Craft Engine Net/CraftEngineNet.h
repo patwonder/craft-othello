@@ -144,6 +144,12 @@ namespace CraftEngineNet {
 		///获取设置的精确搜索随机性大小
 		int getExactTolerance();
 
+		///设置是否计算Principal Variation
+		void setShowPV(bool showPV);
+
+		///返回是否计算Principal Variation
+		bool ifShowPV();
+
 		///设置缓存大小(单表节点数, 占用内存空间为返回值*64字节)
 		///参数：
 		///  newCacheSize: 缓存大小，必须等于1 << N，0<=N<=30

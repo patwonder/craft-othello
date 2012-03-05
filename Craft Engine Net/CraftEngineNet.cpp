@@ -166,6 +166,14 @@ int Engine::getExactTolerance() {
 	return solver->getExactTolerance();
 }
 
+void Engine::setShowPV(bool showPV) {
+	solver->setShowPV(showPV);
+}
+
+bool Engine::ifShowPV() {
+	return solver->ifShowPV();
+}
+
 void Engine::setCacheSize(size_t newCacheSize) {
 	try {
 		Solver::setCacheSize(newCacheSize);

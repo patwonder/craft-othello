@@ -108,6 +108,7 @@ const std::wstring Solver::DEFAULT_BOOK_PATH = L"book.craft";
 unsigned short Solver::currentSearchId = 0;
 BitBoard Solver::lastSearchMy = Solver::defaultMy;
 BitBoard Solver::lastSearchOp = Solver::defaultOp;
+bool Solver::keepSearchId = false;
 #ifdef STABILITY
 int Solver::twoTo3Base[256];
 #endif
@@ -786,6 +787,7 @@ Solver::Solver(int board[MAXSTEP]) {
 	aborted = false;
 	sortStackPtr = 0;
 	pvLength = 0;
+	showPV = true;
 	selectedMove = focusedMove = -1;
 	partialDepth = 0;
 	partialResult = 0;
@@ -6491,6 +6493,9 @@ void Solver::initPV() {
 }
 
 void Solver::setPV(BitBoard& my, BitBoard& op, int depth, int firstMove) {
+	if (!showPV) {
+		return;
+	}
 	principalVariation[0] = firstMove;
 	if (checkedMakeMove(firstMove, my, op)) {
 		pvLength = 1 + searchPV(op, my, depth - 1, true, principalVariation + 1, principalVariation + MAX_PV_LENGTH);
@@ -6500,7 +6505,7 @@ void Solver::setPV(BitBoard& my, BitBoard& op, int depth, int firstMove) {
 	}
 }
 
-int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd) {
+int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd, bool dontExpand) {
 	if (pvStart == pvEnd) return 0;
 
 	BitBoard mob = mobility(my, op);
@@ -6574,8 +6579,24 @@ int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int*
 		}
 	}
 
-	if (lower < upper)
-		return 0;
+	if (lower < upper) {
+		if (!dontExpand && empties <= PV_EXPAND_THRESHOLD && depth >= empties + EPC_STAGES) {
+			// expand the PV, use a temporary Solver to do the task - not abortable
+#ifdef _DEBUG
+			MessageBox(NULL, L"Expanding PV", L"", MB_OK);
+#endif // _DEBUG
+			keepSearchId = true;
+			Solver* tempSolver = new Solver();
+			tempSolver->setShowPV(false);
+			tempSolver->setBitBoard(my, op);
+			SolverResult sr = tempSolver->solveExact(BLACK, false);
+			delete tempSolver;
+			keepSearchId = false;
+			bestMove = sr.getBestMove();
+		} else {
+			return 0;
+		}
+	}
 	if (bestMove == -1) {
 		bestMove = 0;
 		while ((orderTable[bestMove] & mob) == 0) {
@@ -6777,6 +6798,7 @@ int Solver::calcPositionDistance(const BitBoard& my1, const BitBoard& op1, const
 }
 
 void Solver::applyAging(const BitBoard& my, const BitBoard& op) {
+	if (keepSearchId) return;
 	// should be called each time a solve starts
 	int distance = calcPositionDistance(lastSearchMy, lastSearchOp, my, op);
 	currentSearchId += distance;
