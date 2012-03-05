@@ -474,7 +474,7 @@ private:
 	void setPV(BitBoard& my, BitBoard& op, int depth, int firstMove);
 	void setBookPV(BitBoard& my, BitBoard& op, int firstMove);
 	// extract principal variation from transposition table ONLY - no ETC used
-	int searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd, bool dontExpand = false);
+	int searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd);
 	// for exact pv lines that reaches PV_EXPAND_THRESHOLD-empty position, fully expand it (may require some search)
 	static const int PV_EXPAND_THRESHOLD = 12;
 

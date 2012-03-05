@@ -6505,7 +6505,7 @@ void Solver::setPV(BitBoard& my, BitBoard& op, int depth, int firstMove) {
 	}
 }
 
-int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd, bool dontExpand) {
+int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int* pvStart, int* pvEnd) {
 	if (pvStart == pvEnd) return 0;
 
 	BitBoard mob = mobility(my, op);
@@ -6580,7 +6580,7 @@ int Solver::searchPV(BitBoard& my, BitBoard& op, int depth, bool lastFound, int*
 	}
 
 	if (lower < upper) {
-		if (!dontExpand && empties <= PV_EXPAND_THRESHOLD && depth >= empties + EPC_STAGES) {
+		if (empties <= PV_EXPAND_THRESHOLD && depth >= empties + EPC_STAGES) {
 			// expand the PV, use a temporary Solver to do the task - not abortable
 #ifdef _DEBUG
 			MessageBox(NULL, L"Expanding PV", L"", MB_OK);
