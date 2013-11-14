@@ -153,12 +153,12 @@ public:
 	static const int MAXSTEP = 8 * 8;
 	static const int INFINITE = 1000000000;
 	static const int RULER = CraftEngine::RULER;
-	static const std::wstring DEFAULT_PATTERN_PATH;
-	static const std::wstring DEFAULT_BOOK_PATH;
+	static const wchar_t* const DEFAULT_PATTERN_PATH;
+	static const wchar_t* const DEFAULT_BOOK_PATH;
 	
 	// initialization and cleanup
 	static bool initialize();
-	static bool initialize(std::wstring patternPath, std::wstring bookPath);
+	static bool initialize(const wchar_t* patternPath, const wchar_t* bookPath);
 	static void cleanup();
 	static int getInitPart();
 	static int getInitPercent();
@@ -387,9 +387,10 @@ private:
 	int sortResultStack[MAX_STACK_SIZE];
 	int sortStackPtr;
 
+#pragma warning(suppress: 4251)
 	static std::wstring bookPath;
+#pragma warning(suppress: 4251)
 	static std::wstring patternPath;
-
 	int midTolerance, exactTolerance;
 
 	Solver();

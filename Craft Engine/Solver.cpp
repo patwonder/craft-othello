@@ -103,8 +103,8 @@ bool Solver::isBookChanged;
 bool Solver::fatherAdded;
 std::wstring Solver::bookPath;
 std::wstring Solver::patternPath;
-const std::wstring Solver::DEFAULT_PATTERN_PATH = L"data.craft";
-const std::wstring Solver::DEFAULT_BOOK_PATH = L"book.craft";
+const wchar_t* const Solver::DEFAULT_PATTERN_PATH = L"data.craft";
+const wchar_t* const Solver::DEFAULT_BOOK_PATH = L"book.craft";
 unsigned short Solver::currentSearchId = 0;
 BitBoard Solver::lastSearchMy = Solver::defaultMy;
 BitBoard Solver::lastSearchOp = Solver::defaultOp;
@@ -739,7 +739,7 @@ int Solver::getInitPercent() {
 	return initPercent;
 }
 
-bool Solver::initialize(std::wstring patternPath, std::wstring bookPath) {
+bool Solver::initialize(const wchar_t* patternPath, const wchar_t* bookPath) {
 	//std::locale::global(std::locale("")); // solving the 'path with chinese chars' problem
 
 	initPercent = 10;

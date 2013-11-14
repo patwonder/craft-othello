@@ -1,14 +1,12 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55D03D1F-11F8-41D5-AED6-DDBABE6D7AA1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Craft", "Othello.vcxproj", "{E8B2A2D7-8A0D-44C3-AA18-FB5A4B473FEB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{74335A1F-0C27-4FE0-87B9-C16D36518544} = {74335A1F-0C27-4FE0-87B9-C16D36518544}
 	EndProjectSection
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Craft Setup", "..\Craft Setup\Craft Setup.vdproj", "{A01011B9-A719-4763-BDF7-F2E5E916F45A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Craft Engine", "..\Craft Engine\Craft Engine.vcxproj", "{74335A1F-0C27-4FE0-87B9-C16D36518544}"
 EndProject
@@ -20,8 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPC_Calc", "..\MPC_Calc\MPC_Calc.csproj", "{62B9FC18-8B4A-4D50-9AC8-EC71A77F2011}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptableCraft", "..\ScriptableCraft\ScriptableCraft.csproj", "{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Craft Setup - x64", "..\Craft Setup - x64\Craft Setup - x64.vdproj", "{9A653098-DCB9-4BA7-9547-E1957D305D28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +35,6 @@ Global
 		{E8B2A2D7-8A0D-44C3-AA18-FB5A4B473FEB}.Release|Win32.Build.0 = Release|Win32
 		{E8B2A2D7-8A0D-44C3-AA18-FB5A4B473FEB}.Release|x64.ActiveCfg = Release|x64
 		{E8B2A2D7-8A0D-44C3-AA18-FB5A4B473FEB}.Release|x64.Build.0 = Release|x64
-		{A01011B9-A719-4763-BDF7-F2E5E916F45A}.Debug|Win32.ActiveCfg = Debug
-		{A01011B9-A719-4763-BDF7-F2E5E916F45A}.Debug|x64.ActiveCfg = Debug
-		{A01011B9-A719-4763-BDF7-F2E5E916F45A}.Release|Win32.ActiveCfg = Release
-		{A01011B9-A719-4763-BDF7-F2E5E916F45A}.Release|x64.ActiveCfg = Release
 		{74335A1F-0C27-4FE0-87B9-C16D36518544}.Debug|Win32.ActiveCfg = Debug|Win32
 		{74335A1F-0C27-4FE0-87B9-C16D36518544}.Debug|Win32.Build.0 = Debug|Win32
 		{74335A1F-0C27-4FE0-87B9-C16D36518544}.Debug|x64.ActiveCfg = Debug|x64
@@ -75,10 +67,6 @@ Global
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|Win32.Build.0 = Release|x86
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|x64.ActiveCfg = Release|x64
 		{CEB9CFA2-AD35-4210-876A-FA0D6D09B37C}.Release|x64.Build.0 = Release|x64
-		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Debug|Win32.ActiveCfg = Debug
-		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Debug|x64.ActiveCfg = Debug
-		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Release|Win32.ActiveCfg = Release
-		{9A653098-DCB9-4BA7-9547-E1957D305D28}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
