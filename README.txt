@@ -1,28 +1,23 @@
-Craft ÊÇÒ»¿î¾ßÓĞ½Ï¸ßAIµÄºÚ°×Æå³ÌĞò¡£
-°æÈ¨ËùÓĞ (C) 2008-2011  Patrick
+Craft is an Othello program with relatively strong artificial intelligence. It uses techniques including pattern-based evaluation model, bit-board representation, Multi-Prob Cut, NegaScout, iterative-widening End-Cut and self-learning opening book. Craft can look forward 16~20 steps in mid-game, and up to 24 steps perfect endgame.
 
-Craft Îª×ÔÓÉÈí¼ş£»Äú¿ÉÒÀ¾İ×ÔÓÉÈí¼ş»ù½ğ»áËù·¢±íµÄGNUÍ¨ÓÃ¹«¹²ÊÚÈ¨
-Ìõ¿î£¬¶Ô±¾³ÌĞòÔÙ´Î·¢²¼ºÍ/»òĞŞ¸Ä£»ÎŞÂÛÄúÒÀ¾İµÄÊÇ±¾ÊÚÈ¨µÄµÚÈı°æ£¬
-»ò£¨Äú¿ÉÑ¡µÄ£©ÈÎÒ»ÈÕºó·¢ĞĞµÄ°æ±¾¡£
+Craft's AI has now reached almost the same level as the famous Othello program 'ä¼¤å¿ƒé»‘ç™½æ£‹'.
 
-±¾³ÌĞòÊÇ»ùÓÚÊ¹ÓÃÄ¿µÄ¶ø¼ÓÒÔ·¢²¼£¬È»¶ø²»¸ºÈÎºÎµ£±£ÔğÈÎ£»ÒàÎŞ¶ÔÊÊÊÛ
-ĞÔ»òÌØ¶¨Ä¿µÄÊÊÓÃĞÔËùÎªµÄÄ¬Ê¾ĞÔµ£±£¡£ÏêÇéÇë²ÎÕÕGNUÍ¨ÓÃ¹«¹²ÊÚÈ¨¡£
+==================
 
-ÄúÓ¦ÒÑÊÕµ½¸½ËæÓÚ±¾³ÌĞòµÄGNUÍ¨ÓÃ¹«¹²ÊÚÈ¨µÄ¸±±¾£»Èç¹ûÃ»ÓĞ£¬Çë²ÎÕÕ
-<http://www.gnu.org/licenses/>.
+How to build Craft
 
-Craft is an othello program with relatively high AI.
-Copyright (C) 2008-2011  Patrick
+1    Check out Craft source.
 
-Craft is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+2    Open "Othello\Craft.sln" using Microsoft Visual Studio 2012.
 
-Craft is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+3    Right click "Craft Engine" in the solution explorer, and choose "Properties".
 
-You should have received a copy of the GNU General Public License
-along with Craft.  If not, see <http://www.gnu.org/licenses/>.
+4    Expand to "Configuration\Linker\Optimization". Make sure "Link time code generation" option has been set to "/ltcg" for the "Release" configurations you want to build(Win32 and x64).
+
+5    Build the project.
+
+6    To run Craft, copy the contents under "Othello\Game" folder into where the executable is built. For example, "Release|Win32" -> "Othello\Release", "Release|x64" -> "Othello\x64\Release". 
+
+Notes
+
+Since the offical release is built using Profile-Guided Optimizations(PGO), your own build may not be as fast as the official one. If you want to create your own PGO build, follow the instructions at http://msdn.microsoft.com/en-us/library/e7k32f4k(VS.80).aspx .
