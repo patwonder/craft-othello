@@ -108,7 +108,7 @@ namespace MPC_Calc {
 		}
 
 		private bool isRegularEval(int eval) {
-			return (eval < Global.INFINITY - 64 && eval > -Global.INFINITY + 64);
+			return (eval < Global.Infinite - 64 && eval > -Global.Infinite + 64);
 		}
 
 		private void processRecord(TextWriter tw, ulong black, ulong white) {
@@ -120,7 +120,7 @@ namespace MPC_Calc {
 				engine.setBoard(board);
 				for (int mid = MIN_MID_EMPTIES; mid <= MAX_MID_EMPTIES; mid++) {
 					if (empties <= mid) { // avoid searching a 16 empty pos to depth 17
-						result.Add(Global.INFINITY);
+						result.Add(Global.Infinite);
 						continue;
 					}
 					SearchResult res = engine.solve(Chess.BLACK, mid, false);

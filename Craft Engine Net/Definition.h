@@ -212,10 +212,10 @@ namespace CraftEngineNet {
 	public ref class Global abstract {
 	public:
 		///棋盘横向长度
-		static const int WIDTH = CraftEngine::WIDTH;
+		static const int Width = CraftEngine::WIDTH;
 		///棋盘纵向长度
-		static const int HEIGHT = CraftEngine::HEIGHT;
+		static const int Height = CraftEngine::HEIGHT;
 		///Infinity常量
-		static const int INFINITY = CraftEngine::Solver::INFINITE;
+		static const int Infinite = CraftEngine::Solver::INFINITE;
 	};
 } // namespace CraftEngineNet

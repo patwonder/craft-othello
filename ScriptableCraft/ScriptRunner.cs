@@ -57,10 +57,10 @@ namespace ScriptableCraft {
 			if (board.Length != Engine.MAXSTEP) {
 				return null;
 			}
-			Chess[,] result = new Chess[Global.WIDTH, Global.HEIGHT];
-			for (int i = 0; i < Global.HEIGHT; i++) {
-				for (int j = 0; j < Global.WIDTH; j++) {
-					result[j, i] = parseChess(board[i * Global.WIDTH + j]);
+			Chess[,] result = new Chess[Global.Width, Global.Height];
+			for (int i = 0; i < Global.Height; i++) {
+				for (int j = 0; j < Global.Width; j++) {
+					result[j, i] = parseChess(board[i * Global.Width + j]);
 				}
 			}
 			return result;
